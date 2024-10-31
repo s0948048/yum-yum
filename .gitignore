@@ -9,3 +9,6 @@
 *.bmp
 *.tiff
 *.svg
+
+# macOS
+.DS_Store
