@@ -1,2 +1,11 @@
 # Visual Studio settings
 .vs/
+
+# Ignore all image files
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.svg
