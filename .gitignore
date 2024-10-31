@@ -1,5 +1,8 @@
-# Visual Studio settings
+# Visual Studio
 .vs/
+
+# VS Code
+.vscode/
 
 # Ignore all image files
 *.jpg
