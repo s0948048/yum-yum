@@ -48,8 +48,8 @@ publish/
 out/
 
 # Ignore dependency caches and logs
-node_modules/
-**/node_modules/
+# node_modules/
+# **/node_modules/
 npm-debug.log
 yarn-error.log
 logs/
