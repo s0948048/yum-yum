@@ -5,15 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Color</title>
-    <link rel="stylesheet" href="./css/bootstrap.css">
-    <link rel="stylesheet" href="./css/site.css">
+    <link rel="stylesheet" href="./bootstrap.css">
+    <link rel="stylesheet" href="./site.css">
 </head>
 
 <body>
     <div class="container">
-        <p class="text-center pt-3">歡迎分享不錯的配色 ヽ(*´◡`)人(´ω`*)ﾉ</p>
-        <p class="text-center">像是：button、a、內文和背景的配色...等等</p>
-        <p class="text-center fs-6">〈 如果有想新增的顏色，歡迎提出 〉</p>
+        <p class="text-center fw-600 pt-3" style="color: var(--yum-secondary-1);">使用範例：</p>
+         <pre style="margin-bottom: 0;">
+p {
+    color: <span class="fw-500" style="color: var(--yum-secondary-1);">var(--yum-primary-2);</span>
+}
+將 p 標籤的文字顏色設定成 --yum-primary-2 的顏色
+
+button {
+    background-color: <span class="fw-500" style="color: var(--yum-secondary-1);">var(--yum-secondary-1);</span>
+}
+將 button 標籤的背景顏色設定成 --yum-secondary-1 的顏色</pre>
         <hr>
 
         <p class="text-center mb-1">主題配色</p>
@@ -43,6 +51,11 @@
                 <p>var(--yum-secondary-3)</p>
             </div>
         </div>
+        <hr>
+
+        <p class="text-center">歡迎分享不錯的配色 ヽ(*´◡`)人(´ω`*)ﾉ</p>
+        <p class="text-center">像是：button、a、內文和背景的配色...等等</p>
+        <p class="text-center fs-6">〈 如果有想新增的顏色，歡迎提出 〉</p>
         <hr>
     </div>
 
