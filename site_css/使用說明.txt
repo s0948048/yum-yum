@@ -30,8 +30,9 @@
 　　　　　　→ 第三行程式碼，改成：namespace 你的專案名稱.Controllers
 
 步驟二：
-　　［修改］帶走的各個檔案中引用的［檔案路徑］。
-　　引用 site.css 和 bootstrap.css 的檔案路徑。
+　　［修改］帶走的各個檔案裡引用的［檔案路徑］。
+　　<link rel="stylesheet" href="修改這裡">
+　　<link rel="stylesheet" href="修改這裡">
 
 步驟三：
 　　注意引用順序。
