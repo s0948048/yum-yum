@@ -1,0 +1,166 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<section class="section-content">
+    <div class="container" style="max-width: 960x;">
+        <div class="card text-center mb-2 ">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs nav-fill">
+                    <li class="nav-item RecipeTitle">
+                        <a class="nav-link active" asp-controller="User" asp-action="MyRecipeEdit">我的食譜</a>
+                    </li>
+                    <li class="nav-item RecipeTitle">
+                        <a class="nav-link" asp-controller="User" asp-action="MyRecipeCollect">收藏食譜</a>
+                    </li>
+
+                </ul>
+            </div>
+            <br>
+
+            <div class="PleaseEditCard">
+
+                <div class="card mb-3 mx-auto " style="max-width: 95%;">
+                    <div class="row">
+                        <div class="col-md-3 d-flex justify-content-center align-items-center">
+                            <div class="card-img  position-relative">
+                                <img src="/img/icon/pleaseEditStamp.svg" style="max-width: 50%;position: absolute;top: 50%;
+                      left: 55%;
+                      transform: translate(-50%, -50%); z-index: 2;">
+                                <img src="/img/recipe/recipe_intro/1402.jpg" class="rounded" style="max-width: 100%;z-index: 1; position: relative;opacity:20%;" alt="recipe_intro">
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body2">
+                                <h4 class="card-title text-start">酪梨水波蛋吐司</h4>
+                                <p class="card-title text-start" id="UserID">作者</p>
+                                <p class="card-text text-start" id="RecipeDescript">
+                                    周末不一定要跑咖啡廳
+                                    在家也能享有健康早午餐
+                                    <br>
+                                    酪梨控一定要試看看!
+
+                                </p>
+                                <p class="card-title text-start" id="RecipeIngredients">食材: 酪梨,雞蛋,吐司,鹽,黑胡椒</p>
+                                <p class="card-text text-start"></p>
+                                <div class="d-flex align-items-center">
+                                    <img src="/img/icon/timer.svg" alt="timer">
+                                    <div class="card-text text-start mb-0"><small class="text-muted">10 min</small></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex justify-content-center align-items-center">
+                            <button type="button" class="btn btn-secondary "><img src="/img/icon/edit.svg" alt="edit"> 編輯食譜</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="card mb-3 mx-auto " style="max-width: 95%;">
+                <div class="row">
+
+                    <div class="col-md-3 d-flex justify-content-center align-items-center">
+                        <div class="card-img">
+                            <img src="/img/recipe/recipe_intro/1402.jpg" class="rounded" style="max-width: 100%;" alt="...">
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body2">
+                            <h4 class="card-title text-start">酪梨水波蛋吐司</h4>
+                            <p class="card-title text-start" id="UserID">作者</p>
+                            <p class="card-text text-start" id="RecipeDescript">
+                                周末不一定要跑咖啡廳
+                                在家也能享有健康早午餐
+                                <br>
+                                酪梨控一定要試看看!
+
+                            </p>
+                            <p class="card-title text-start" id="RecipeIngredients">食材: 酪梨,雞蛋,吐司,鹽,黑胡椒</p>
+                            <p class="card-text text-start"></p>
+                            <div class="d-flex align-items-center">
+                                <img src="/img/icon/timer.svg" alt="timer">
+                                <div class="card-text text-start mb-0"><small class="text-muted">10 min</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex justify-content-center align-items-center">
+                        <button type="button" class="btn btn-secondary "><img src="/img/icon/edit.svg" alt="timer"> 編輯食譜</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3 mx-auto " style="max-width: 95%;">
+                <div class="row">
+
+                    <div class="col-md-3 d-flex justify-content-center align-items-center">
+                        <div class="card-img">
+                            <img src="/img/recipe/recipe_intro/1402.jpg" class="rounded" style="max-width: 100%;" alt="...">
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body2">
+                            <h4 class="card-title text-start">酪梨水波蛋吐司</h4>
+                            <p class="card-title text-start" id="UserID">作者</p>
+                            <p class="card-text text-start" id="RecipeDescript">
+                                周末不一定要跑咖啡廳
+                                在家也能享有健康早午餐
+                                <br>
+                                酪梨控一定要試看看!
+
+                            </p>
+                            <p class="card-title text-start" id="RecipeIngredients">食材: 酪梨,雞蛋,吐司,鹽,黑胡椒</p>
+                            <p class="card-text text-start"></p>
+                            <div class="d-flex align-items-center">
+                                <img src="/img/icon/timer.svg" alt="timer">
+                                <div class="card-text text-start mb-0"><small class="text-muted">10 min</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex justify-content-center align-items-center">
+                        <button type="button" class="btn btn-secondary "><img src="/img/icon/edit.svg" alt="timer"> 編輯食譜</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3 mx-auto " style="max-width: 95%;">
+                <div class="row">
+
+                    <div class="col-md-3 d-flex justify-content-center align-items-center">
+                        <div class="card-img">
+                            <img src="/img/recipe/recipe_intro/1402.jpg" class="rounded" style="max-width: 100%;" alt="...">
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body2">
+                            <h4 class="card-title text-start">酪梨水波蛋吐司</h4>
+                            <p class="card-title text-start" id="UserID">作者</p>
+                            <p class="card-text text-start" id="RecipeDescript">
+                                周末不一定要跑咖啡廳
+                                在家也能享有健康早午餐
+                                <br>
+                                酪梨控一定要試看看!
+
+                            </p>
+                            <p class="card-title text-start" id="RecipeIngredients">食材: 酪梨,雞蛋,吐司,鹽,黑胡椒</p>
+                            <p class="card-text text-start"></p>
+                            <div class="d-flex align-items-center">
+                                <img src="/img/icon/timer.svg" alt="timer">
+                                <div class="card-text text-start mb-0"><small class="text-muted">10 min</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex justify-content-center align-items-center">
+                        <button type="button" class="btn btn-secondary "><img src="/img/icon/edit.svg" alt="timer"> 編輯食譜</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+</section>

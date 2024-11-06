@@ -4,46 +4,118 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - YumYum</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/YumYum.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">YumYum</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+
+        @* ---navbar在此 ---*@
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand logo" asp-controller="Home" asp-action="Index">
+                    <img src="/img/icon/LogoYumyum.svg" width: auto; height: 60px; alt="Logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex justify-content-center align-items-center">
+
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown ">
+                                <a class="nav-link dropdown-toggle " href="#" id="navbarDarkDropdownMenuLink" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">食譜</a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Index">查詢食譜</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Index">建立食譜</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+
+                            <a class="nav-link fridge-link" style="font-size: 1.15rem;font-weight: 500;letter-spacing: 0.14rem;" asp-controller="Home" asp-action="Index">冰箱</a>
                         </li>
+
+
+
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    惜食專區
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Index">介紹惜食</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Index">管理良食</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Index">惜食配對</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Index">配對記錄</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Index">聯絡資料</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    會員專區
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index">個人簡介</a>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index">基本資料</a>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="User" asp-action="MyRecipeEdit">我的食譜</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+                            <a class="nav-link" href="#"><img src="~/img/icon/Login.svg" height="30px" width="auto" alt="login"> 登入</a>
                         </li>
+
                     </ul>
                 </div>
             </div>
         </nav>
+
+
+    
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" style="flex: 1; padding-top: 80px; padding-bottom: 80px;">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer>
+        @* <footer class="border-top footer text-muted"> *@
+
         <div class="container">
             &copy; 2024 - YumYum - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/shared/bootstrap.bundle.js"></script>
+    <script src="~/js/shared/jquery.js"></script>
+    <script src="~/js/shared/site.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -1,0 +1,78 @@
+﻿
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.section-content {
+    background-color: var(--yum-primary-1);
+    color: var(--yum-primary-2);
+    /*padding: 185px 0;*/
+}
+
+/* 分頁標籤 */
+.nav-item .nav-link.active {
+    background-color: var(--yum-primary-2) !important;
+    color: var(--yum-primary-1) !important;
+}
+
+.nav a {
+    text-decoration: none;
+    color: var(--yum-primary-2);
+}
+
+.RecipeTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+
+
+/* 卡片底色 */
+.card {
+    background-color: var(--yum-primary-1) !important;
+    --bs-card-bg: var(--yum-primary-2) !important;
+}
+
+.nav-tabs {
+    --bs-nav-tabs-link-active-color: var(--yum-primary-1) !important;
+}
+
+
+.container .card {
+    background-color: var(--yum-primary-1);
+}
+
+
+.nav {
+    --bs-nav-link-color: display !important;
+    --bs-nav-link-hover-color: display !important;
+}
+/* 卡片文字圖片邊距 */
+.card-body2 {
+    padding: 32px 32px 32px 0px;
+}
+
+.card-img {
+    padding: 32px 0px 32px 32px;
+}
+
+
+/* 超連結樣式拉掉 */
+
+a {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+/* 卡片內文 作者字體 */
+#UserID {
+    font: 15px;
+}
+
+
+button {
+    border-radius: 24px !important;
+    background-color: var(--yum-primary-2) !important;
+}

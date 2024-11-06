@@ -1,0 +1,114 @@
+﻿
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.section-content {
+    background-color: var(--yum-primary-1);
+    color: var(--yum-primary-2);
+    /*padding: 185px 0;*/
+}
+
+/*.nav {
+    --bs-nav-link-color: var(--yum-primary-2) !important;
+}*/
+
+/* 分頁標籤 */
+/*.nav a {
+    color: var(--yum-primary-2) !important;
+}
+
+.nav-item .nav-link {
+    background-color: var(--yum-primary-1) !important;
+    color: var(--yum-primary-2) !important;
+}
+
+.nav-link:hover {
+    background-color: var(--yum-primary-2) !important;
+    color: var(--yum-primary-1) !important;
+}*/
+
+/* 點擊後（active 狀態）的樣式 */
+
+/*.nav-link:active,
+.nav-link.active {
+    background-color: var(--yum-primary-2) !important;
+    color: var(--yum-primary-1) !important;
+}*/
+
+
+/* 設定 active 狀態的背景顏色 */
+.nav-link.active {
+    background-color: var(--yum-primary-2) !important;
+    color: var(--yum-primary-1) !important; /* 字色設為白色 */
+    border-color: var(--yum-primary-2) !important; /* 如果需要設置邊框顏色 */
+}
+
+/* 設定非 active 狀態的文字顏色 */
+.nav-link {
+    color: var(--yum-primary-2) !important;
+}
+
+    /* 滑鼠懸停在非 active 連結上的效果 */
+    .nav-link:hover {
+        background-color: var(--yum-primary-2) !important;
+        color: var(--yum-primary-1) !important;
+    }
+
+
+.RecipeTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+
+
+/* 卡片底色 */
+.card {
+    background-color: var(--yum-primary-1) !important;
+    --bs-card-bg: var(--yum-primary-2) !important;
+}
+
+.nav-tabs {
+    --bs-nav-tabs-link-active-color: var(--yum-primary-1) !important;
+}
+
+
+.container .card {
+    background-color: var(--yum-primary-1);
+}
+
+
+.nav {
+    --bs-nav-link-color: display !important;
+    --bs-nav-link-hover-color: display !important;
+}
+/* 卡片文字圖片邊距 */
+.card-body2 {
+    padding: 32px 32px 32px 0px;
+}
+
+.card-img {
+    padding: 32px 0px 32px 32px;
+}
+
+
+/* 超連結樣式拉掉 */
+
+a {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+/* 卡片內文 作者字體 */
+#UserID {
+    font: 15px;
+}
+
+
+button {
+    border-radius: 24px !important;
+    background-color: var(--yum-primary-2) !important;
+}
