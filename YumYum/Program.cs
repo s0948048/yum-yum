@@ -5,6 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// µù¥U cors ¸ó·½½Ð¨D
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Local5500", builder =>
+    {
+        builder.WithOrigins(
+            "http://localhost:5500"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
@@ -16,7 +29,7 @@ builder.Services.AddControllersWithViews()
                 UnicodeRanges.CjkUnifiedIdeographs
             );
         options.JsonSerializerOptions.WriteIndented = true;
-    });
+    }); 
 
 var connectionString = builder.Configuration.GetConnectionString("YumYumDB");
 builder.Services.AddDbContext<YumYumDbContext>(x => x.UseSqlServer(connectionString));
@@ -31,6 +44,9 @@ builder.Services.AddSession(options =>
 });
 
 var app = builder.Build();
+
+// ±Ò¥Î CORS
+app.UseCors("Local5500");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
