@@ -1,5 +1,5 @@
 /*
-    YumYum  v1.1 (2024-11-06)
+    YumYum  v1.2 (2024-11-07)
     ※ 注意引用順序 ※
     請先引用 bootstrap.css，再引用這份 site.css，最後才引用自己編寫的 .css
 */
@@ -89,12 +89,22 @@
 
 
 /* === 通用設定 === */
+
+
+/*1107新增*/
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 body {
     font-family: "Inter", "Noto Sans TC";
     font-size: 1.15rem !important;
-    color: var(--yum-primary-2);
     background-color: var(--yum-primary-1);
+    color: var(--yum-primary-2);
+    margin-bottom: 60px;
 }
+
 
 /* p {
     margin-bottom: 0;
@@ -130,7 +140,8 @@ body {
 
 /*
     【 版本紀錄 】
-
+    YumYum  v1.2 (2024-11-07)
+    [新增] — html{...},body{margin-bottom: 60px}->這樣footer才不會跑版
     YumYum  v1.1 (2024-11-06)
     [修改] — 將內文字型大小調整為 1.15rem，並且設定成 !important。
     body { font-size: 1.25rem; → font-size: 1.15rem !important; }
