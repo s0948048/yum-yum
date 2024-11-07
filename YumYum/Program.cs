@@ -1,5 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using YumYum.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,10 @@ builder.Services.AddControllersWithViews()
             );
         options.JsonSerializerOptions.WriteIndented = true;
     });
+
+var connectionString = builder.Configuration.GetConnectionString("YumYumDB");
+builder.Services.AddDbContext<YumYumDbContext>(x => x.UseSqlServer(connectionString));
+
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
