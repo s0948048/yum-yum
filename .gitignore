@@ -12,6 +12,7 @@
 *.bmp
 *.tiff
 *.svg
+*.webp
 
 # macOS
 .DS_Store
