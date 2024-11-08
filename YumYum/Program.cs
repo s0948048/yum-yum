@@ -35,7 +35,7 @@ var connectionString = builder.Configuration.GetConnectionString("YumYumDB");
 builder.Services.AddDbContext<YumYumDbContext>(x => x.UseSqlServer(connectionString));
 
 builder.Services.AddDistributedMemoryCache();
-
+//add session
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromSeconds(20);
