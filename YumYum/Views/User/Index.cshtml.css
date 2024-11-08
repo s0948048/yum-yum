@@ -1,6 +1,22 @@
 ﻿.tags {
     border-color: white;
+    color: var(--yum-primary-2);
 }
+
+    .tags:hover {
+        color: var(--yum-primary-3);
+        background-color: var(--yum-primary-2);
+    }
+
+        .tags:hover svg path {
+            fill: var(--yum-primary-3);
+            transition-duration: 0.6s;
+        }
+
+    .tags > svg path {
+        color: var(--yum-primary-2);
+        fill: var(--yum-primary-3);
+    }
 
 .contentcard, button {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -33,9 +49,11 @@ svg {
     padding-right: 2px
 }
 
-#btnEdit {
+#btn-edit {
     background-color: var( --yum-secondary-1);
     border-color: var( --yum-secondary-1);
     border-radius: 50px;
-    float: right
+    float: right;
+    fill: var(--yum-primary-1);
+    color: var(--yum-primary-1);
 }
