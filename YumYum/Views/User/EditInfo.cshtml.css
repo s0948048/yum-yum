@@ -1,0 +1,33 @@
+﻿h2, h5, p, label {
+    color: var(--yum-primary-2);
+}
+
+.tags {
+    border-color: white;
+}
+
+.textcount {
+    color: var(--yum-secondary-4);
+    float: right
+}
+
+.linktext {
+    color: var(--yum-primary-2);
+}
+
+    .linktext > svg {
+        color: #b4b4b4;
+    }
+
+textarea {
+    height: 200px;
+}
+
+#btn-save {
+    background-color: var( --yum-secondary-1);
+    border-color: var( --yum-secondary-1);
+    border-radius: 50px;
+    float: right;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+}

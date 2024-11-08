@@ -20,10 +20,19 @@ namespace YumYum.Controllers
 		//    return View();
 		//}
 
+        //健誠
+
 		public IActionResult Index()
 		{
 			return View();
 		}
+
+		public IActionResult EditInfo()
+		{
+			return View();
+		}
+
+
 
 
 		//芳慈

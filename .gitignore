@@ -92,3 +92,4 @@ packages/
 *.swp
 *.swn
 *.swo
+/YumYum/Views/User/EditInfo.cshtml
