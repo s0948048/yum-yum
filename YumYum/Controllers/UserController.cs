@@ -15,17 +15,14 @@ namespace YumYum.Controllers
         }
 
 
-		//public async Task<IActionResult> Index()
-		//{
-		//    return View();
-		//}
+        public async Task<IActionResult> Index()
+        {
+            return View();
+        }
 
         //健誠
 
-		public IActionResult Index()
-		{
-			return View();
-		}
+       
 
 		public IActionResult EditInfo()
 		{
