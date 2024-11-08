@@ -1,0 +1,246 @@
+﻿<style>
+	h1, p, h5 {
+		color: var(--yum-primary-2);
+	}
+
+	#btn-select {
+		background-color: var( --yum-secondary-1);
+		border-color: var( --yum-secondary-1);
+		border-radius: 25px;
+		box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+		transition: 0.3s;
+	}
+
+	.btn-tags {
+		background-color: var( --yum-secondary-3);
+		border-color: var(--yum-primary-3);
+		border-radius: 30px;
+		color: var(--yum-primary-2);
+		box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+		transition: 0.3s;
+	}
+
+		.btn-tags:hover {
+			background-color: var(--yum-primary-3);
+			box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+			transition: 0.3s;
+		}
+
+	.contentcard {
+		box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+		transition: 0.3s;
+	}
+
+		.contentcard:hover {
+			box-shadow: 0 16px 32px 0 rgba(0,0,0,0.2);
+		}
+
+	.offcanvas-body {
+		background-color: var(--yum-primary-3);
+	}
+
+	.btn-menu, .btn-menu:hover, .btn-menu:active {
+		background-color: var(--yum-primary-3);
+		color: var(--yum-primary-2);
+	}
+</style>
+
+<div style="text-align:center">
+	<h1 class="mb-4 fw-600">食材在手 靈感不愁</h1>
+	<p class="fw-600">請點選食材Tag 或 查詢食材</p>
+	@* 搜尋列 *@
+	<div class="mb-4">
+		<nav class="navbar">
+			<form class="container-fluid" style="width:60%">
+				<div class="input-group">
+					<button class="btn btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+						<img src="./Img/filter.svg" alt="fliter" />
+					</button>
+					<input type="text" class="form-control" placeholder="查詢食材" aria-label="Username" aria-describedby="basic-addon1">
+					<button class="btn btn-menu input-group-text" id="basic-addon1">
+						<img src="./Img/search.svg" alt="search" />
+					</button>
+				</div>
+			</form>
+		</nav>
+	</div>
+	@* 食材標籤 *@
+	<div id="tags" class="mb-4">
+		<div id="carouselExampleDark" class="carousel carousel-dark slide carousel-fade" data-bs-ride="carousel">
+			<div class="carousel-indicators">
+				<button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+				<button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+				<button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+			</div>
+			<div class="carousel-inner">
+				<div class="carousel-item active" data-bs-interval="99999">
+					<div class="ms-5 mb-5">
+						@for (int i = 1; i < 51; i++)
+						{
+							<button class="btn-tags btn mb-4 me-5" style="border-radius:20px;">
+								<img src="./Img/@(i+3).svg" width="25" height="25" class="pe-1 pb-0">牛奶
+							</button>
+							if (i % 7 == 0)
+							{
+								<br />
+							}
+						}
+					</div>
+				</div>
+				<div class="carousel-item" data-bs-interval="99999">
+					<div class="ms-5 mb-5">
+						@for (int i = 1; i < 51; i++)
+						{
+							<button class="btn-tags btn mb-4 me-5" style="border-radius:20px;">
+								<img src="./Img/@(i+3).svg" width="25" height="25" class="pe-1 pb-0">牛奶糖
+							</button>
+							if (i % 7 == 0)
+							{
+								<br />
+							}
+						}
+					</div>
+				</div>
+				<div class="carousel-item">
+					<div class="ms-5 mb-5">
+						@for (int i = 1; i < 51; i++)
+						{
+							<button class="btn-tags btn mb-4 me-5" style="border-radius:20px;">
+								<img src="./Img/@(i+3).svg" width="25" height="25" class="pe-1 pb-0">牛奶饅頭
+							</button>
+							if (i % 8 == 0)
+							{
+								<br />
+							}
+						}
+					</div>
+				</div>
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+	</div>
+	<p class="mb-3 fs-4 fw-600">已選的食材</p>
+	<div id="tags-selected" class="mb-4">
+		@for (int i = 1; i < 11; i++)
+		{
+			<button class="btn-tags btn mb-4 me-5" style="border-radius:20px;">
+				<img src="./Img/@(i+3).svg" width="25" height="25" class="pe-1 pb-0">牛奶
+			</button>
+			if (i % 8 == 0)
+			{
+				<br />
+			}
+		}
+	</div>
+	<button class="btn btn-primary mb-5 fs-4" id="btn-select">
+		查食譜
+	</button>
+	<div>
+		@* 搜尋結果 *@
+		<div class="card-body" style="display:flex; flex-flow:wrap row;justify-content:space-around" id="context">
+			@for (int i = 0; i < 9; i++)
+			{
+				<div class="card contentcard mb-4" style="width: 30%;">
+					<img src="~/img/close-up-delicious-asian-food.jpg" class="card-img-top" alt="...">
+					<div class="card-body">
+						<h5 class="card-title mb-3 fs-3 fw-600">日式燒肉飯</h5>
+						<p class="card-text fs-6">雞蛋、鹽、黑胡椒...</p>
+						<p class="card-text fs-6">30分鐘</p>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+	@* 選單 *@
+	<div class="offcanvas offcanvas-start" style="background-color:var(--yum-primary-1);max-width:270px;" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+		<div class="offcanvas-header mb-3">
+			<h4 class="offcanvas-title ms-2 pt-3" id="offcanvasWithBothOptionsLabel">分類</h4>
+			@* <button type="button" class="btn-close pt-4" data-bs-dismiss="offcanvas" aria-label="Close"></button> *@
+		</div>
+		<div class="d-flex flex-column align-items-center " id="Ifilter">
+			<label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-1">
+				<img src="../../img/img/food_attr/1.svg">
+				<span>全穀雜糧類</span>
+			</label>
+			<input type="checkbox" name="filter-IAttr" id="IAttr-1" hidden>
+			<label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-2">
+				<img src="../../img/img/food_attr/2.svg">
+				<span>豆魚蛋肉類</span>
+			</label>
+			<input type="checkbox" name="filter-IAttr" id="IAttr-2" hidden>
+			<label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-3">
+				<img src="../../img/img/food_attr/3.svg">
+				<span>乳品類</span>
+			</label>
+			<input type="checkbox" name="filter-IAttr" id="IAttr-3" hidden>
+			<label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-4">
+				<img src="../../img/img/food_attr/4.svg">
+				<span>蔬菜類</span>
+			</label>
+			<input type="checkbox" name="filter-IAttr" id="IAttr-4" hidden>
+			<label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-5">
+				<img src="../../img/img/food_attr/5.svg">
+				<span>水果類</span>
+			</label>
+			<input type="checkbox" name="filter-IAttr" id="IAttr-5" hidden>
+			<label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-6">
+				<img src="../../img/img/food_attr/6.svg">
+				<span>油與堅果類</span>
+			</label>
+			<input type="checkbox" name="filter-IAttr" id="IAttr-6" hidden>
+		</div>
+	</div>
+</div>
+
+<style>
+	/* 左側區域的類別篩選  */
+	#Ifilter label span {
+		display: inline-block;
+		width: 75%;
+		text-wrap: nowrap;
+		letter-spacing: 0.3rem;
+	}
+
+	#Ifilter label img {
+		width: 30px;
+	}
+
+	/* 左側區域的 ck hover 事件  */
+	#Ifilter label {
+		width: 12rem;
+		height: 3rem;
+		background-color: var(--yum-primary-3);
+		opacity: 65%;
+		font-size: 1.25rem;
+		box-shadow: 2px 2px var(--yum-primary-2);
+	}
+		#Ifilter label:hover {
+			background-color: var(--yum-primary-2);
+			box-shadow: 2px 2px var(--yum-secondary-4);
+		}
+	/* 左側區域的 ck selected 事件  */
+	#Ifilter .selected {
+		background-color: var(--yum-primary-2);
+		color: var(--yum-primary-3);
+		box-shadow: 2px 2px var(--yum-secondary-4);
+		opacity: 50%;
+	}
+</style>
+<script>
+	window.addEventListener('load', function () {
+		$('#Ifilter input[type="checkbox"]').change(function () {
+			console.log($(this).prop('checked'));
+			console.log($('#Ifilter input[type="checkbox"]:checked'));
+			$(this).prev().toggleClass('selected')
+		});
+	})
+</script>
+
+
