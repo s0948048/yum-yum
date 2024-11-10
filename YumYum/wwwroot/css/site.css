@@ -83,6 +83,10 @@
         }
         將 button 標籤的背景顏色設定成 --yum-secondary-1 的顏色
     */
+    /* ======1110新增修改===== */
+    /*改變boostrap內建連結藍色字*/
+    --bs-link-color: #30533f !important;
+    --bs-link-hover-color: #284535 !important;
 }
 
 /* ================ */
@@ -92,17 +96,17 @@
 
 
 /*1107新增*/
-html {
+/*html {
     position: relative;
     min-height: 100%;
-}
+}*/
 
 body {
     font-family: "Inter", "Noto Sans TC";
     font-size: 1.15rem !important;
     background-color: var(--yum-primary-1);
     color: var(--yum-primary-2);
-    margin-bottom: 60px;
+/*    margin-bottom: 60px;*/
 }
 
 
