@@ -1,5 +1,5 @@
 /*
-    YumYum  v1.2 (2024-11-07)
+    YumYum  v1.3 (2024-11-11)
     ※ 注意引用順序 ※
     請先引用 bootstrap.css，再引用這份 site.css，最後才引用自己編寫的 .css
 */
@@ -83,32 +83,37 @@
         }
         將 button 標籤的背景顏色設定成 --yum-secondary-1 的顏色
     */
+
+    /* === 11-10 [新增] === */
+    /* 改變 bootstrap a 標籤連結預設的文字顏色 */
+    --bs-link-color: #30533f !important;
+    --bs-link-hover-color: #284535 !important;
 }
 
 /* ================ */
 
 
 /* === 通用設定 === */
-
-
-/*1107新增*/
-html {
-    position: relative;
-    min-height: 100%;
-}
-
 body {
     font-family: "Inter", "Noto Sans TC";
     font-size: 1.15rem !important;
     background-color: var(--yum-primary-1);
     color: var(--yum-primary-2);
-    margin-bottom: 60px;
+    /* === 11-07 [新增] === */
+    /* margin-bottom: 60px;*/
+    /* === 11-11 [刪除] === */
 }
 
+/* === 11-07 [新增] === */
+/*html {
+    position: relative;
+    min-height: 100%;
+}*/
+/* === 11-11 [刪除] === */
 
-/* p {
+/*p {
     margin-bottom: 0;
-} */
+}*/
 
 /*li {
     list-style-type: none;
@@ -140,15 +145,31 @@ body {
 
 /*
     【 版本紀錄 】
+
+    YumYum  v1.3 (2024-11-11)
+    [刪除] — 移除 html 的 relative 設定，一併移除最小高度的設定。
+    html { position: relative; min-height: 100%; }
+    [刪除] — 移除 body 的 margin-bottom 設定。
+    body { margin-bottom: 60px }
+    [新增] — 將 bootstrap a 標籤連結預設的文字顏色更改成主色系二號，並且設定成 !important。
+    :root { --bs-link-color: #30533f !important; }
+    [新增] — 將 bootstrap a 標籤連結:hover 預設的文字顏色更改成 #284535，並且設定成 !important。
+    :root { --bs-link-hover-color: #284535 !important; }
+    -------------------------------------------------------------------
     YumYum  v1.2 (2024-11-07)
-    [新增] — html{...},body{margin-bottom: 60px}->這樣footer才不會跑版
+    [新增] — 將 html 設定成 relative，同時設定最小高度。
+    html { position: relative; min-height: 100%; }
+    [新增] — 對 body 新增 margin-bottom，這樣 footer 才不會跑版。
+    body { margin-bottom: 60px }
+    -------------------------------------------------------------------
     YumYum  v1.1 (2024-11-06)
     [修改] — 將內文字型大小調整為 1.15rem，並且設定成 !important。
     body { font-size: 1.25rem; → font-size: 1.15rem !important; }
     [新增] — 主題配色新增輔色系四號。
     :root { --yum-secondary-4: #b4b4b4; }
-    [新增] — 將預設文字顏色設定成主色系二號，提高配色主題性。
+    [新增] — 將預設的文字顏色設定成主色系二號，提高配色主題性。
     body { color: var(--yum-primary-2); }
-    -------------------------------------------------------------
+    -------------------------------------------------------------------
     YumYum  v1.0 (2024-10-31)
+
 */
