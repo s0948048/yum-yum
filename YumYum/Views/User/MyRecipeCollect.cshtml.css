@@ -1,10 +1,6 @@
 ﻿
 
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 
 .section-content {
     background-color: var(--yum-primary-1);
@@ -12,16 +8,26 @@
     /*padding: 185px 0;*/
 }
 
-/* 分頁標籤 */
-.nav-item .nav-link.active {
+
+
+/* 設定 active 狀態的背景顏色 */
+.nav-link.active {
     background-color: var(--yum-primary-2) !important;
-    color: var(--yum-primary-1) !important;
+    color: var(--yum-primary-1) !important; /* 字色設為白色 */
+    border-color: var(--yum-primary-2) !important; /* 如果需要設置邊框顏色 */
 }
 
-.nav a {
-    text-decoration: none;
-    color: var(--yum-primary-2);
+/* 設定非 active 狀態的文字顏色 */
+.nav-link {
+    color: var(--yum-primary-2) !important;
 }
+
+    /* 滑鼠懸停在非 active 連結上的效果 */
+    .nav-link:hover {
+        background-color: var(--yum-primary-2) !important;
+        color: var(--yum-primary-1) !important;
+    }
+
 
 .RecipeTitle {
     font-size: 1.2rem;
@@ -75,4 +81,5 @@ a {
 button {
     border-radius: 24px !important;
     background-color: var(--yum-primary-2) !important;
+    margin: 0.5rem;
 }

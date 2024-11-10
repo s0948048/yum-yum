@@ -1,10 +1,7 @@
 ﻿
 
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
+
 
 .section-content {
     background-color: var(--yum-primary-1);
@@ -12,32 +9,6 @@
     /*padding: 185px 0;*/
 }
 
-/*.nav {
-    --bs-nav-link-color: var(--yum-primary-2) !important;
-}*/
-
-/* 分頁標籤 */
-/*.nav a {
-    color: var(--yum-primary-2) !important;
-}
-
-.nav-item .nav-link {
-    background-color: var(--yum-primary-1) !important;
-    color: var(--yum-primary-2) !important;
-}
-
-.nav-link:hover {
-    background-color: var(--yum-primary-2) !important;
-    color: var(--yum-primary-1) !important;
-}*/
-
-/* 點擊後（active 狀態）的樣式 */
-
-/*.nav-link:active,
-.nav-link.active {
-    background-color: var(--yum-primary-2) !important;
-    color: var(--yum-primary-1) !important;
-}*/
 
 
 /* 設定 active 狀態的背景顏色 */
@@ -111,4 +82,24 @@ a {
 button {
     border-radius: 24px !important;
     background-color: var(--yum-primary-2) !important;
+    margin:0.5rem;
+}
+
+
+
+/* 提示訊息樣式 */
+#toastMessage {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1055;
+
+    min-width: 250px;
+    background-color: #198754;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 15px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }

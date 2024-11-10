@@ -1,12 +1,16 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@* --麵包屑導覽-- *@
+<div class="container custom-left mt-4 mb-4">
 
+    @await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
+
+</div>
+
+
+@* --tabs 卡片-- *@
 
 <section class="section-content">
-    <div class="container" style="max-width: 960x;">
+    <div class="container mt-5 mb-4 d-flex justify-content-center align-items-center">
+
         <div class="card text-center mb-2 ">
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs nav-fill">
@@ -19,8 +23,8 @@
 
                 </ul>
             </div>
-            <br>
 
+            @* ----請修改---- *@
             <div class="PleaseEditCard">
 
                 <div class="card mb-3 mx-auto " style="max-width: 95%;">
@@ -35,7 +39,7 @@
                         </div>
                         <div class="col-md-7">
                             <div class="card-body2">
-                                <h4 class="card-title text-start">酪梨水波蛋吐司</h4>
+                                <h4 class="card-title text-start">酪梨水波蛋吐司111</h4>
                                 <p class="card-title text-start" id="UserID">作者</p>
                                 <p class="card-text text-start" id="RecipeDescript">
                                     周末不一定要跑咖啡廳
@@ -61,6 +65,58 @@
             </div>
 
 
+
+
+            @* ----未發布的食譜---- *@
+            <div class="PleaseEditCard">
+
+                <div class="card mb-3 mx-auto " style="max-width: 95%;">
+                    <div class="row">
+                        <div class="col-md-3 d-flex justify-content-center align-items-center">
+                            <div class="card-img  position-relative">
+                                <button type="button" class="btn btn-secondary md-4" style="max-width: 50%;position: absolute;top: 50%;
+                      left: 55%;
+                      transform: translate(-50%, -50%); z-index: 2;">
+                                    草稿
+                                </button>
+                                
+                                <img src="/img/recipe/recipe_intro/1402.jpg" class="rounded" style="max-width: 100%;z-index: 1; position: relative;opacity:20%;" alt="recipe_intro">
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body2">
+                                <h4 class="card-title text-start">酪梨水波蛋吐司111</h4>
+                                <p class="card-title text-start" id="UserID">作者</p>
+                                <p class="card-text text-start" id="RecipeDescript">
+                                    周末不一定要跑咖啡廳
+                                    在家也能享有健康早午餐
+                                    <br>
+                                    酪梨控一定要試看看!
+
+                                </p>
+                                <p class="card-title text-start" id="RecipeIngredients">食材: 酪梨,雞蛋,吐司,鹽,黑胡椒</p>
+                                <p class="card-text text-start"></p>
+                                <div class="d-flex align-items-center">
+                                    <img src="/img/icon/timer.svg" alt="timer">
+                                    <div class="card-text text-start mb-0"><small class="text-muted">10 min</small></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 align-self-center md-4">
+                            <button type="button" class="btn btn-secondary md-4" id="openModal"><img src="/img/icon/edit.svg" alt="upload"> 發布日期</button>
+                            <button type="button" class="btn btn-secondary  md-4"><img src="/img/icon/edit.svg" alt="edit"> 編輯食譜</button>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+            @* -----一般食譜---- *@
             <div class="card mb-3 mx-auto " style="max-width: 95%;">
                 <div class="row">
 
@@ -94,73 +150,112 @@
                 </div>
             </div>
 
-            <div class="card mb-3 mx-auto " style="max-width: 95%;">
-                <div class="row">
 
-                    <div class="col-md-3 d-flex justify-content-center align-items-center">
-                        <div class="card-img">
-                            <img src="/img/recipe/recipe_intro/1402.jpg" class="rounded" style="max-width: 100%;" alt="...">
-                        </div>
+            
+           @* --發佈日期彈跳視窗跟 顯示訊息-- *@
+           @* -- Toast 提示訊息 -- *@
+            <div id="toastMessage" class="toast align-items-center text-bg-success border-0">
+                <div class="d-flex">
+                    <div class="toast-body" id="toastText">
+            @* !-- 訊息內容 -- *@
                     </div>
-                    <div class="col-md-7">
-                        <div class="card-body2">
-                            <h4 class="card-title text-start">酪梨水波蛋吐司</h4>
-                            <p class="card-title text-start" id="UserID">作者</p>
-                            <p class="card-text text-start" id="RecipeDescript">
-                                周末不一定要跑咖啡廳
-                                在家也能享有健康早午餐
-                                <br>
-                                酪梨控一定要試看看!
-
-                            </p>
-                            <p class="card-title text-start" id="RecipeIngredients">食材: 酪梨,雞蛋,吐司,鹽,黑胡椒</p>
-                            <p class="card-text text-start"></p>
-                            <div class="d-flex align-items-center">
-                                <img src="/img/icon/timer.svg" alt="timer">
-                                <div class="card-text text-start mb-0"><small class="text-muted">10 min</small></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2 d-flex justify-content-center align-items-center">
-                        <button type="button" class="btn btn-secondary "><img src="/img/icon/edit.svg" alt="timer"> 編輯食譜</button>
-                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close"></button>
                 </div>
             </div>
 
-            <div class="card mb-3 mx-auto " style="max-width: 95%;">
-                <div class="row">
-
-                    <div class="col-md-3 d-flex justify-content-center align-items-center">
-                        <div class="card-img">
-                            <img src="/img/recipe/recipe_intro/1402.jpg" class="rounded" style="max-width: 100%;" alt="...">
-                        </div>
-                    </div>
-                    <div class="col-md-7">
-                        <div class="card-body2">
-                            <h4 class="card-title text-start">酪梨水波蛋吐司</h4>
-                            <p class="card-title text-start" id="UserID">作者</p>
-                            <p class="card-text text-start" id="RecipeDescript">
-                                周末不一定要跑咖啡廳
-                                在家也能享有健康早午餐
-                                <br>
-                                酪梨控一定要試看看!
-
-                            </p>
-                            <p class="card-title text-start" id="RecipeIngredients">食材: 酪梨,雞蛋,吐司,鹽,黑胡椒</p>
-                            <p class="card-text text-start"></p>
-                            <div class="d-flex align-items-center">
-                                <img src="/img/icon/timer.svg" alt="timer">
-                                <div class="card-text text-start mb-0"><small class="text-muted">10 min</small></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2 d-flex justify-content-center align-items-center">
-                        <button type="button" class="btn btn-secondary "><img src="/img/icon/edit.svg" alt="timer"> 編輯食譜</button>
-                    </div>
-                </div>
-            </div>
-
-
+            
 
         </div>
+
+
+
+
+        @* !-- Modal彈跳視窗選擇日期 -- *@
+        <div class="modal fade" id="dateModal" tabindex="-1" aria-labelledby="dateModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="dateModalLabel">選擇發佈日期</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="datePicker" class="form-label">選擇日期:</label>
+                        <input type="date" id="datePicker" class="form-control" value="2018-07-22" min="2018-01-01" max="2018-12-31">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                        <button type="button" class="btn btn-primary" id="publishDate">發佈</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
 </section>
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // 設置日期範圍
+            const today = new Date();
+            const threeMonthsLater = new Date();
+            threeMonthsLater.setMonth(today.getMonth() + 3);
+
+            const minDate = today.toISOString().split('T')[0];
+            const maxDate = threeMonthsLater.toISOString().split('T')[0];
+
+            $('#datePicker').attr('min', minDate).attr('max', maxDate);
+
+            // 開啟模態視窗
+            $('#openModal').on('click', function () {
+                $('#dateModal').modal('show');
+            });
+
+            // 顯示提示訊息在畫面可見範圍
+            const showToastMessage = (message) => {
+            const scrollTop = $(window).scrollTop();
+            const windowHeight = $(window).height();
+
+                // 設定提示訊息的位置：畫面中間偏下
+                const toastTop = scrollTop + windowHeight - 100; // 距離畫面底部 100px
+
+                $('#toastMessage')
+                    .text(message)
+                    .css({
+                        top: `${toastTop}px`,
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                    })
+                    .fadeIn()
+                    .delay(2000)
+                    .fadeOut();
+            };
+
+            // 發佈日期
+            $('#publishDate').on('click', function () {
+                const selectedDate = $('#datePicker').val();
+                if (selectedDate) {
+                    console.log('選擇的日期:', selectedDate);
+
+                    // 顯示提示訊息
+                    showToastMessage(`已選擇發佈時間為：${selectedDate}`);
+                    $('#dateModal').modal('hide'); // 關閉視窗
+                } else {
+                    alert('請選擇一個日期！');
+                }
+            });
+        });
+    </script>
+
+
+}
+
+
+

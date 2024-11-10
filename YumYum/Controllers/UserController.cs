@@ -35,11 +35,29 @@ namespace YumYum.Controllers
 		//芳慈
 		public IActionResult MyRecipeEdit()
         {
+            // 設定Breadcrumb 顯示頁面資訊
+            ViewBag.Breadcrumbs = new List<BreadcrumbItem>
+             {
+             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+             new BreadcrumbItem("會員專區", Url.Action("Index", "User") ?? "#"),
+             new BreadcrumbItem("我的食譜", "#") // 目前的頁面
+             };
+
             return View();
         }
 
         public IActionResult MyRecipeCollect()
         {
+
+            // 設定Breadcrumb 顯示頁面資訊
+            ViewBag.Breadcrumbs = new List<BreadcrumbItem>
+            {
+            new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+            new BreadcrumbItem("會員專區", Url.Action("Index", "User") ?? "#"),
+            new BreadcrumbItem("我的食譜", Url.Action("MyRecipeEdit", "User") ?? "#"),
+            new BreadcrumbItem("收藏食譜", "#") // 目前的頁面
+            };
+
             return View();
         }
 
