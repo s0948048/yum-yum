@@ -3,3 +3,108 @@
 *@
 @{
 }
+<div class="container mt-5">
+    <div class="row">
+        <!-- Sidebar - Food Tag Section -->
+        <div class="col-md-5 col-lg-4 position-relative">
+            <h5 class="mb-4">請點選食材Tag</h5>
+            <div class="input-group mb-3">
+                <span class="input-group-text p-2"><img src="~/img/filter.svg" alt="" /></span>
+                <input type="text" class="form-control" placeholder="輸入食材關鍵字">
+            </div>
+
+            <div class="tag-section">
+                <div class="d-flex flex-wrap">
+                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
+                    </button>
+                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
+                    </button>
+                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
+                    </button>
+                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
+                    </button>
+                    <!-- Add more tags here -->
+
+                </div>
+            </div>
+
+            <button class="btn btn-secondary mt-3">+新增食材</button>
+        </div>
+
+        <!-- Right-hand Section - Edit Selected Item -->
+        <div class="col-md-7 col-lg-8 edit-section">
+            <h5>冰箱</h5>
+            <p>此區記錄份量，有效日期</p>
+
+            <!-- Item List -->
+            <div class="item-list mb-4">
+                <div class="row align-items-center mb-1">
+                    <div class="col-md-3 col-4">
+                        <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                            <i class="fas fa-filter"></i><span class="ms-2">牛奶哈哈</span>
+                        </button>
+                    </div>
+                    <div class="col-md-2 col-4">
+                        <input type="number" class="form-control" value="1" min="1">
+                    </div>
+                    <div class="col-md-2 col-4">
+                        <select class="form-select">
+                            <option>顆</option>
+                            <option>份</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-8">
+                        <input type="date" class="form-control" value="2024-12-13">
+                    </div>
+                    <div class="col-md-1 col-4 d-flex justify-content-end">
+                        <button class="btn d-flex justify-content-center align-items-center ps-1 pe-1" id="b tn-delete">
+                            <img src="~/img/delete.svg" alt="Alternate Text" />
+                        </button>
+                    </div>
+                </div>
+                <div class="row align-items-center mb-1">
+                    <div class="col-md-3 col-4">
+                        <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                            <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
+                        </button>
+                    </div>
+                    <div class="col-md-2 col-4">
+                        <input type="number" class="form-control" value="1" min="1">
+                    </div>
+                    <div class="col-md-2 col-4">
+                        <select class="form-select">
+                            <option>顆</option>
+                            <option>份</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-8">
+                        <input type="date" class="form-control" value="2024-12-13">
+                    </div>
+                    <div class="col-md-1 col-4 d-flex justify-content-end">
+                        <button class="btn d-flex justify-content-center align-items-center ps-1 pe-1">
+                            <img src="~/img/delete.svg" alt="Alternate Text" />
+                        </button>
+                    </div>
+                </div>
+                <!-- Repeat above block for each item -->
+            </div>
+
+            <div class="d-flex justify-content-end align-items-center mt-2">
+                <div class="mt-auto d-flex justify-content-end" id="btn-return">
+                    <button class="btn btn-secondary mb-2 me-3">返回</button>
+                </div>
+                <div class="mt-auto d-flex justify-content-end">
+                    <button class="btn btn-primary mb-2 me-5">儲存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/fridge/fridge_edit.js"></script>
+}
