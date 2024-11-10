@@ -1,5 +1,103 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+
 @{
+}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Sidebar - Food Tag Section -->
+        <div class="col-md-5 col-lg-4 position-relative">
+            <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center rounded-4">
+                <div class="hint-block bg-white p-3 rounded-pill shadow text-center">
+                    <p class="mb-0">新增食材<br>請點擊編輯按鈕</p>
+                </div>
+            </div>
+
+            <h5 class="mb-4">請點選食材Tag</h5>
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-filter"></i></span>
+                <input type="text" class="form-control" placeholder="輸入食材關鍵字">
+            </div>
+
+            <div class="tag-section">
+                <div class="d-flex flex-wrap">
+                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
+                    </button>
+                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
+                    </button>
+                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
+                    </button>
+                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
+                    </button>
+                    <!-- Add more tags here -->
+
+                </div>
+            </div>
+
+            <button class="btn btn-secondary mt-3">+新增食材</button>
+        </div>
+
+        <!-- Right-hand Section - Edit Selected Item -->
+        <div class="col-md-7 col-lg-8 edit-section">
+            <h5>冰箱</h5>
+            <p>此區記錄份量，有效日期</p>
+
+            <!-- Item List -->
+            <div class="item-list mb-4">
+                <div class="row align-items-center mb-1">
+                    <div class="col-md-3 col-4">
+                        <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                            <i class="fas fa-filter"></i><span class="ms-2">牛奶哈哈</span>
+                        </button>
+                    </div>
+                    <div class="col-md-2 col-2 text-center">
+                        <span class="bottom-line">1 顆</span>
+                    </div>
+                    <div class="col-md-3 col-3 text-center">
+                        <span class="bottom-line">有效天數: 2日</span>
+                    </div>
+                    <div class="col-md-3 col-2 text-end">
+                        <span class="badge bg-danger">快過期了</span>
+                    </div>
+                </div>
+                <div class="row align-items-center mb-1">
+                    <div class="col-md-3 col-4">
+                        <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                            <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
+                        </button>
+                    </div>
+                    <div class="col-md-2 col-2 text-center">
+                        <span class="bottom-line">4 顆</span>
+                    </div>
+                    <div class="col-md-3 col-3 text-center">
+                        <span class="bottom-line">有效天數: 3日</span>
+                    </div>
+                    <div class="col-md-3 col-2 text-end">
+                        <span class="badge bg-success">SAFE</span>
+                    </div>
+                </div>
+                <!-- Repeat above block for each item -->
+            </div>
+
+        </div>
+
+        <div class="d-flex justify-content-end align-items-center mt-2">
+            <div class="d-flex justify-content-end" id="btn-edit">
+                <button class="btn btn-secondary me-3">編輯</button>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-primary me-5">查食譜</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/fridge/fridge_index.js"></script>
 }
