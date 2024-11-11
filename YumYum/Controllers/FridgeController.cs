@@ -23,7 +23,6 @@ namespace YumYum.Controllers
                                  ValidDate = fridge.ValidDate
                              }
                              ).ToList();
-            //var viewModel = _context.RefrigeratorStores.ToList();
             return View(viewModel);
         }
 
