@@ -1,19 +1,16 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - YumYum</title>
-
+	<title>YumYum</title>
 	<link rel="stylesheet" href="~/css/bootstrap.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/YumYum.styles.css" asp-append-version="true" />
 </head>
 <body>
 	<header>
-
-		@* ---navbar在此 ---*@
-
+		@* --- navbar在此 ---*@
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<div class="container">
 				<a class="navbar-brand logo" asp-controller="Recipe" asp-action="Index">
@@ -37,13 +34,11 @@
 								<li><a class="dropdown-item" asp-controller="Recipe" asp-action="Index">建立食譜</a></li>
 							</ul>
 						</li>
-
 						<!-- 冰箱 -->
 						<li class="nav-item">
 							<a class="nav-link fridge-link" style="font-size: 1.15rem; font-weight: 500; letter-spacing: 0.14rem;"
 							   asp-controller="Fridge" asp-action="Index">冰箱</a>
 						</li>
-
 						<!-- 惜食專區 -->
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="foodWasteDropdown" role="button"
@@ -62,7 +57,6 @@
 								<li><a class="dropdown-item" asp-controller="Cherish" asp-action="ContactInformation">聯絡資料</a></li>
 							</ul>
 						</li>
-
 						<!-- 會員專區 -->
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="memberDropdown" role="button"
@@ -75,7 +69,6 @@
 								<li><a class="dropdown-item" asp-controller="User" asp-action="MyRecipeEdit">我的食譜</a></li>
 							</ul>
 						</li>
-
 						<!-- 登入 -->
 						<li class="nav-item">
 							<a class="nav-link" href="#">
@@ -86,11 +79,8 @@
 				</div>
 			</div>
 		</nav>
-
-
-
-
 	</header>
+
 	<div class="container">
 		<main role="main" class="pb-3">
 			@RenderBody()
@@ -100,10 +90,11 @@
 	<footer>
 		@* <footer class="border-top footer text-muted"> *@
 
-		<div class="container">
-			&copy; 2024 - YumYum - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+		<div class="container fs-6 text-center">
+			Copyright &copy; 2024 YumYum. All rights reserved.
 		</div>
 	</footer>
+
 	<script src="~/js/shared/bootstrap.bundle.js"></script>
 	<script src="~/js/shared/jquery.js"></script>
 	<script src="~/js/shared/site.js"></script>
