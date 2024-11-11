@@ -9,12 +9,12 @@ namespace YumYum.Controllers
         private readonly YumYumDbContext _context;
         public IActionResult Index()
         {
-            var viewModel = (from fridge in _context.RefrigeratorStores
+            var fridgeItemData = (from fridge in _context.RefrigeratorStores
                              join igd in _context.Ingredients on fridge.IngredientId equals igd.IngredientId
                              join unit in _context.Units on fridge.UnitId equals unit.UnitId
                              where fridge.UserId == 3204 
                              orderby fridge.Quantity
-                             select new RefrigeratorViewModel
+                             select new FridgeItemViewModel
                              {
                                  UserID = fridge.UserId,
                                  IngredientName = igd.IngredientName,
@@ -23,6 +23,20 @@ namespace YumYum.Controllers
                                  ValidDate = fridge.ValidDate
                              }
                              ).ToList();
+
+            var ingredientData = (from igd in _context.Ingredients
+                                  select new IngredientViewModel
+                                  {
+                                      IngredientName = igd.IngredientName,
+                                      IngredientIcon = igd.IngredientIcon
+                                  }).ToList();
+
+            var viewModel = new FridgeViewModel
+            {
+                RefrigeratorData = fridgeItemData,
+                IngredientData = ingredientData
+            };
+
             return View(viewModel);
         }
 
