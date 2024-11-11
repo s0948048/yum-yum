@@ -24,20 +24,13 @@
 
             <div class="tag-section">
                 <div class="d-flex flex-wrap">
-                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
-                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
-                    </button>
-                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
-                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
-                    </button>
-                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
-                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
-                    </button>
-                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
-                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
-                    </button>
-                    <!-- Add more tags here -->
-
+                    <!-- All Food tags here -->
+                    @foreach (var item in Model.IngredientData)
+                    {
+                        <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                            <img src="@Url.Content($"~{item.IngredientIcon}")" alt="Food Icon" /><span class="ms-2">@item.IngredientName</span>
+                        </button>
+                    }
                 </div>
             </div>
 
