@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YumYum.Models;
+using YumYum.Models.Customer;
 
 namespace YumYum.Controllers
 {
@@ -13,7 +14,7 @@ namespace YumYum.Controllers
                              join unit in _context.Units on fridge.UnitId equals unit.UnitId
                              where fridge.UserId == 3204 
                              orderby fridge.Quantity
-                             select new RefrigeratorViewModel
+                             select new RefrigratorView
                              {
                                  UserID = fridge.UserId,
                                  IngredientName = igd.IngredientName,
