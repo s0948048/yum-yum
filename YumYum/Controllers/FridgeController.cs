@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YumYum.Models;
-using YumYum.Models.Customer;
+using YumYum.Models.ViewModels;
 
 namespace YumYum.Controllers
 {

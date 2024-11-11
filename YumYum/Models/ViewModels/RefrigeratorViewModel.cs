@@ -1,4 +1,4 @@
-﻿namespace YumYum.Models.Customer
+﻿namespace YumYum.Models.ViewModels
 {
     public class RefrigeratorViewModel
     {
