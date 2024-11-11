@@ -8,7 +8,20 @@ namespace YumYum.Controllers
         private readonly YumYumDbContext _context;
         public IActionResult Index()
         {
-            var viewModel = _context.RefrigeratorStores.ToList();
+            var viewModel = (from fridge in _context.RefrigeratorStores
+                             join igd in _context.Ingredients on fridge.IngredientId equals         igd.IngredientId
+                             join unit in _context.Units on fridge.UnitId equals unit.UnitId
+                             where fridge.UserId == 3204 
+                             select new
+                             {
+                                 UserID = fridge.UserId,
+                                 IngredientName = igd.IngredientName,
+                                 Quantity = fridge.Quantity,
+                                 UnitName = unit.UnitName,
+                                 ValidDate = fridge.ValidDate
+                             }
+                             ).ToList();
+            //var viewModel = _context.RefrigeratorStores.ToList();
             return View(viewModel);
         }
 
