@@ -10,7 +10,7 @@ namespace YumYum.Controllers
         public IActionResult Index()
         {
             var viewModel = (from fridge in _context.RefrigeratorStores
-                             join igd in _context.Ingredients on fridge.IngredientId equals         igd.IngredientId
+                             join igd in _context.Ingredients on fridge.IngredientId equals igd.IngredientId
                              join unit in _context.Units on fridge.UnitId equals unit.UnitId
                              where fridge.UserId == 3204 
                              orderby fridge.Quantity
