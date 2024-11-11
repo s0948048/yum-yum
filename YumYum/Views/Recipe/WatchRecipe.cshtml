@@ -33,7 +33,7 @@
         <div class="col-6 p-4 " style="height: 500px;">
             <div class="input-group mb-2 w-100">
                 <!-- 料理名稱 -->
-                <h1 class="m-2 d-inline-block d-flex">@Model[0].recipeName</h1>
+                <h1 class="m-2 d-inline-block d-flex ms-0">@Model[0].recipeName</h1>
                 <!-- 料理類型 -->
                 <div class="d-flex ms-auto pt-3">
                     <b style="font-size: 1.25rem;">@Model[0].recipeClassName</b>
@@ -62,13 +62,12 @@
 
     <div class="row">
         <div class="col-12 p-5 pt-2">
-            <!-- 食材 -->
-
+            <!-- 所需食材 -->
             <div class="d-flex mt-4" style="flex-direction: column;text-align: start;">
                 <p class="text-big mb-3">所需食材</p>
 
-                <div class="d-flex justify-content-around flex-wrap pt-5"
-                     style="height: 320px ;width:100%; overflow-y: auto;border-radius: 6px;background-color:#c5c2c2b9">
+                <div class="d-flex justify-content-around flex-wrap pt-5 bg-gray"
+                     style="height: 320px ;width:100%; overflow-y: auto;border-radius: 6px;">
                     @foreach (IngredientWatch item in ingredients!)
                     {
                         <!-- 左邊 -->
