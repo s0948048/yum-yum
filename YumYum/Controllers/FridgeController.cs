@@ -18,6 +18,7 @@ namespace YumYum.Controllers
                              {
                                  UserID = fridge.UserId,
                                  IngredientName = igd.IngredientName,
+                                 IngredientIcon = igd.IngredientIcon,
                                  Quantity = fridge.Quantity,
                                  UnitName = unit.UnitName,
                                  ValidDate = fridge.ValidDate
