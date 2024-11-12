@@ -13,7 +13,7 @@ namespace YumYum.Controllers
                              join igd in _context.Ingredients on fridge.IngredientId equals igd.IngredientId
                              join unit in _context.Units on fridge.UnitId equals unit.UnitId
                              where fridge.UserId == 3204 
-                             orderby fridge.Quantity
+                             orderby fridge.ValidDate
                              select new FridgeItemViewModel
                              {
                                  UserID = fridge.UserId,
