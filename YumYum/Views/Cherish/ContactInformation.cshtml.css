@@ -1,0 +1,31 @@
+﻿.my-button {
+    color: var(--yum-primary-2);
+    background-color: var(--yum-primary-3);
+}
+
+    .my-button:hover {
+        color: var(--yum-primary-3);
+        background-color: var(--yum-primary-2);
+    }
+
+.article-title {
+    color: var(--yum-primary-3);
+    background-color: var(--yum-primary-2);
+}
+
+.background-white {
+    background-color: var(--yum-secondary-3);
+}
+
+.reminder-text {
+    color: var(--yum-secondary-1);
+}
+
+svg {
+    width: 1.15rem;
+    height: 1.15rem;
+}
+
+    svg path {
+        fill: var(--yum-primary-2);
+    }

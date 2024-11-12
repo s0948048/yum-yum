@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using YumYum.Models;
 
 namespace YumYum.Controllers
 {
@@ -26,6 +27,13 @@ namespace YumYum.Controllers
 
 		public IActionResult ContactInformation()
 		{
+			// 設定 Breadcrumb
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+			 new BreadcrumbItem("聯絡資料", "#") // 當前的頁面
+             };
+
 			return View();
 		}
 	}
