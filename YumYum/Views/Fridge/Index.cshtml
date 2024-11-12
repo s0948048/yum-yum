@@ -27,7 +27,8 @@
                     @foreach (var item in Model.IngredientData)
                     {
                         <button class="tag-button d-inline-flex align-items-center btn btn-tags">
-                            <img src="@Url.Content($"~{item.IngredientIcon}")" alt="Food Icon" /><span class="ms-2">@item.IngredientName</span>
+                            <img src="@Url.Content($"~{item.IngredientIcon}")" alt="Food Icon" />
+                            <span>@item.IngredientName</span>
                         </button>
                     }
                 </div>
@@ -49,7 +50,7 @@
                         <div class="col-md-3 col-4">
                             <button class="tag-button d-inline-flex align-items-center btn btn-tags">
                                 <img src="@Url.Content($"~{item.IngredientIcon}")" alt="Food Icon" />
-                                <span class="ms-2">@item.IngredientName</span>
+                                <span>@item.IngredientName</span>
                             </button>
                         </div>
                         <div class="col-md-2 col-2 text-center">
