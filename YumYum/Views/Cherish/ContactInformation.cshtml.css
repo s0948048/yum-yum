@@ -29,3 +29,12 @@ svg {
     svg path {
         fill: var(--yum-primary-2);
     }
+
+.set-fs {
+    font-size: 1.15rem !important;
+}
+
+.my-input:focus {
+    border-color: var(--yum-primary-2);
+    box-shadow: 0 0 0 0.2rem var(--yum-primary-3);
+}

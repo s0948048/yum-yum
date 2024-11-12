@@ -13,13 +13,13 @@
 <!-- 表單內容 -->
 <div class="row background-white mb-4 rounded-bottom">
 	<p class="text-center pt-3 pb-2 fw-500 reminder-text">建立聯絡資料後，即可使用［帶入填寫］功能</p>
-	<form action="">
+	<form method="" action="">
 		<div class="row">
 			<div class="col-6">
 				<!-- 暱稱欄位 -->
 				<div class="col">
 					<label for="nick-name" class="form-label">暱稱</label>
-					<input type="text" class="form-control" id="nick-name" placeholder="如何稱呼您">
+					<input type="text" class="form-control my-input" id="nick-name" placeholder="如何稱呼您">
 					<div class="invalid-feedback">
 						<!-- 查怎麼實作 -->
 						此為必填欄位
@@ -60,7 +60,7 @@
 						</svg>
 						LINE
 					</label>
-					<input type="text" class="form-control" id="ContactLine" placeholder="輸入 LINE ID">
+					<input type="text" class="form-control my-input" id="ContactLine" placeholder="輸入 LINE ID">
 				</div>
 				<!-- 電話號碼 -->
 				<div div class="col mt-3">
@@ -71,7 +71,7 @@
 						</svg>
 						電話號碼
 					</label>
-					<input type="text" class="form-control" id="ContactPhone" placeholder="輸入 手機號碼 或 室內電話">
+					<input type="text" class="form-control my-input" id="ContactPhone" placeholder="輸入 手機號碼 或 室內電話">
 				</div>
 			</div>
 
@@ -79,11 +79,11 @@
 			<div class="col-6">
 				<label for="trade-time" class="form-label">面交時段</label>
 				<div class="d-flex justify-content-around pb-3">
-					<button class="btn my-button">平日</button>
-					<button class="btn my-button">假日</button>
-					<button class="btn my-button">所有早上</button>
-					<button class="btn my-button">所有下午</button>
-					<button class="btn my-button">所有晚上</button>
+					<button class="btn my-button set-fs">平日</button>
+					<button class="btn my-button set-fs">假日</button>
+					<button class="btn my-button set-fs">所有早上</button>
+					<button class="btn my-button set-fs">所有下午</button>
+					<button class="btn my-button set-fs">所有晚上</button>
 				</div>
 				<div class="d-flex justify-content-around pb-3">
 					<label for="">星期一</label>
@@ -181,17 +181,17 @@
 					</svg>
 					其他聯絡方式
 				</label>
-				<input type="text" class="form-control" id="ContactOther" placeholder="輸入 其他聯絡方式">
+				<input type="text" class="form-control my-input" id="ContactOther" placeholder="輸入 其他聯絡方式">
 			</div>
 		</div>
 
 		<!-- 儲存、返回按鈕 -->
 		<div class="row justify-content-center my-4">
 			<div class="col-2 text-center">
-				<button class="btn my-button">返回</button>
+				<button class="btn my-button set-fs">返回</button>
 			</div>
 			<div class="col-2 text-center">
-				<input type="submit" value="儲存" class="btn my-button">
+				<button class="btn my-button set-fs" type="submit">儲存</button>
 			</div>
 		</div>
 	</form>
