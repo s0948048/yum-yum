@@ -1,5 +1,3 @@
-﻿$(document).ready(function () {
-    $("#btn-edit").on("click", function () {
-        window.location.href = '@Url.Action("Edit", "Fridge")';
-    });
-});
+﻿ $("#btn-edit").on("click", function () {
+     window.location.href = "/fridge/edit";
+ });

@@ -72,8 +72,8 @@
         </div>
 
         <div class="d-flex justify-content-end align-items-center mt-2">
-            <div class="d-flex justify-content-end" id="btn-edit">
-                <button class="btn btn-secondary me-3">編輯</button>
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-secondary me-3" id="btn-edit">編輯</button>
             </div>
             <div class="d-flex justify-content-end">
                 <button class="btn btn-primary me-5">查食譜</button>
@@ -85,4 +85,9 @@
 
 @section Scripts {
     <script src="~/js/fridge/fridge_index.js"></script>
+    <script>
+        // $("#btn-edit").on("click", function () {
+        //     window.location.href = "/fridge/edit";
+        // });
+    </script>
 }
