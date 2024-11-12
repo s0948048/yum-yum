@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
-    $("#btn-edit").click(function () {
-        window.location.href = "/fridge/edit";
+    console.log("jQuery Loaded");
+    $("#btn-edit").on("click", function () {
+        window.location.href = '@Url.Action("Edit", "Fridge")';
     });
 });
