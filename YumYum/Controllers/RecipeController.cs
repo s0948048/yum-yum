@@ -26,80 +26,94 @@ namespace YumYum.Controllers
         //毅祥
         public async Task<IActionResult> WatchRecipe()
         {
+            //此區與此區的view更動中
             //接收食譜的id
             int? recipeId = HttpContext.Session.GetInt32("recipeId");
             //測試(之後會刪掉)->
             int recipeIdTest = 1402;
-            //拿取食譜所需食材
-            var ingredients = from ingreRecipe in await _context.RecipeIngredients.Where(id => id.RecipeId == recipeIdTest).ToListAsync()
-                              join ingre in await _context.Ingredients.ToListAsync()
-                              on ingreRecipe.IngredientId equals ingre.IngredientId
-                              join ingreUnit in await _context.Units.ToListAsync()
-                              on ingreRecipe.UnitId equals ingreUnit.UnitId
-                              select new IngredientWatch
+            //得到資料
+            //取得食譜內容
+            var recipeBrief = from recipe in await _context.RecipeBriefs.Where(p => p.RecipeId == recipeIdTest).ToListAsync()
+                              join className in await _context.RecipeClasses.ToListAsync()
+                              on recipe.RecipeClassId equals className.RecipeClassId
+                              select new RecipeWatch_Brief
                               {
-                                  //食材名稱
-                                  ingredientName = ingre.IngredientName,
-                                  //食材icon路徑
-                                  ingredientImg = ingre.IngredientIcon,
-                                  //食材數量
-                                  ingredientCount = ingreRecipe.Quantity,
-                                  //食材單位名稱
-                                  ingredientsUnit = ingreUnit.UnitName,
+                                  //食譜名稱
+                                  recipeName = recipe.RecipeName,
+                                  //完成時間
+                                  recipeFinishTime = recipe.FinishMinute,
+                                  //食用人數
+                                  recipePeople = recipe.PersonQuantity,
+                                  //食譜類別
+                                  className = className.RecipeClassName,
                               };
-            //因為session只能存字串或字串形式的物件 所以我們要將indredients序列化
-            var ingredientsJson = JsonSerializer.Serialize(ingredients);
-            //建立session
-            TempData["ingredients"] = ingredientsJson;
-            TempData.Keep("ingredients");
+            //取得最新版本號
+            var recipeStepAndIntroVersion = await _context.RecipeRecordFields.Where(p => p.RecipeId == recipeIdTest).MaxAsync(x => x.RecipeRecVersion);
+            //取得最新版本的內容(簡介、食譜圖片、步驟圖片內容)
+            var recipeStepAndIntro = await _context.RecipeRecordFields.Where(p => p.RecipeId == recipeIdTest && p.RecipeRecVersion == recipeStepAndIntroVersion).ToListAsync();
+            //取得食譜食材
+            var recipeIngredient = from data in await _context.RecipeIngredients.ToListAsync()
+                                   join ingre in await _context.Ingredients.ToListAsync()
+                                   on data.IngredientId equals ingre.IngredientId
+                                   join unit in await _context.Units.ToListAsync()
+                                   on data.UnitId equals unit.UnitId
+                                   where data.RecipeId == recipeIdTest
+                                   select new RecipeWatch_Ingredient
+                                   {
+                                       //食材名稱
+                                       ingredientName = ingre.IngredientName,
+                                       //食材icon
+                                       ingredientImg = ingre.IngredientIcon,
+                                       //食材數量
+                                       ingredientCount = data.Quantity,
+                                       //食材單位
+                                       ingredientunit = unit.UnitName,
+                                   };
 
-            //調用食譜內容
-            var query = from data in await _context.RecipeBriefs.ToListAsync()
-                        join step in await _context.RecipeSteps.ToListAsync()
-                        on data.RecipeId equals step.RecipeId
-                        join classname in await _context.RecipeClasses.ToListAsync()
-                        on data.RecipeClassId equals classname.RecipeClassId
-                        where data.RecipeId == recipeIdTest
-                        select new RecipeWatch
-                        {
-                            //食譜名稱
-                            recipeName = data.RecipeName,
-                            //食譜照片
-                            recipeImage = data.RecipeShot,
-                            //類型
-                            recipeClassName = classname.RecipeClassName,
-                            //簡介
-                            recipeDescription = data.RecipeDescript,
-                            //時間
-                            recipeFinishMinute = data.FinishMinute,
-                            //人數
-                            reciptPersonQuantity = data.PersonQuantity,
-                            //步驟數
-                            recipeStepNumber = step.StepNumber,
-                            //步驟圖片
-                            recipeStepsImage = step.StepShot,
-                            //步驟敘述
-                            recipeStepDescription = step.StepDescript,
-                        };
-            var datalist = query.ToList();
-            return View(datalist);
+            var AllList = new RecipeWatch()
+            {
+                recipeWatchBrief = recipeBrief.ToList(),
+                recipeRecordFields = recipeStepAndIntro.ToList(),
+                recipeIngredient = recipeIngredient.ToList(),
+            };
+            return View(AllList);
         }
 
         public async Task<IActionResult> CreateRecipe()
         {
-            //還在測試
-            var ingredients = new List<string> { "雞蛋", "牛奶", "麵粉", "糖", "辣椒醬", "火龍果", "蘇打餅乾" };
-            ViewData["Ingredients"] = ingredients;
-            return View();
+            var ingredientList = await _context.Ingredients.ToListAsync();
+            var classList = await _context.RecipeClasses.ToListAsync();
+            var unitList = await _context.Units.ToListAsync();
+
+            var allList = new RecipeCreate()
+            {
+                Ingredients = ingredientList,
+                className = classList,
+                units = unitList
+            };
+
+
+            //取得食材
+            return View(allList);
 
         }
-        //編輯食譜 js css還暫套跟createRecipe一樣的
+        //編輯食譜 js css還暫套跟createRecipe一樣的之後差別是還要導入查看食譜的資料
         public async Task<IActionResult> EditRecipe()
         {
-            //還在測試
-            var ingredients = new List<string> { "雞蛋", "牛奶", "麵粉", "糖", "辣椒醬", "火龍果", "蘇打餅乾" };
-            ViewData["Ingredients"] = ingredients;
-            return View();
+            var ingredientList = await _context.Ingredients.ToListAsync();
+            var classList = await _context.RecipeClasses.ToListAsync();
+            var unitList = await _context.Units.ToListAsync();
+
+            var allList = new RecipeCreate()
+            {
+                Ingredients = ingredientList,
+                className = classList,
+                units = unitList
+            };
+
+
+            //取得食材
+            return View(allList);
 
         }
 

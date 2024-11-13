@@ -4,16 +4,10 @@
 @using System.Text.Json;
 @using YumYum.Models;
 @{
-    var ingredientsJson = TempData["ingredients"] as string;
-    var ingredients = new List<IngredientWatch>();
 
-    if (!string.IsNullOrEmpty(ingredientsJson))
-    {
-        ingredients = JsonSerializer.Deserialize<List<IngredientWatch>>(ingredientsJson);
-    }
 }
 
-@model List<RecipeWatch>
+@model RecipeWatch
 @section Scripts {
     <script src="~/Views/Recipe/WatchRecipe.cshtml.js"></script>
 }
@@ -25,7 +19,7 @@
         <!-- 食譜圖片 -->
         <div class="col-6 p-5 flex-column" style="height: 500px;justify-content: center;">
             <div class="d-flex justify-content-center mb-5">
-                <img src="@Model[0].recipeImage" alt="..." class="m-0 br-black" style="height: 400px;width: 600px;">
+                <img src="@Model.recipeRecordFields[0].FieldShot" alt="..." class="m-0 br-black" style="height: 400px;width: 600px;">
             </div>
         </div>
 
@@ -33,10 +27,10 @@
         <div class="col-6 p-4 " style="height: 500px;">
             <div class="input-group mb-2 w-100">
                 <!-- 料理名稱 -->
-                <h1 class="m-2 d-inline-block d-flex ms-0">@Model[0].recipeName</h1>
+                <h1 class="m-2 d-inline-block d-flex ms-0">@Model.recipeWatchBrief[0].recipeName</h1>
                 <!-- 料理類型 -->
                 <div class="d-flex ms-auto pt-3">
-                    <b style="font-size: 1.25rem;">@Model[0].recipeClassName</b>
+                    <b style="font-size: 1.25rem;">@Model.recipeWatchBrief[0].className</b>
                 </div>
             </div>
 
@@ -44,18 +38,18 @@
             <div class="d-flex justify-content-start" style="border-color: aliceblue;margin-top: 1rem;">
                 <div class="ms-0" style="width: 50%;border-color: aliceblue;">
                     <p class="mb-2 text-big">份量<small>(人份)</small></p>
-                    <input type="text" class="br-gray input-type" value="@Model[0].reciptPersonQuantity" readonly>
+                    <input type="text" class="br-gray input-type" value="@Model.recipeWatchBrief[0].recipePeople" readonly>
                 </div>
                 <div class="ms-5" style="width: 50%;">
                     <p class="mb-2 text-big">烹調時間<small>(分鐘)</small></p>
-                    <input type="text" class="br-gray input-type" value="@Model[0].recipeFinishMinute" readonly>
+                    <input type="text" class="br-gray input-type" value="@Model.recipeWatchBrief[0].recipeFinishTime" readonly>
                 </div>
             </div>
             <!-- 簡介 -->
             <div class="d-inline-block mb-0 w-100" style="margin-top: 31px;">
                 <p class="m-2 text-big">簡介：</p>
                 <textarea class="mb-2 br-gray p-3" style="width: 100%; border-radius: 4px;font-size: 1rem;"
-                          rows="6" readonly>@Model[0].recipeDescription</textarea>
+                          rows="6" readonly>@Model.recipeRecordFields[0].FieldDescript</textarea>
             </div>
         </div>
     </div>
@@ -68,7 +62,7 @@
 
                 <div class="d-flex justify-content-around flex-wrap pt-5 bg-gray"
                      style="height: 320px ;width:100%; overflow-y: auto;border-radius: 6px;">
-                    @foreach (IngredientWatch item in ingredients!)
+                    @foreach (var item in Model.recipeIngredient)
                     {
                         <!-- 左邊 -->
                         <div class="col-4 d-flex justify-content-center" style="height:64.45px">
@@ -82,7 +76,7 @@
                             </div>
                             <!-- 數量和單位 -->
                             <div class="col-3 d-flex justify-content-center align-items-center">
-                                <b type="text" style="width: 80px;border:0px;text-decoration:underline solid var(--yum-secondary-4) 2px;text-underline-offset:8px" class="ms-2 me-4 br-black d-flex text-center">@item.ingredientCount@item.ingredientsUnit</b>
+                                <b type="text" style="width: 80px;border:0px;text-decoration:underline solid var(--yum-secondary-4) 2px;text-underline-offset:8px" class="ms-2 me-4 br-black d-flex text-center">@item.ingredientCount@item.ingredientunit</b>
                             </div>
                         </div>
                     }
@@ -95,9 +89,9 @@
     <!-- 步驟 -->
     <div class="row mt-5" style="position:relative">
         <div class="col-6 p-0" id="left-steps" style="border-top:2px solid var(--yum-secondary-4);border-right:2px solid var(--yum-secondary-4)">
-            @foreach (var item in Model)
+            @foreach (var item in Model.recipeRecordFields)
             {
-                if (item.recipeStepNumber == 1)
+                if (item.RecipeField == 1)
                 {
                     <!-- 步驟1 -->
                     <!--空的樣式-->
@@ -106,42 +100,41 @@
                         ──────────────●
                     </p>
                     <div class="card mt-5" style="width: 18rem; margin-left: 7rem;" id="step01">
-                        <img src="@item.recipeStepsImage" class="card-img-top" alt="哈哈" style="height: 13rem;">
+                        <img src="@item.FieldShot" class="card-img-top" alt="哈哈" style="height: 13rem;">
                         <div class="text-center m-0 step-bk">
-                            <p class="m-0 mt-1" style="font-size: 1.5rem;">@($"STEP0{item.recipeStepNumber}")</p>
+                            <p class="m-0 mt-1" style="font-size: 1.5rem;">@($"STEP0{item.RecipeField}")</p>
                         </div>
                         <div class="card-body" style="width:286px;height:152px">
-                            <textarea class="card-text" style="width:100%;height:100%;border-color:transparent">@item.recipeDescription</textarea>
+                            <textarea class="card-text" style="width:100%;height:100%;border-color:transparent">@item.FieldDescript</textarea>
                         </div>
                     </div>
-                    if (item.recipeStepNumber == Model.Count)
+                    if (item.RecipeField == Model.recipeRecordFields.Count - 1)
                     {
                         <script>
-                            $(`#@($"step0{item.recipeStepNumber}")`).addClass("mb-200");
+                            $(`#@($"step0{item.RecipeField}")`).addClass("mb-200");
                         </script>
                     }
 
                 }
-                else if (item.recipeStepNumber % 2 != 0)
+                else if (item.RecipeField % 2 != 0)
                 {
                     //奇數步驟
-
                     <p style="position: absolute;margin-top: 50.2rem;margin-left: 23.76rem;color:var(--yum-secondary-4)">
                         ──────────────●
                     </p>
-                    <div class="card step-left" id="@($"step0{item.recipeStepNumber}")">
-                        <img src="@item.recipeStepsImage" class="card-img-top" alt="哈哈" style="height: 13rem;">
+                    <div class="card step-left" id="@($"step0{item.RecipeField}")">
+                        <img src="@item.FieldShot" class="card-img-top" alt="哈哈" style="height: 13rem;">
                         <div class="text-center m-0 step-bk">
-                            <p class="m-0 mt-1" style="font-size: 1.5rem;">@($"STEP0{item.recipeStepNumber}")</p>
+                            <p class="m-0 mt-1" style="font-size: 1.5rem;">@($"STEP0{item.RecipeField}")</p>
                         </div>
                         <div class="card-body" style="width:286px;height:152px">
-                            <textarea class="card-text" style="width:100%;height:100%;border-color:transparent">@item.recipeStepDescription</textarea>
+                            <textarea class="card-text" style="width:100%;height:100%;border-color:transparent">@item.FieldDescript</textarea>
                         </div>
                     </div>
-                    if (item.recipeStepNumber == Model.Count)
+                    if (item.RecipeField == Model.recipeIngredient.Count - 1)
                     {
                         <script>
-                            $(`#@($"step0{item.recipeStepNumber}")`).addClass("mb-200");
+                            $(`#@($"step0{item.RecipeField}")`).addClass("mb-200");
                         </script>
                     }
                 }
@@ -149,49 +142,49 @@
         </div>
 
         <div class="col-6 p-0" id="right-steps" style="border-top:2px solid var(--yum-secondary-4)">
-            @foreach (var item in Model)
+            @foreach (var item in Model.recipeRecordFields)
             {
 
-                if (item.recipeStepNumber == 2)
+                if (item.RecipeField == 2)
                 {
                     <p style="position: absolute;margin-top: 42.2rem;margin-left:-10px;color:var(--yum-secondary-4)">
                         ●─────────────
                     </p>
                     <div class="card" style="width: 18rem; margin-top:30rem;margin-left: 14.25rem;" id="step02">
-                        <img src="@item.recipeStepsImage" class="card-img-top" alt="哈哈" style="height: 13rem;">
+                        <img src="@item.FieldShot" class="card-img-top" alt="哈哈" style="height: 13rem;">
                         <div class="text-center m-0 step-bk">
-                            <p class="m-0 mt-1" style="font-size: 1.5rem;">@($"STEP0{item.recipeStepNumber}")</p>
+                            <p class="m-0 mt-1" style="font-size: 1.5rem;">@($"STEP0{item.RecipeField}")</p>
                         </div>
                         <div class="card-body" style="width:286px;height:152px">
-                            <textarea class="card-text" style="width:100%;height:100%;border-color:transparent">@item.recipeStepDescription</textarea>
+                            <textarea class="card-text" style="width:100%;height:100%;border-color:transparent">@item.FieldDescript</textarea>
                         </div>
                     </div>
-                    if (item.recipeStepNumber == Model.Count)
+                    if (item.RecipeField == Model.recipeRecordFields.Count - 1)
                     {
                         <script>
-                            $(`#@($"step0{item.recipeStepNumber}")`).addClass("mb-200");
+                            $(`#@($"step0{item.RecipeField}")`).addClass("mb-200");
                         </script>
                     }
                 }
 
-                else if (item.recipeStepNumber % 2 == 0 && item.recipeStepNumber != 2)
+                else if (item.RecipeField % 2 == 0 && (item.RecipeField != 2 && item.RecipeField != 0))
                 {
                 //偶數步驟
 
                     <p style="position: absolute;margin-top: 50.2rem;margin-left:-10px;color:var(--yum-secondary-4)">●────────────</p>
-                    <div class="card step-right" id="@($"step0{item.recipeStepNumber}")">
-                        <img src="@item.recipeStepsImage" class="card-img-top" alt="哈哈" style="height: 13rem;">
+                    <div class="card step-right" id="@($"step0{item.RecipeField}")">
+                        <img src="@item.FieldShot" class="card-img-top" alt="哈哈" style="height: 13rem;">
                         <div class="text-center m-0 step-bk">
-                            <p class="m-0 mt-1" style="font-size: 1.5rem;">@($"STEP0{item.recipeStepNumber}")</p>
+                            <p class="m-0 mt-1" style="font-size: 1.5rem;">@($"STEP0{item.RecipeField}")</p>
                         </div>
                         <div class="card-body" style="width:286px;height:152px">
-                            <textarea class="card-text" style="width:100%;height:100%;border-color:transparent">@item.recipeStepDescription</textarea>
+                            <textarea class="card-text" style="width:100%;height:100%;border-color:transparent">@item.FieldDescript</textarea>
                         </div>
                     </div>
-                    if (item.recipeStepNumber == Model.Count)
+                    if (item.RecipeField == Model.recipeRecordFields.Count - 1)
                     {
                         <script>
-                            $(`#@($"step0{item.recipeStepNumber}")`).addClass("mb-200");
+                            $(`#@($"step0{item.RecipeField}")`).addClass("mb-200");
                         </script>
                     }
                 }
