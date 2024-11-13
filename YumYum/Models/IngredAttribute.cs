@@ -11,6 +11,8 @@ public partial class IngredAttribute
 
     public string IngredAttributePhoto { get; set; } = null!;
 
+    public virtual ICollection<CherishOrder> CherishOrders { get; set; } = new List<CherishOrder>();
+
     public virtual ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
 
     public virtual ICollection<Unit> Units { get; set; } = new List<Unit>();

@@ -23,6 +23,3 @@ public partial class RefrigeratorStore
 
     public virtual UserSecretInfo User { get; set; } = null!;
 }
-
-
-

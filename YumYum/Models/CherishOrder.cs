@@ -11,25 +11,33 @@ public partial class CherishOrder
 
     public DateOnly EndDate { get; set; }
 
+    public byte IngredAttributeId { get; set; }
+
     public short IngredientId { get; set; }
 
     public short Quantity { get; set; }
 
-    public string CherishPhoto { get; set; } = null!;
+    public string ObtainSource { get; set; } = null!;
 
-    public byte TradeStateCode { get; set; }
+    public DateOnly ObtainDate { get; set; }
 
     public DateOnly SubmitDate { get; set; }
 
-    public DateOnly? UpdateDate { get; set; }
+    public DateTime? ReserveDate { get; set; }
 
-    public virtual ICollection<CherishOrderApplicant> CherishOrderApplicants { get; set; } = new List<CherishOrderApplicant>();
+    public byte TradeStateCode { get; set; }
+
+    public virtual CherishOrderCheck? CherishOrderCheck { get; set; }
 
     public virtual CherishOrderInfo? CherishOrderInfo { get; set; }
 
+    public virtual ICollection<CherishTradeTime> CherishTradeTimes { get; set; } = new List<CherishTradeTime>();
+
     public virtual UserSecretInfo GiverUser { get; set; } = null!;
+
+    public virtual IngredAttribute IngredAttribute { get; set; } = null!;
 
     public virtual Ingredient Ingredient { get; set; } = null!;
 
-    public virtual TradeState TradeStateCodeNavigation { get; set; } = null!;
+    public virtual CherishTradeState TradeStateCodeNavigation { get; set; } = null!;
 }

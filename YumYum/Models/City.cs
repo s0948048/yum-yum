@@ -14,6 +14,4 @@ public partial class City
     public virtual ICollection<CherishOrderInfo> CherishOrderInfos { get; set; } = new List<CherishOrderInfo>();
 
     public virtual ICollection<Region> Regions { get; set; } = new List<Region>();
-
-    public virtual ICollection<UserDetail> UserDetails { get; set; } = new List<UserDetail>();
 }

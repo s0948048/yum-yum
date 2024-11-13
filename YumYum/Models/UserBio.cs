@@ -7,8 +7,6 @@ public partial class UserBio
 {
     public int UserId { get; set; }
 
-    public string? UserNickname { get; set; }
-
     public string? UserIntro { get; set; }
 
     public string? HeadShot { get; set; }

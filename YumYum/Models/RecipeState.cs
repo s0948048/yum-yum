@@ -9,5 +9,5 @@ public partial class RecipeState
 
     public string RecipeStateDescript { get; set; } = null!;
 
-    public virtual ICollection<RecipeBrief> RecipeBriefs { get; set; } = new List<RecipeBrief>();
+    public virtual ICollection<RecipeRecord> RecipeRecords { get; set; } = new List<RecipeRecord>();
 }

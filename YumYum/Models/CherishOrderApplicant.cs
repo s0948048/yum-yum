@@ -18,6 +18,4 @@ public partial class CherishOrderApplicant
     public string? ApplicantContactOther { get; set; }
 
     public virtual UserSecretInfo Applicant { get; set; } = null!;
-
-    public virtual CherishOrder Cherish { get; set; } = null!;
 }

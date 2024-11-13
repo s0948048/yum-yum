@@ -13,8 +13,6 @@ public partial class CherishDefaultInfo
 
     public short TradeRegionId { get; set; }
 
-    public string TradeTimeDescript { get; set; } = null!;
-
     public string? ContactLine { get; set; }
 
     public string? ContactPhone { get; set; }

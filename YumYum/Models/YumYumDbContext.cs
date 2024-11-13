@@ -17,13 +17,23 @@ public partial class YumYumDbContext : DbContext
 
     public virtual DbSet<Admin> Admins { get; set; }
 
+    public virtual DbSet<CherishCheckReason> CherishCheckReasons { get; set; }
+
     public virtual DbSet<CherishDefaultInfo> CherishDefaultInfos { get; set; }
+
+    public virtual DbSet<CherishDefaultTimeSet> CherishDefaultTimeSets { get; set; }
 
     public virtual DbSet<CherishOrder> CherishOrders { get; set; }
 
     public virtual DbSet<CherishOrderApplicant> CherishOrderApplicants { get; set; }
 
+    public virtual DbSet<CherishOrderCheck> CherishOrderChecks { get; set; }
+
     public virtual DbSet<CherishOrderInfo> CherishOrderInfos { get; set; }
+
+    public virtual DbSet<CherishTradeState> CherishTradeStates { get; set; }
+
+    public virtual DbSet<CherishTradeTime> CherishTradeTimes { get; set; }
 
     public virtual DbSet<City> Cities { get; set; }
 
@@ -35,29 +45,30 @@ public partial class YumYumDbContext : DbContext
 
     public virtual DbSet<RecipeClass> RecipeClasses { get; set; }
 
-    public virtual DbSet<RecipeEditField> RecipeEditFields { get; set; }
+    public virtual DbSet<RecipeField> RecipeFields { get; set; }
 
     public virtual DbSet<RecipeIngredient> RecipeIngredients { get; set; }
 
-    public virtual DbSet<RecipeState> RecipeStates { get; set; }
+    public virtual DbSet<RecipeRecord> RecipeRecords { get; set; }
 
-    public virtual DbSet<RecipeStep> RecipeSteps { get; set; }
+    public virtual DbSet<RecipeRecordField> RecipeRecordFields { get; set; }
+
+    public virtual DbSet<RecipeState> RecipeStates { get; set; }
 
     public virtual DbSet<RefrigeratorStore> RefrigeratorStores { get; set; }
 
     public virtual DbSet<Region> Regions { get; set; }
 
-    public virtual DbSet<TradeState> TradeStates { get; set; }
-
     public virtual DbSet<Unit> Units { get; set; }
 
     public virtual DbSet<UserBio> UserBios { get; set; }
 
-    public virtual DbSet<UserDetail> UserDetails { get; set; }
-
     public virtual DbSet<UserSecretInfo> UserSecretInfos { get; set; }
 
-   
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.\\sqlexpress;Database=yumyumdb;Integrated Security=True;Encrypt=False;");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Admin>(entity =>
@@ -81,6 +92,18 @@ public partial class YumYumDbContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<CherishCheckReason>(entity =>
+        {
+            entity.HasKey(e => e.ReasonId);
+
+            entity.ToTable("CherishCheckReason");
+
+            entity.Property(e => e.ReasonId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("ReasonID");
+            entity.Property(e => e.ReasonText).HasMaxLength(5);
+        });
+
         modelBuilder.Entity<CherishDefaultInfo>(entity =>
         {
             entity.HasKey(e => e.GiverUserId);
@@ -101,7 +124,6 @@ public partial class YumYumDbContext : DbContext
                 .HasMaxLength(4)
                 .IsUnicode(false);
             entity.Property(e => e.TradeRegionId).HasColumnName("TradeRegionID");
-            entity.Property(e => e.TradeTimeDescript).HasMaxLength(60);
             entity.Property(e => e.UserNickname)
                 .HasMaxLength(10)
                 .IsFixedLength();
@@ -122,6 +144,24 @@ public partial class YumYumDbContext : DbContext
                 .HasConstraintName("FK_CherishDefaultInfo_Region");
         });
 
+        modelBuilder.Entity<CherishDefaultTimeSet>(entity =>
+        {
+            entity.HasKey(e => e.TimeId);
+
+            entity.ToTable("CherishDefaultTimeSet");
+
+            entity.Property(e => e.TimeId).HasColumnName("TimeID");
+            entity.Property(e => e.GiverUserId).HasColumnName("GiverUserID");
+            entity.Property(e => e.TradeTimeCode)
+                .HasMaxLength(5)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.GiverUser).WithMany(p => p.CherishDefaultTimeSets)
+                .HasForeignKey(d => d.GiverUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CherishDefaultTimeSet_UserSecretInfo");
+        });
+
         modelBuilder.Entity<CherishOrder>(entity =>
         {
             entity.HasKey(e => e.CherishId);
@@ -129,16 +169,21 @@ public partial class YumYumDbContext : DbContext
             entity.ToTable("CherishOrder");
 
             entity.Property(e => e.CherishId).HasColumnName("CherishID");
-            entity.Property(e => e.CherishPhoto)
-                .HasMaxLength(40)
-                .IsUnicode(false);
             entity.Property(e => e.GiverUserId).HasColumnName("GiverUserID");
+            entity.Property(e => e.IngredAttributeId).HasColumnName("IngredAttributeID");
             entity.Property(e => e.IngredientId).HasColumnName("IngredientID");
+            entity.Property(e => e.ObtainSource).HasMaxLength(15);
+            entity.Property(e => e.ReserveDate).HasColumnType("smalldatetime");
 
             entity.HasOne(d => d.GiverUser).WithMany(p => p.CherishOrders)
                 .HasForeignKey(d => d.GiverUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CherishOrder_UserSecretInfo");
+
+            entity.HasOne(d => d.IngredAttribute).WithMany(p => p.CherishOrders)
+                .HasForeignKey(d => d.IngredAttributeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CherishOrder_IngredAttribute");
 
             entity.HasOne(d => d.Ingredient).WithMany(p => p.CherishOrders)
                 .HasForeignKey(d => d.IngredientId)
@@ -148,7 +193,7 @@ public partial class YumYumDbContext : DbContext
             entity.HasOne(d => d.TradeStateCodeNavigation).WithMany(p => p.CherishOrders)
                 .HasForeignKey(d => d.TradeStateCode)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CherishOrder_TradeState");
+                .HasConstraintName("FK_CherishOrder_CherishTradeState");
         });
 
         modelBuilder.Entity<CherishOrderApplicant>(entity =>
@@ -174,11 +219,31 @@ public partial class YumYumDbContext : DbContext
                 .HasForeignKey(d => d.ApplicantId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CherishOrderApplicant_UserSecretInfo");
+        });
 
-            entity.HasOne(d => d.Cherish).WithMany(p => p.CherishOrderApplicants)
-                .HasForeignKey(d => d.CherishId)
+        modelBuilder.Entity<CherishOrderCheck>(entity =>
+        {
+            entity.HasKey(e => e.CherishId);
+
+            entity.ToTable("CherishOrderCheck");
+
+            entity.Property(e => e.CherishId)
+                .ValueGeneratedNever()
+                .HasColumnName("CherishID");
+            entity.Property(e => e.CherishPhoto).HasMaxLength(60);
+            entity.Property(e => e.OtherPhoto).HasMaxLength(60);
+            entity.Property(e => e.ReasonId).HasColumnName("ReasonID");
+            entity.Property(e => e.RejectText).HasMaxLength(60);
+            entity.Property(e => e.ValidDatePhoto).HasMaxLength(60);
+
+            entity.HasOne(d => d.Cherish).WithOne(p => p.CherishOrderCheck)
+                .HasForeignKey<CherishOrderCheck>(d => d.CherishId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CherishOrderApplicant_CherishOrder");
+                .HasConstraintName("FK_CherishOrderCheck_CherishOrder");
+
+            entity.HasOne(d => d.Reason).WithMany(p => p.CherishOrderChecks)
+                .HasForeignKey(d => d.ReasonId)
+                .HasConstraintName("FK_CherishOrderCheck_CherishCheckReason");
         });
 
         modelBuilder.Entity<CherishOrderInfo>(entity =>
@@ -201,7 +266,6 @@ public partial class YumYumDbContext : DbContext
                 .HasMaxLength(4)
                 .IsUnicode(false);
             entity.Property(e => e.TradeRegionId).HasColumnName("TradeRegionID");
-            entity.Property(e => e.TradeTimeDescript).HasMaxLength(60);
             entity.Property(e => e.UserNickname).HasMaxLength(10);
 
             entity.HasOne(d => d.Cherish).WithOne(p => p.CherishOrderInfo)
@@ -218,6 +282,34 @@ public partial class YumYumDbContext : DbContext
                 .HasForeignKey(d => d.TradeRegionId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CherishOrderInfo_Region");
+        });
+
+        modelBuilder.Entity<CherishTradeState>(entity =>
+        {
+            entity.HasKey(e => e.TradeStateCode).HasName("PK_TradeState");
+
+            entity.ToTable("CherishTradeState");
+
+            entity.Property(e => e.TradeStateCode).ValueGeneratedOnAdd();
+            entity.Property(e => e.TradeStateDescript).HasMaxLength(10);
+        });
+
+        modelBuilder.Entity<CherishTradeTime>(entity =>
+        {
+            entity.HasKey(e => e.TimeId).HasName("PK__CherishT__E04ED967F1D0706D");
+
+            entity.ToTable("CherishTradeTime");
+
+            entity.Property(e => e.TimeId).HasColumnName("TimeID");
+            entity.Property(e => e.CherishId).HasColumnName("CherishID");
+            entity.Property(e => e.TradeTimeCode)
+                .HasMaxLength(5)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Cherish).WithMany(p => p.CherishTradeTimes)
+                .HasForeignKey(d => d.CherishId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CherishTradeTime_CherishOrder");
         });
 
         modelBuilder.Entity<City>(entity =>
@@ -267,28 +359,19 @@ public partial class YumYumDbContext : DbContext
             entity.ToTable("RecipeBrief");
 
             entity.Property(e => e.RecipeId).HasColumnName("RecipeID");
-            entity.Property(e => e.CreateUserId).HasColumnName("CreateUserID");
-            entity.Property(e => e.EditFieldId).HasColumnName("EditFieldID");
+            entity.Property(e => e.CreatorId).HasColumnName("CreatorID");
             entity.Property(e => e.RecipeClassId).HasColumnName("RecipeClassID");
-            entity.Property(e => e.RecipeDescript).HasMaxLength(150);
             entity.Property(e => e.RecipeName).HasMaxLength(20);
-            entity.Property(e => e.RecipeShot)
-                .HasMaxLength(50)
-                .IsUnicode(false);
 
-            entity.HasOne(d => d.EditField).WithMany(p => p.RecipeBriefs)
-                .HasForeignKey(d => d.EditFieldId)
-                .HasConstraintName("FK_RecipeBrief_RecipeEditField");
+            entity.HasOne(d => d.Creator).WithMany(p => p.RecipeBriefs)
+                .HasForeignKey(d => d.CreatorId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_RecipeBrief_UserSecretInfo");
 
             entity.HasOne(d => d.RecipeClass).WithMany(p => p.RecipeBriefs)
                 .HasForeignKey(d => d.RecipeClassId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_RecipeBrief_RecipeClass");
-
-            entity.HasOne(d => d.RecipeStateCodeNavigation).WithMany(p => p.RecipeBriefs)
-                .HasForeignKey(d => d.RecipeStateCode)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RecipeBrief_RecipeState");
         });
 
         modelBuilder.Entity<RecipeClass>(entity =>
@@ -299,16 +382,16 @@ public partial class YumYumDbContext : DbContext
             entity.Property(e => e.RecipeClassName).HasMaxLength(20);
         });
 
-        modelBuilder.Entity<RecipeEditField>(entity =>
+        modelBuilder.Entity<RecipeField>(entity =>
         {
-            entity.HasKey(e => e.EditFieldId);
+            entity.HasKey(e => e.FieldId);
 
-            entity.ToTable("RecipeEditField");
+            entity.ToTable("RecipeField");
 
-            entity.Property(e => e.EditFieldId)
+            entity.Property(e => e.FieldId)
                 .ValueGeneratedOnAdd()
-                .HasColumnName("EditFieldID");
-            entity.Property(e => e.EditFieldName).HasMaxLength(20);
+                .HasColumnName("FieldID");
+            entity.Property(e => e.FieldName).HasMaxLength(5);
         });
 
         modelBuilder.Entity<RecipeIngredient>(entity =>
@@ -336,6 +419,49 @@ public partial class YumYumDbContext : DbContext
                 .HasConstraintName("FK_RecipeIngredients_Unit");
         });
 
+        modelBuilder.Entity<RecipeRecord>(entity =>
+        {
+            entity.HasKey(e => new { e.RecipeId, e.RecipeRecVersion });
+
+            entity.ToTable("RecipeRecord");
+
+            entity.Property(e => e.RecipeId).HasColumnName("RecipeID");
+
+            entity.HasOne(d => d.Recipe).WithMany(p => p.RecipeRecords)
+                .HasForeignKey(d => d.RecipeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_RecipeRecord_RecipeBrief");
+
+            entity.HasOne(d => d.RecipeStatusCodeNavigation).WithMany(p => p.RecipeRecords)
+                .HasForeignKey(d => d.RecipeStatusCode)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_RecipeRecord_RecipeState");
+        });
+
+        modelBuilder.Entity<RecipeRecordField>(entity =>
+        {
+            entity.HasKey(e => new { e.RecipeId, e.RecipeRecVersion, e.RecipeField });
+
+            entity.ToTable("RecipeRecordField");
+
+            entity.Property(e => e.RecipeId).HasColumnName("RecipeID");
+            entity.Property(e => e.FieldComment).HasMaxLength(30);
+            entity.Property(e => e.FieldDescript).HasMaxLength(150);
+            entity.Property(e => e.FieldShot)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.RecipeFieldNavigation).WithMany(p => p.RecipeRecordFields)
+                .HasForeignKey(d => d.RecipeField)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_RecipeRecordField_RecipeField");
+
+            entity.HasOne(d => d.Recipe).WithMany(p => p.RecipeRecordFields)
+                .HasForeignKey(d => d.RecipeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_RecipeRecordField_RecipeBrief");
+        });
+
         modelBuilder.Entity<RecipeState>(entity =>
         {
             entity.HasKey(e => e.RecipeStateCode);
@@ -346,22 +472,6 @@ public partial class YumYumDbContext : DbContext
             entity.Property(e => e.RecipeStateDescript)
                 .HasMaxLength(10)
                 .IsFixedLength();
-        });
-
-        modelBuilder.Entity<RecipeStep>(entity =>
-        {
-            entity.HasKey(e => new { e.RecipeId, e.StepNumber });
-
-            entity.Property(e => e.RecipeId).HasColumnName("RecipeID");
-            entity.Property(e => e.StepDescript).HasMaxLength(150);
-            entity.Property(e => e.StepShot)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-
-            entity.HasOne(d => d.Recipe).WithMany(p => p.RecipeSteps)
-                .HasForeignKey(d => d.RecipeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RecipeSteps_RecipeBrief");
         });
 
         modelBuilder.Entity<RefrigeratorStore>(entity =>
@@ -410,16 +520,6 @@ public partial class YumYumDbContext : DbContext
                 .HasConstraintName("FK_Region_City");
         });
 
-        modelBuilder.Entity<TradeState>(entity =>
-        {
-            entity.HasKey(e => e.TradeStateCode);
-
-            entity.ToTable("TradeState");
-
-            entity.Property(e => e.TradeStateCode).ValueGeneratedOnAdd();
-            entity.Property(e => e.TradeStateDescript).HasMaxLength(10);
-        });
-
         modelBuilder.Entity<Unit>(entity =>
         {
             entity.ToTable("Unit");
@@ -455,7 +555,6 @@ public partial class YumYumDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("IGAccount");
             entity.Property(e => e.UserIntro).HasMaxLength(150);
-            entity.Property(e => e.UserNickname).HasMaxLength(20);
             entity.Property(e => e.WebLink).IsUnicode(false);
             entity.Property(e => e.WebNickName).HasMaxLength(15);
             entity.Property(e => e.YoutuLink).IsUnicode(false);
@@ -465,37 +564,6 @@ public partial class YumYumDbContext : DbContext
                 .HasForeignKey<UserBio>(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserBio_UserSecretInfo");
-        });
-
-        modelBuilder.Entity<UserDetail>(entity =>
-        {
-            entity.HasKey(e => e.UserId);
-
-            entity.ToTable("UserDetail");
-
-            entity.Property(e => e.UserId)
-                .ValueGeneratedNever()
-                .HasColumnName("UserID");
-            entity.Property(e => e.CityKey)
-                .HasMaxLength(4)
-                .IsUnicode(false);
-            entity.Property(e => e.RegionId).HasColumnName("RegionID");
-            entity.Property(e => e.UserPhone)
-                .HasMaxLength(15)
-                .IsUnicode(false);
-
-            entity.HasOne(d => d.CityKeyNavigation).WithMany(p => p.UserDetails)
-                .HasForeignKey(d => d.CityKey)
-                .HasConstraintName("FK_UserDetail_City");
-
-            entity.HasOne(d => d.Region).WithMany(p => p.UserDetails)
-                .HasForeignKey(d => d.RegionId)
-                .HasConstraintName("FK_UserDetail_Region");
-
-            entity.HasOne(d => d.User).WithOne(p => p.UserDetail)
-                .HasForeignKey<UserDetail>(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UserDetail_UserSecretInfo");
         });
 
         modelBuilder.Entity<UserSecretInfo>(entity =>
@@ -511,13 +579,10 @@ public partial class YumYumDbContext : DbContext
             entity.Property(e => e.EmailValidCode)
                 .HasMaxLength(6)
                 .IsUnicode(false);
-            entity.Property(e => e.GoogleId).HasColumnName("GoogleID");
             entity.Property(e => e.Password)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.UserName)
-                .HasMaxLength(10)
-                .IsUnicode(false);
+            entity.Property(e => e.UserNickname).HasMaxLength(20);
 
             entity.HasMany(d => d.Recipes).WithMany(p => p.Users)
                 .UsingEntity<Dictionary<string, object>>(
