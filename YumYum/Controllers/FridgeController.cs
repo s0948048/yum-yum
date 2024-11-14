@@ -11,19 +11,19 @@ namespace YumYum.Controllers
         public IActionResult Index()
         {
             var fridgeItemData = (from fridge in _context.RefrigeratorStores
-                             join igd in _context.Ingredients on fridge.IngredientId equals igd.IngredientId
-                             join unit in _context.Units on fridge.UnitId equals unit.UnitId
-                             where fridge.UserId == 3204 
-                             orderby fridge.ValidDate
-                             select new FridgeItemViewModel
-                             {
-                                 UserID = fridge.UserId,
-                                 IngredientName = igd.IngredientName,
-                                 IngredientIcon = igd.IngredientIcon,
-                                 Quantity = fridge.Quantity,
-                                 UnitName = unit.UnitName,
-                                 ValidDate = fridge.ValidDate
-                             }
+                                  join igd in _context.Ingredients on fridge.IngredientId equals igd.IngredientId
+                                  join unit in _context.Units on fridge.UnitId equals unit.UnitId
+                                  where fridge.UserId == 3204
+                                  orderby fridge.ValidDate
+                                  select new FridgeItemViewModel
+                                  {
+                                      UserID = fridge.UserId,
+                                      IngredientName = igd.IngredientName,
+                                      IngredientIcon = igd.IngredientIcon,
+                                      Quantity = fridge.Quantity,
+                                      UnitName = unit.UnitName,
+                                      ValidDate = fridge.ValidDate
+                                  }
                              ).ToList();
 
             var ingredientData = (from igd in _context.Ingredients
@@ -38,7 +38,7 @@ namespace YumYum.Controllers
                 RefrigeratorData = fridgeItemData,
                 IngredientData = ingredientData
             };
-
+           
             return View(viewModel);
         }
 
