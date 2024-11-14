@@ -7,18 +7,22 @@
 @section Scripts {
     <script src="~/Views/User/RegisterPage.cshtml.js"></script>
 }
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/shared/jquery.js"></script>
 
 <div class="container mb-5" style="width: 700px;margin-top:125px;margin-bottom:100px">
     <div class="row justify-content-center align-items-center">
         <div class="col-6 text-center br-black">
             <div class="text-center mb-4 pt-4">
                 <img b-u91x837eck src="~/img/icon/LogoYumyum.svg" class="logo-icon my-2">
-                <h3 class="mt-3">YumYum.</h3>
+                <h3 class="mt-3">註冊帳號</h3>
             </div>
+            <!--姓名-->
+            <!--<div class="input-group">
+                <input type="text" name="name" class="my-2 form-control" value="" placeholder="姓名">
+            </div>-->
             <!-- 暱稱 -->
             <div class="input-group">
-                <input class="my-2 form-control" type="text" placeholder="暱稱">
+                <input id="register-nickname" class="my-2 form-control" type="text" placeholder="暱稱">
             </div>
             <!-- 註冊帳號-->
             <div class="input-group">
@@ -27,7 +31,7 @@
             </div>
             <!-- 註冊密碼-->
             <div class="input-group">
-                <input id="register-pwd" class="my-2 form-control" type="password" placeholder="註冊密碼 (至少6個字母或數字)">
+                <input id="register-pwd" class="my-2 form-control" type="password" placeholder="註冊密碼 (至少6碼，須包含字母與數字)">
             </div>
             <!-- 確認密碼-->
             <div class="input-group mb-3">
@@ -40,7 +44,7 @@
             <!--已有帳號-->
             <div class="text-center mb-3">
                 <h6 class="mb-2">已經有帳戶了嗎?</h6>
-                <a class="btn btn-outline-success">登入</a>
+                <a href="~/User/LogInPage" class="btn btn-outline-success">登入</a>
             </div>
         </div>
     </div>

@@ -1,0 +1,64 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using Microsoft.EntityFrameworkCore;
+@using System.Collections.Immutable;
+@using System.Text.Json;
+@using YumYum.Models;
+@model UserSecretInfo;
+@{
+
+}
+<script src="~/js/shared/jquery.js"></script>
+
+<div class="container" style="border:2px solid black;border-radius:6px;width:550px;margin-bottom:300px">
+    <h3 class="pt-3 ps-3">輸入電子郵箱驗證碼</h3>
+    <hr>
+    <div class="ps-3">
+        <p>@($"請幫我們確認這是您的電子郵件。請輸入傳送至{Model.Email}的驗證碼。")</p>
+        <input type="text" id="register-verifycode">
+        <button class="btn btn-success" id="resend-mail">重新發送</button>
+    </div>
+    <hr>
+    <div class="text-end pb-3 pe-3">
+        <button class="btn btn-success" id="register-verifybutton">確認</button>
+    </div>
+</div>
+<script>
+    $('#register-verifybutton').on('click', function () {
+        if ($('#register-verifycode').val() == "@Model.EmailValidCode") {
+            console.log('驗證碼正確')
+            $.ajax({
+                url: '/user/RegisterVerifyPage',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(@Html.Raw(JsonSerializer.Serialize(Model))),
+                success: function (result) {
+                    alert(result["successmessage"]);
+                    window.location.href = result["action"];
+                },
+                error: function (xhr, status, error) {
+                    console.error('錯誤', error)
+                }
+            })
+        }
+        else {
+            alert("驗證碼錯誤")
+        }
+    })
+    $('#resend-mail').on('click', function () {
+        $.ajax({
+            url: '/user/SendVerifyAgain',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify("@Model.Email"),
+            success: function (result) {
+                alert(result["sucessmessage"]);
+                window.location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.error('錯誤', error)
+            }
+        })
+    })
+</script>
