@@ -86,7 +86,9 @@ head {
     width: 150px;
     text-align: center;
 }
-
+.nav-99 {
+    z-index: 2147483647;
+}
 
 
 .navbar-nav .nav-link {
