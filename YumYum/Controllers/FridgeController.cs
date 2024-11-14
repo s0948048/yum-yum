@@ -45,7 +45,7 @@ namespace YumYum.Controllers
 
         public IActionResult Edit()
         {
-            var viewModel = _context.Ingredients
+            var ingredientData = _context.Ingredients
                             .Where(igd => !_context.RefrigeratorStores
                                     .Where(store => store.UserId == 3204)
                                     .Select(store => store.IngredientId)
@@ -57,6 +57,14 @@ namespace YumYum.Controllers
                                 IngredientIcon = igd.IngredientIcon
                             });
 
+            var viewData = ingredientData.ToList();
+
+            var viewModel = new FridgeViewModel
+            {
+                RefrigeratorData = null,
+                IngredientData = viewData
+            };
+            
             return View(viewModel);
         }
         public FridgeController(YumYumDbContext context)
