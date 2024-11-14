@@ -251,5 +251,17 @@ namespace YumYum.Controllers
             }
 
         }
+        [HttpPut]
+        public async Task<IActionResult> ChangePasswordPage([FromBody] UserSecretInfo user)
+        {
+            UserSecretInfo changePasswordUser = await _context.UserSecretInfos.FirstOrDefaultAsync(p => p.Email == user.Email);
+            changePasswordUser!.Password = user.Password;
+            var saveResult = await _context.SaveChangesAsync();
+            if (saveResult != 0)
+            {
+                return Json(new { message = "變更密碼成功" });
+            }
+            else { return Json(new { message = "資料存取發生錯誤" }); }
+        }
     }
 }
