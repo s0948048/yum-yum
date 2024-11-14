@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using YumYum.Models;
 using YumYum.Models.ViewModels;
 
@@ -9,31 +8,15 @@ namespace YumYum.Controllers
     {
         private readonly YumYumDbContext _context;
 
+        public FridgeController(YumYumDbContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
-            var fridgeItemData = (from fridge in _context.RefrigeratorStores
-                                  join igd in _context.Ingredients on fridge.IngredientId equals igd.IngredientId
-                                  join unit in _context.Units on fridge.UnitId equals unit.UnitId
-                                  where fridge.UserId == 3204
-                                  orderby fridge.ValidDate
-                                  select new FridgeItemViewModel
-                                  {
-                                      UserID = fridge.UserId,
-                                      IngredientName = igd.IngredientName,
-                                      IngredientIcon = igd.IngredientIcon,
-                                      Quantity = fridge.Quantity,
-                                      UnitName = unit.UnitName,
-                                      ValidDate = fridge.ValidDate
-                                  }
-                              ).ToList();
-
-
-            var ingredientData = (from igd in _context.Ingredients
-                                  select new IngredientViewModel
-                                  {
-                                      IngredientName = igd.IngredientName,
-                                      IngredientIcon = igd.IngredientIcon
-                                  }).ToList();
+            var fridgeItemData = GetFridgeItemData();
+            var ingredientData = GetIngredientData();
 
             var viewModel = new FridgeViewModel
             {
@@ -46,47 +29,53 @@ namespace YumYum.Controllers
 
         public IActionResult Edit()
         {
-            var fridgeItemData = (from fridge in _context.RefrigeratorStores
-                                  join igd in _context.Ingredients on fridge.IngredientId equals igd.IngredientId
-                                  join unit in _context.Units on fridge.UnitId equals unit.UnitId
-                                  where fridge.UserId == 3204
-                                  orderby fridge.ValidDate
-                                  select new FridgeItemViewModel
-                                  {
-                                      UserID = fridge.UserId,
-                                      IngredientName = igd.IngredientName,
-                                      IngredientIcon = igd.IngredientIcon,
-                                      Quantity = fridge.Quantity,
-                                      UnitName = unit.UnitName,
-                                      ValidDate = fridge.ValidDate
-                                  }
-                              ).ToList();
-
-            var ingredientData = _context.Ingredients
-                            .Where(igd => !_context.RefrigeratorStores
-                                    .Where(store => store.UserId == 3204)
-                                    .Select(store => store.IngredientId)
-                                    .Contains(igd.IngredientId)
-                                    )
-                            .Select(igd => new IngredientViewModel
-                            {
-                                IngredientName = igd.IngredientName,
-                                IngredientIcon = igd.IngredientIcon
-                            });
-
-            var viewData = ingredientData.ToList();
+            var fridgeItemData = GetFridgeItemData();
+            var ingredientData = GetIngredientData(userId: 3204);
 
             var viewModel = new FridgeViewModel
             {
                 RefrigeratorData = fridgeItemData,
-                IngredientData = viewData
+                IngredientData = ingredientData
             };
             
             return View(viewModel);
         }
-        public FridgeController(YumYumDbContext context)
+
+        private List<FridgeItemViewModel> GetFridgeItemData()
         {
-            _context = context;
+            return (from fridge in _context.RefrigeratorStores
+                    join igd in _context.Ingredients on fridge.IngredientId equals igd.IngredientId
+                    join unit in _context.Units on fridge.UnitId equals unit.UnitId
+                    where fridge.UserId == 3204
+                    orderby fridge.ValidDate
+                    select new FridgeItemViewModel
+                    {
+                        UserID = fridge.UserId,
+                        IngredientName = igd.IngredientName,
+                        IngredientIcon = igd.IngredientIcon,
+                        Quantity = fridge.Quantity,
+                        UnitName = unit.UnitName,
+                        ValidDate = fridge.ValidDate
+                    }).ToList();
+        }
+
+        private List<IngredientViewModel> GetIngredientData(int? userId = null)
+        {
+            var ingredientsQuery = _context.Ingredients.AsQueryable();
+
+            if (userId.HasValue) 
+            {
+                var existingIngredientIds = _context.RefrigeratorStores
+                                             .Where(store => store.UserId == userId.Value)
+                                             .Select(store => store.IngredientId);
+                ingredientsQuery = ingredientsQuery.Where(igd => !existingIngredientIds.Contains(igd.IngredientId));
+            }
+
+            return ingredientsQuery.Select(igd => new IngredientViewModel
+            {
+                IngredientName = igd.IngredientName,
+                IngredientIcon = igd.IngredientIcon
+            }).ToList();
         }
     }
 }
