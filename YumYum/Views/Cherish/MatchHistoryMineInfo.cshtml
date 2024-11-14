@@ -1,0 +1,110 @@
+﻿<div class="container d-flex justify-content-center align-items-center mt-3" style="max-width: 960px; margin: 0 auto;">
+
+
+    <main>
+        <!-- 表單標題 即期良食資料 -->
+        <div class="row article-title rounded-top ">
+            <div class="col-4 ms-3">
+                <h2 class="my-3">即期良食資料</h2>
+            </div>
+        </div>
+
+        <!-- 表單內容  -->
+
+        <div class="row background-white area-padding p-4">
+            <div class="food-card d-flex flex-wrap mt-2 md-2">
+                <div class="col-4">
+                    <img src="/img/cherish/1.jpg" class="p-3 img-fluid" alt="Food">
+                </div>
+                <div class="col-8 p-3">
+                    <div class="d-flex justify-content-between mt-3 mb-3">
+                        <h5>茄子</h5>
+                        <div>數量: 4</div>
+                        <div>截止日期: 2024.11.11</div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-3 mb-3 align-items-center">
+                        <span>購買日期 或 採收日期: 2024-10-31</span>
+
+
+                        <span class="category-label">蔬菜類</span>
+                    </div>
+
+                    <p class="d-flex justify-content: flex-start align-items-center pt-4 pd-4">
+
+                        <span>食材來源: 自行採收</span>
+                    </p>
+                    <div class="cherishMatch d-flex justify-content-between pt-4 pd-4">
+                        <span>食材有效期限: 2024-11-12</span>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- 表單標題 聯絡方式 -->
+        <div class="row article-title rounded-top">
+            <div class="col-4 ms-3">
+                <h2 class="my-3">聯絡方式</h2>
+            </div>
+        </div>
+
+        <!-- 表單內容 -->
+
+        <div class="row background-white mb-4 area-padding">
+            <div class="team-boxed">
+                <div class="container">
+                    <div class="row g-4">
+
+                        <!-- 配對人卡片  -->
+                        @for (int k = 0; k < 6; k++)
+                        {
+                            <div class="col-md-6 col-lg-4 item">
+                                <div class="box text-center">
+                                    <img class="rounded-circle mb-3" src="/img/user/3204.jpg"
+                                         alt="avatar">
+                                    <p class="name fs-4">何瑞之</p>
+                                    <p class="title">聯絡方式</p>
+                                    <!-- Line -->
+                                    <div class="item">
+                                        <div class="contact mb-2">
+                                            <img src="/img/icon/line.svg" style="width: 20px; height: 20px;"
+                                                 alt="line-icon">
+                                            <label for="ContactLine" class="form-label ms-1">LINE</label>
+                                            <input class="form-control" type="text" value="rezho0427" readonly>
+                                        </div>
+                                    </div>
+                                    <!-- Phone -->
+                                    <div class="item">
+                                        <div class="contact mb-2">
+                                            <img src="/img/icon/phone.svg" style="width: 20px; height: 20px;"
+                                                 alt="phone-icon">
+                                            <label for="ContactPhone" class="form-label ms-1">電話號碼</label>
+                                            <input class="form-control" type="text" value="0979251340" readonly>
+                                        </div>
+                                    </div>
+                                    <!-- Other Contact -->
+                                    <div class="item">
+                                        <div class="contact">
+                                            <img src="/img/icon/contacts.svg" style="width: 20px; height: 20px;"
+                                                 alt="contacts-icon">
+                                            <label for="ContactOther" class="form-label ms-1">其他聯絡方式</label>
+                                            <input class="form-control" type="text" value="無" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>

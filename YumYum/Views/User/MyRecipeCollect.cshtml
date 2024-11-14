@@ -1,11 +1,18 @@
-﻿@* --麵包屑導覽-- *@
+﻿@* 資料引用  顯示食譜簡介列表*@
+@model List<RecipeBrief>
+
+@* --麵包屑導覽-- *@
 <div class="container custom-left mt-4 mb-4">
 
     @await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
 
 </div>
 
+
+
 @* --tabs 卡片-- *@
+
+
 
 <section class="section-content">
     <div class="container mt-5 mb-4 d-flex justify-content-center align-items-center">
@@ -23,7 +30,8 @@
                 </ul>
             </div>
 
-            @for (int k = 0; k < 3; k++) {
+            @for (int k = 0; k < Model.Count; k++)
+            {
 
             @* -----一般食譜---- *@
             <div class="card mb-3 mx-auto " style="max-width: 95%;">
@@ -31,12 +39,12 @@
 
                     <div class="col-md-3 d-flex justify-content-center align-items-center">
                         <div class="card-img">
-                            <img src="/img/recipe/recipe_intro/1402.jpg" class="rounded" style="max-width: 100%;" alt="...">
+                                <img src="~/img/recipe/recipe_intro/1402.jpg" class="rounded" style="max-width: 100%;" alt="...">
                         </div>
                     </div>
                     <div class="col-md-7">
                         <div class="card-body2">
-                            <h4 class="card-title text-start">酪梨水波蛋吐司</h4>
+                                <h4 class="card-title text-start">@Model[k].RecipeName</h4>
                             <p class="card-title text-start" id="UserID">作者</p>
                             <p class="card-text text-start" id="RecipeDescript">
                                 周末不一定要跑咖啡廳
@@ -54,14 +62,17 @@
                         </div>
                     </div>
                     <div class="col-md-2 d-flex justify-content-center align-items-center">
-                        <button type="button" class="btn btn-secondary "><img src="/img/icon/bookmark.svg" alt="timer"> 收藏食譜</button>
+                        <button type="button" class="btn btn-secondary ">
+                                <svg height="24px" viewBox="0 -960 960 960" width="24px">
+                                    <path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z" fill="#e2e3cf" /></svg>
+
+                            收藏食譜</button>
                     </div>
                 </div>
             </div>
 
 
             }
-
 
 
         </div>

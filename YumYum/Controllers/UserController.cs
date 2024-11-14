@@ -43,7 +43,15 @@ namespace YumYum.Controllers
              new BreadcrumbItem("我的食譜", "#") // 目前的頁面
              };
 
+
+            //sql db test--成功連上
+            string? RecipeName = (from xa in _context.RecipeBriefs
+                                  where xa.RecipeId == 1399
+                                  select xa.RecipeName).SingleOrDefault();
+            ViewBag.recipeName = RecipeName;
+
             return View();
+
         }
 
         public IActionResult MyRecipeCollect()
@@ -58,7 +66,20 @@ namespace YumYum.Controllers
             new BreadcrumbItem("收藏食譜", "#") // 目前的頁面
             };
 
-            return View();
+            //return View();
+
+
+            //sql db test2
+            var data = from xa in _context.RecipeBriefs
+                       where xa.RecipeId > 1399 && xa.RecipeId <= 1404
+
+                       select new RecipeBrief
+                       {
+                           RecipeName = xa.RecipeName,
+                           //RecipeShot = xa.RecipeShot
+                       };
+
+            return View(data.ToList());
         }
 
 

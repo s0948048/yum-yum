@@ -19,13 +19,10 @@ namespace YumYum.Controllers
 		{
 			return View();
 		}
+        
+        
 
-		public IActionResult MatchHistory()
-		{
-			return View();
-		}
-
-		public IActionResult ContactInformation()
+        public IActionResult ContactInformation()
 		{
 			// 設定 Breadcrumb
 			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
@@ -36,5 +33,25 @@ namespace YumYum.Controllers
 
 			return View();
 		}
-	}
+
+		//芳慈
+        public IActionResult MatchHistory()
+        {
+            return View();
+        }
+        public IActionResult MatchHistoryOthers()
+        {
+            return View();
+        }
+
+        public IActionResult MatchHistoryMineInfo()
+        {
+            return View();
+        }
+
+        public IActionResult MatchHistoryOthersInfo()
+        {
+            return View();
+        }
+    }
 }
