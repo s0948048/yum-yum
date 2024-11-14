@@ -27,7 +27,7 @@
                     @foreach (var item in Model.IngredientData!)
                     {
                         <button class="tag-button d-inline-flex align-items-center btn btn-tags">
-                            <img src="@Url.Content($"~{item.IngredientIcon}")" alt="Food Icon" />
+                            <img src="@Url.Content($"~{item.IngredientIcon}")" alt="" />
                             <span>@item.IngredientName</span>
                         </button>
                     }
