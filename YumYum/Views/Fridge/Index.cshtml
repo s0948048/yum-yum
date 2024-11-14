@@ -24,7 +24,7 @@
             <div class="tag-section">
                 <div class="d-flex flex-wrap">
                     <!-- All Food tags here -->
-                    @foreach (var item in Model.IngredientData)
+                    @foreach (var item in Model.IngredientData!)
                     {
                         <button class="tag-button d-inline-flex align-items-center btn btn-tags">
                             <img src="@Url.Content($"~{item.IngredientIcon}")" alt="Food Icon" />
@@ -44,7 +44,7 @@
 
             <!-- Item List -->
             <div class="item-list mb-4">
-                @foreach(var item in Model.RefrigeratorData)
+                @foreach(var item in Model.RefrigeratorData!)
                 {
                     <div class="row align-items-center mb-1">
                         <div class="col-md-3 col-4">
