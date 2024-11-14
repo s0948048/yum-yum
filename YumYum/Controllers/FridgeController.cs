@@ -7,6 +7,7 @@ namespace YumYum.Controllers
     public class FridgeController : Controller
     {
         private readonly YumYumDbContext _context;
+
         public IActionResult Index()
         {
             var fridgeItemData = (from fridge in _context.RefrigeratorStores
