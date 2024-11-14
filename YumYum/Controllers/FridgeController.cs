@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using YumYum.Models;
 using YumYum.Models.ViewModels;
 
@@ -44,7 +45,19 @@ namespace YumYum.Controllers
 
         public IActionResult Edit()
         {
-            return View();
+            var viewModel = _context.Ingredients
+                            .Where(igd => !_context.RefrigeratorStores
+                                    .Where(store => store.UserId == 3204)
+                                    .Select(store => store.IngredientId)
+                                    .Contains(igd.IngredientId)
+                                    )
+                            .Select(igd => new IngredientViewModel
+                            {
+                                IngredientName = igd.IngredientName,
+                                IngredientIcon = igd.IngredientIcon
+                            });
+
+            return View(viewModel);
         }
         public FridgeController(YumYumDbContext context)
         {
