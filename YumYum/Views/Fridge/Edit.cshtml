@@ -2,6 +2,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    @model YumYum.Models.ViewModels.FridgeViewModel
 }
 <div class="container mt-5">
     <div class="row">
@@ -15,20 +16,13 @@
 
             <div class="tag-section">
                 <div class="d-flex flex-wrap">
-                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
-                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
-                    </button>
-                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
-                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
-                    </button>
-                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
-                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
-                    </button>
-                    <button class="tag-button d-inline-flex align-items-center btn btn-tags">
-                        <i class="fas fa-filter"></i><span class="ms-2">牛奶</span>
-                    </button>
-                    <!-- Add more tags here -->
-
+                    @foreach (var item in Model.IngredientData!)
+                    {
+                        <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                            <img src="@Url.Content($"~{item.IngredientIcon}")" alt="" />
+                            <span>@item.IngredientName</span>
+                        </button>
+                    }
                 </div>
             </div>
 
