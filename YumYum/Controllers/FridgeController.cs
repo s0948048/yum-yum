@@ -8,6 +8,7 @@ namespace YumYum.Controllers
     public class FridgeController : Controller
     {
         private readonly YumYumDbContext _context;
+        private List<FridgeItemViewModel> fridgeItemData;
 
         public IActionResult Index()
         {
@@ -25,7 +26,8 @@ namespace YumYum.Controllers
                                       UnitName = unit.UnitName,
                                       ValidDate = fridge.ValidDate
                                   }
-                             ).ToList();
+                              ).ToList();
+
 
             var ingredientData = (from igd in _context.Ingredients
                                   select new IngredientViewModel
@@ -61,7 +63,7 @@ namespace YumYum.Controllers
 
             var viewModel = new FridgeViewModel
             {
-                RefrigeratorData = null,
+                RefrigeratorData = fridgeItemData,
                 IngredientData = viewData
             };
             
@@ -70,6 +72,7 @@ namespace YumYum.Controllers
         public FridgeController(YumYumDbContext context)
         {
             _context = context;
+            fridgeItemData = new List<FridgeItemViewModel>();
         }
     }
 }
