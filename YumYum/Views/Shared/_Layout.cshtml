@@ -31,7 +31,7 @@
 							<ul class="dropdown-menu" aria-labelledby="recipeDropdown">
 								<li><a class="dropdown-item" asp-controller="Recipe" asp-action="Index">查詢食譜</a></li>
 								<li><hr class="dropdown-divider"></li>
-								<li><a class="dropdown-item" asp-controller="Recipe" asp-action="Index">建立食譜</a></li>
+								<li><a class="dropdown-item" asp-controller="Recipe" asp-action="WatchRecipe">建立食譜</a></li>
 							</ul>
 						</li>
 						<!-- 冰箱 -->
@@ -71,7 +71,7 @@
 						</li>
 						<!-- 登入 -->
 						<li class="nav-item">
-							<a class="nav-link" href="#">
+							<a class="nav-link" asp-controller="User" asp-action="LogInPage">
 								<img src="~/img/icon/Login.svg" style="height: 30px; width: auto;" alt="login"> 登入
 							</a>
 						</li>

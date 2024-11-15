@@ -112,8 +112,7 @@
 
 
 /* 左側區域的 ck hover 事件  */
-.Ifilter label,
-.cherishMatch label {
+.Ifilter label {
     margin-bottom: 0.7rem;
     width: 12rem;
     height: 3rem;
@@ -123,16 +122,35 @@
     box-shadow: 2px 2px var(--yum-primary-2);
 }
 
-    #Ifilter label:hover,
-    .cherishMatch label:hover {
-        background-color: var(--yum-primary-2);
-        box-shadow: 2px 2px var(--yum-secondary-4);
-    }
+#Ifilter label:hover{
+    background-color: var(--yum-primary-2);
+    box-shadow: 2px 2px var(--yum-secondary-4);
+}
 
-        .cherishMatch label:hover svg path {
-            fill: var(--yum-primary-3);
-            transition-duration: 0.6s;
-        }
+
+/*查看配對按鈕樣式*/
+
+.cherishMatch label {
+    margin-bottom: 0.7rem;
+    width: 12rem;
+    height: 3rem;
+    background-color: var(--yum-primary-3);
+    color: var(--yum-primary-2);
+    border-radius: 0.5rem;
+    font-size: 1.25rem;
+    border:0;
+}
+
+#Ifilter label:hover,
+.cherishMatch label:hover {
+    background-color: var(--yum-primary-2);
+    color: var(--yum-primary-1);
+}
+
+.cherishMatch label:hover svg path {
+    fill: var(--yum-primary-3);
+    transition-duration: 0.6s;
+}
 /* 已選radio狀態樣式 */
 .Ifilter input[type="radio"]:checked + label {
     background-color: var(--yum-primary-2);
@@ -179,4 +197,29 @@
     width: 100%;
     display: flex;
     align-items: center;
+}
+
+/* 此頁面中間區域的 btn hover 事件  */
+.my-button {
+    background-color: var(--yum-primary-3);
+    border: none;
+    color: var(--yum-primary-2);
+    padding: 10px 10px;
+    border-radius: 5px;
+/*    font-size: 16px;*/
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.my-button:hover {
+    background-color: var(--yum-primary-2);
+    color: var(--yum-secondary-3);
+}
+
+.my-button svg {
+    vertical-align: middle; /* 圖標垂直置中 */
+}
+
+.my-button:hover svg path {
+    fill: var(--yum-primary-3);
+    transition-duration: 0.5s;
 }

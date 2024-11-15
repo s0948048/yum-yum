@@ -1,4 +1,6 @@
-﻿<div class="container my-4 ">
+﻿
+
+<div class="container my-4 ">
 	<div class="row d-flex align-items-stretch">
 		<!-- 左邊篩選欄 -->
 		<div class="col-md-4 d-flex flex-column" id="left-pannel">
@@ -8,7 +10,9 @@
 					<div class="Ifilter flex-column align-items-center mt-2" id="Ifilter">
 
 
-
+						<div class="text-center">
+							<span class="fw-500 fs-5">配對紀錄</span>
+							<hr>
 						<!-- 我的食材按鈕 -->
 						<input type="radio" checked name="filter-IAttr" id="IAttr-1" hidden>
 						<label class="btn btn-outline-success rounded-4 align-content-center fw-600"
@@ -27,6 +31,8 @@
 							<span>別人的食材</span>
 						</label>
 					</div>
+					</div>
+
 
 				</div>
 
@@ -35,7 +41,24 @@
 		</div>
 
 		<!-- 右邊卡片內容 -->
+
+		
 		<div class="col-md-8" id="right-pannel">
+
+			<!-- 搜尋欄 -->
+			<form class="col-6 d-flex justify-content-start">
+				<div class="input-group">
+					<input type="search" class="form-control set-fs my-input" placeholder="想找什麼食材？">
+				</div>
+				<button type="submit" class="btn my-button d-flex align-items-center justify-content-center">
+					<svg viewBox="0 0 512 512" width="18.4" height="18.4" fill="currentColor">
+						<path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+					</svg>
+				</button>
+
+			</form>
+
+			<!-- 配對食材資訊卡 -->
 			@for (int k = 0; k < 3; k++)
 			{
 				<div class="food-card d-flex flex-wrap mt-2 md-2">
@@ -44,24 +67,28 @@
 					</div>
 					<div class="col-8 p-3">
 						<div class="d-flex justify-content-between mt-3 mb-3">
-							<h5>茄子</h5>
+							<h5 class="fw-bold d-inline-block">茄子</h5>
 							<div>數量: 4</div>
 							<div>截止日期: 2024.11.11</div>
 						</div>
 						<div class="d-flex justify-content-between mt-3 mb-3 align-items-center">
-							<span>購買日期 或 採收日期: 2024-10-31</span>
-							<span class="category-label">蔬菜類</span>
+							<div><span class="fw-bold d-inline-block">購買日期 或 採收日期:</span><span>2024-10-31</span></div>
+							<p style="padding: 0.2rem 0; margin: 0.5rem 0;right: 8%;  border-radius: 15px;
+                                width: 5.7rem; background-color:#0000002c;text-align:
+                                center;font-size: 1rem;">
+								蔬菜類
+							</p>
 						</div>
 
-						<p class="d-flex justify-content: flex-start align-items-center pt-4 pd-4">
-							From 台中柯震東 &nbsp;&nbsp;&nbsp;
-							<img src="/img/icon/location.svg" alt="Location" style="width: 16px;"> 台中市 大甲區
-						</p>
-						<div class="cherishMatch d-flex justify-content-between pt-4 pd-4">
-							<p><img src="~/img/icon/contacts.svg" alt="Location" style="width: 16px;">聯絡方式: 其他聯絡方式</p>
-							<label class="btn-outline-success btn rounded-4 align-content-center fw-600" id="cherishMatch" for="IAttr-1" onclick="window.location.href='/Cherish/MatchHistoryMineInfo';">
+						<div class="d-flex justify-content: flex-start align-items-center mt-3 md-3 ">
+							<span class ="fw-bold d-inline-block">From </span><span>台中柯震東</span>
+							<img src="/img/icon/location.svg" alt="Location" style="width: 16px;"> <span>台中市 大甲區</span>
+						</div>
+						<div class="cherishMatch d-flex justify-content-between align-items-center pt-3 pd-3 md-3">
+							<span class="fw-bold d-inline-block">聯絡方式:</span> <span><img src="~/img/icon/contacts.svg" alt="Location" style="width: 16px;">其他聯絡方式</span>
+							<label class="btn-outline-success btn align-content-center fw-600" id="cherishMatch" for="IAttr-1" onclick="window.location.href='/Cherish/MatchHistoryMineInfo';">
 								<svg height="20px" viewBox="0 -960 960 960" width="20px">
-									<path d="M480-312q70 0 119-49t49-119q0-70-49-119t-119-49q-70 0-119 49t-49 119q0 70 49 119t119 49Zm0-72q-40 0-68-28t-28-68q0-40 28-68t68-28q40 0 68 28t28 68q0 40-28 68t-68 28Zm0 192q-142.6 0-259.8-78.5Q103-349 48-480q55-131 172.2-209.5Q337.4-768 480-768q142.6 0 259.8 78.5Q857-611 912-480q-55 131-172.2 209.5Q622.6-192 480-192Zm0-288Zm0 216q112 0 207-58t146-158q-51-100-146-158t-207-58q-112 0-207 58T127-480q51 100 146 158t207 58Z" fill="#68AE86"></path>
+									<path d="M480-312q70 0 119-49t49-119q0-70-49-119t-119-49q-70 0-119 49t-49 119q0 70 49 119t119 49Zm0-72q-40 0-68-28t-28-68q0-40 28-68t68-28q40 0 68 28t28 68q0 40-28 68t-68 28Zm0 192q-142.6 0-259.8-78.5Q103-349 48-480q55-131 172.2-209.5Q337.4-768 480-768q142.6 0 259.8 78.5Q857-611 912-480q-55 131-172.2 209.5Q622.6-192 480-192Zm0-288Zm0 216q112 0 207-58t146-158q-51-100-146-158t-207-58q-112 0-207 58T127-480q51 100 146 158t207 58Z" fill="#30533f"></path>
 								</svg>
 								<span>查看配對</span>
 							</label>
