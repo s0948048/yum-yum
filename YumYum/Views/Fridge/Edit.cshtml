@@ -95,6 +95,45 @@
             </div>
         </div>
     </div>
+    @* 選單 *@
+    <div class="offcanvas offcanvas-start" style="background-color:var(--yum-primary-1);max-width:270px;" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="offcanvas-header mb-3">
+            <h4 class="offcanvas-title ms-2 pt-3" id="offcanvasWithBothOptionsLabel">分類</h4>
+            @* <button type="button" class="btn-close pt-4" data-bs-dismiss="offcanvas" aria-label="Close"></button> *@
+        </div>
+        <div class="d-flex flex-column align-items-center " id="Ifilter">
+            <label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-1">
+                <img src="../../img/img/food_attr/1.svg">
+                <span>全穀雜糧類</span>
+            </label>
+            <input type="checkbox" name="filter-IAttr" id="IAttr-1" hidden>
+            <label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-2">
+                <img src="../../img/img/food_attr/2.svg">
+                <span>豆魚蛋肉類</span>
+            </label>
+            <input type="checkbox" name="filter-IAttr" id="IAttr-2" hidden>
+            <label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-3">
+                <img src="../../img/img/food_attr/3.svg">
+                <span>乳品類</span>
+            </label>
+            <input type="checkbox" name="filter-IAttr" id="IAttr-3" hidden>
+            <label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-4">
+                <img src="../../img/img/food_attr/4.svg">
+                <span>蔬菜類</span>
+            </label>
+            <input type="checkbox" name="filter-IAttr" id="IAttr-4" hidden>
+            <label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-5">
+                <img src="../../img/img/food_attr/5.svg">
+                <span>水果類</span>
+            </label>
+            <input type="checkbox" name="filter-IAttr" id="IAttr-5" hidden>
+            <label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-6">
+                <img src="../../img/img/food_attr/6.svg">
+                <span>油與堅果類</span>
+            </label>
+            <input type="checkbox" name="filter-IAttr" id="IAttr-6" hidden>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
