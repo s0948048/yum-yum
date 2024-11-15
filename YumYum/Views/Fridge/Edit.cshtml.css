@@ -88,6 +88,7 @@
         background-color: var(--yum-primary-2);
         box-shadow: 2px 2px var(--yum-secondary-4);
     }
+
 /* 左側區域的 ck selected 事件  */
 #Ifilter .selected {
     background-color: var(--yum-primary-2);
