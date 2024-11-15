@@ -1,0 +1,50 @@
+﻿.my-button {
+    color: var(--yum-primary-2);
+    background-color: var(--yum-primary-3);
+}
+
+    .my-button:hover {
+        color: var(--yum-primary-3);
+        background-color: var(--yum-primary-2);
+    }
+
+.article-title {
+    color: var(--yum-primary-3);
+    background-color: var(--yum-primary-2);
+}
+
+.background-white {
+    background-color: var(--yum-secondary-3);
+}
+
+.reminder-text {
+    color: var(--yum-secondary-1);
+}
+
+.my-photo {
+    width: 100%;
+}
+
+svg {
+    width: 1.15rem;
+    height: 1.15rem;
+}
+
+    svg path {
+        fill: var(--yum-primary-2);
+    }
+
+.set-fs {
+    font-size: 1.15rem !important;
+}
+
+.my-input:focus {
+    border-color: var(--yum-primary-2);
+    box-shadow: 0 0 0 0.2rem var(--yum-primary-3);
+}
+
+.my-select {
+}
+
+.my-checkbox {
+}

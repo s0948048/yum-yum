@@ -5,9 +5,7 @@ namespace YumYum.Controllers
 {
 	public class CherishController : Controller
 	{
-        
-
-        public IActionResult Introduce()
+		public IActionResult Introduce()
 		{
 			return View();
 		}
@@ -17,14 +15,42 @@ namespace YumYum.Controllers
 			return View();
 		}
 
+		public IActionResult ManageAdd()
+		{
+			return View();
+		}
+
+		public IActionResult ManageEdit()
+		{
+			return View();
+		}
+
 		public IActionResult Match()
 		{
 			return View();
 		}
-        
-        
 
-        public IActionResult ContactInformation()
+		//芳慈
+		public IActionResult MatchHistory()
+		{
+			return View();
+		}
+		public IActionResult MatchHistoryOthers()
+		{
+			return View();
+		}
+
+		public IActionResult MatchHistoryMineInfo()
+		{
+			return View();
+		}
+
+		public IActionResult MatchHistoryOthersInfo()
+		{
+			return View();
+		}
+
+		public IActionResult ContactInformation()
 		{
 			// 設定 Breadcrumb
 			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
@@ -35,25 +61,5 @@ namespace YumYum.Controllers
 
 			return View();
 		}
-
-		//芳慈
-        public IActionResult MatchHistory()
-        {
-            return View();
-        }
-        public IActionResult MatchHistoryOthers()
-        {
-            return View();
-        }
-
-        public IActionResult MatchHistoryMineInfo()
-        {
-            return View();
-        }
-
-        public IActionResult MatchHistoryOthersInfo()
-        {
-            return View();
-        }
-    }
+	}
 }
