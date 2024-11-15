@@ -29,7 +29,7 @@ $('#step-plus').on('click', function () {
         var stepRight = $('<div>', {
             id: `step0${steps}`,
             class: 'card step-right step',    // 設定 class 屬性
-            html: `<img b-mc3u0u1te1 src="/img/icon/AddPhoto.png" class="card-img-top img-load" alt="哈哈" style="height: 13rem;"><div b-mc3u0u1te1  class= "text-center m-0 step-bk"> <p b-mc3u0u1te1  class="m-0 mt-1" style="font-size: 1.5rem;">STEP ${steps}</p></div ><div b-mc3u0u1te1  class="card-body" style="width:286px;height:152px"><textarea b-mc3u0u1te1 id=step-text0${steps} class="card-text" style="width:100%;height:100%;border-color:transparent" placeholder="點我輸入內容"></textarea></div>`
+            html: `<img b-mc3u0u1te1 src="/img/icon/AddPhoto.png" class="card-img-top img-load" alt="哈哈" style="height: 13rem;"><div b-mc3u0u1te1  class= "text-center m-0 step-bk"> <p b-mc3u0u1te1  class="m-0 mt-1" style="font-size: 1.5rem;">STEP 0${steps}</p></div ><div b-mc3u0u1te1  class="card-body" style="width:286px;height:152px"><textarea b-mc3u0u1te1 id=step-text0${steps} class="card-text" style="width:100%;height:100%;border-color:transparent" placeholder="點我輸入內容"></textarea></div>`
         }).attr('b-mc3u0u1te1', '');
         //把前一個步驟的mb-200屬性移除
         $(`#step-countdiv0${steps - 1}`).removeClass('mb-200')
@@ -46,7 +46,7 @@ $('#step-plus').on('click', function () {
         var stepLeft = $('<div>', {
             id: `step0${steps}`,
             class: 'card step-left step',    // 設定 class 屬性
-            html: `<img b-mc3u0u1te1  src="/img/icon/AddPhoto.png" class="card-img-top img-load" alt="哈哈" style="height: 13rem;"><div b-mc3u0u1te1 class= "text-center m-0 step-bk"><p b-mc3u0u1te1  class="m-0 mt-1" style="font-size: 1.5rem;">STEP ${steps}</p></div ><div b-mc3u0u1te1  class="card-body" style="width:286px;height:152px"><textarea b-mc3u0u1te1 id="step-text0${steps}" class="card-text" style="width:100%;height:100%;border-color:transparent" placeholder="點我輸入內容"></textarea></div>`
+            html: `<img b-mc3u0u1te1  src="/img/icon/AddPhoto.png" class="card-img-top img-load" alt="哈哈" style="height: 13rem;"><div b-mc3u0u1te1 class= "text-center m-0 step-bk"><p b-mc3u0u1te1  class="m-0 mt-1" style="font-size: 1.5rem;">STEP 0${steps}</p></div ><div b-mc3u0u1te1  class="card-body" style="width:286px;height:152px"><textarea b-mc3u0u1te1 id="step-text0${steps}" class="card-text" style="width:100%;height:100%;border-color:transparent" placeholder="點我輸入內容"></textarea></div>`
         }).attr('b-mc3u0u1te1', '');
         //把前一個步驟的mb-200屬性移除
         $(`#step-countdiv0${steps - 1}`).removeClass('mb-200')
