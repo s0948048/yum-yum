@@ -78,7 +78,7 @@
 #Ifilter label {
     width: 12rem;
     height: 3rem;
-    background-color: var(--yum-primary-3);
+    background-color: var(--yum-primary-3); 
     opacity: 65%;
     font-size: 1.25rem;
     box-shadow: 2px 2px var(--yum-primary-2);
