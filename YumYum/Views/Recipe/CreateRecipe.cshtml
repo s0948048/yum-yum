@@ -115,17 +115,16 @@
     </div>
 </div>
 
-<div class="row mt-5" style="position:relative">
+<div class="row mt-5" style="position:relative" id="all-steps">
 
     <div class="col-6 p-0" id="left-steps" style="border-top:2px solid var(--yum-secondary-4);border-right:2px solid  var(--yum-secondary-4)">
 
         <!-- 步驟1 -->
         <!--空的樣式-->
-        <p style="position: absolute;margin-top: 15.2rem;margin-left: 24.52rem;color:var(--yum-secondary-4)">
-            ──────────────●
-        </p>
-        <div class="card mt-5" style="width: 18rem; margin-left: 7rem;" id="step01">
-            <img src="~/img/icon/AddPhoto.png" class="card-img-top img-load" alt="哈哈" style="height: 13rem;">
+        <!--class-step是用來搜索總步驟數的-->
+        <div style="position: absolute;margin-top: 15.2rem;margin-left: 24.7rem;color:var(--yum-secondary-4)"> ─────────────<img class="remove-steps" style="width:50px;height:50px" src="~/img/icon/close.svg"/></div>
+        <div class="card mt-5 step" style="width: 18rem; margin-left: 7rem;" id="step01">
+            <img src="~/img/icon/AddPhoto.png" class="card-img-top img-load" alt="加上圖片" style="height: 13rem;">
             <div class="text-center m-0 step-bk">
                 <p class="m-0 mt-1" style="font-size: 1.5rem;">STEP 01</p>
             </div>
@@ -143,10 +142,8 @@
 
         <!-- 步驟2 -->
         <!-- 1rem=16px -->
-        <p style="position: absolute;margin-top: 42.2rem;margin-left:-10px;color:var(--yum-secondary-4)">
-            ●─────────────
-        </p>
-        <div class="card" style="width: 18rem; margin-top:30rem;margin-left: 14.25rem;" id="step02">
+        <div style="position: absolute;margin-top: 42.2rem;margin-left:-26px;color:var(--yum-secondary-4)"><img class="remove-steps" style="width:50px;height:50px" src="~/img/icon/close.svg" />─────────────</div>
+        <div class="card step" style="width: 18rem; margin-top:30rem;margin-left: 14.25rem;" id="step02">
             <img src="~/img/icon/AddPhoto.png" class="card-img-top img-load" alt="哈哈" style="height: 13rem;">
             <div class="text-center m-0 step-bk">
                 <p class="m-0 mt-1" style="font-size: 1.5rem;">STEP 02</p>
@@ -320,7 +317,7 @@
                     $(element).addClass('d-none')
                 }
             }
-            
         })
     })
+    
 </script>
