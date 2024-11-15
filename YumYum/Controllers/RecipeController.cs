@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
 using System.Text.Json;
 using YumYum.Models;
+using YumYum.Models.Recipe;
 
 namespace YumYum.Controllers
 {
@@ -84,12 +85,19 @@ namespace YumYum.Controllers
             var ingredientList = await _context.Ingredients.ToListAsync();
             var classList = await _context.RecipeClasses.ToListAsync();
             var unitList = await _context.Units.ToListAsync();
-
+            var attribute = from attri in await _context.IngredAttributes.ToListAsync()
+                            select new RecipeCreate_attribute
+                            {
+                                IngredAttributeId = attri.IngredAttributeId,
+                                IngredAttributeName = attri.IngredAttributeName,
+                                IngredAttributePhoto = attri.IngredAttributePhoto,
+                            };
             var allList = new RecipeCreate()
             {
                 Ingredients = ingredientList,
                 className = classList,
-                units = unitList
+                units = unitList,
+                attributes = attribute.ToList(),
             };
 
 
@@ -97,18 +105,28 @@ namespace YumYum.Controllers
             return View(allList);
 
         }
+
+
+
         //編輯食譜 js css還暫套跟createRecipe一樣的之後差別是還要導入查看食譜的資料
         public async Task<IActionResult> EditRecipe()
         {
             var ingredientList = await _context.Ingredients.ToListAsync();
             var classList = await _context.RecipeClasses.ToListAsync();
             var unitList = await _context.Units.ToListAsync();
-
+            var attribute = from attri in await _context.IngredAttributes.ToListAsync()
+                            select new RecipeCreate_attribute
+                            {
+                                IngredAttributeId = attri.IngredAttributeId,
+                                IngredAttributeName = attri.IngredAttributeName,
+                                IngredAttributePhoto = attri.IngredAttributePhoto,
+                            };
             var allList = new RecipeCreate()
             {
                 Ingredients = ingredientList,
                 className = classList,
-                units = unitList
+                units = unitList,
+                attributes = attribute.ToList(),
             };
 
 
