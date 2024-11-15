@@ -52,3 +52,46 @@
     pointer-events: auto;
     font-weight: bold;
 }
+
+.offcanvas-body {
+    background-color: var(--yum-primary-3);
+}
+
+.btn-menu, .btn-menu:hover, .btn-menu:active {
+    background-color: var(--yum-primary-3);
+    color: var(--yum-primary-2);
+}
+
+/* 左側區域的類別篩選  */
+#Ifilter label span {
+    display: inline-block;
+    width: 75%;
+    text-wrap: nowrap;
+    letter-spacing: 0.3rem;
+}
+
+#Ifilter label img {
+    width: 30px;
+}
+
+/* 左側區域的 ck hover 事件  */
+#Ifilter label {
+    width: 12rem;
+    height: 3rem;
+    background-color: var(--yum-primary-3);
+    opacity: 65%;
+    font-size: 1.25rem;
+    box-shadow: 2px 2px var(--yum-primary-2);
+}
+
+    #Ifilter label:hover {
+        background-color: var(--yum-primary-2);
+        box-shadow: 2px 2px var(--yum-secondary-4);
+    }
+/* 左側區域的 ck selected 事件  */
+#Ifilter .selected {
+    background-color: var(--yum-primary-2);
+    color: var(--yum-primary-3);
+    box-shadow: 2px 2px var(--yum-secondary-4);
+    opacity: 50%;
+}
