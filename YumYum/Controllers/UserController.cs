@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Net.Mail;
 using System.Net;
 using YumYum.Models;
+using YumYum.Models.ViewModels;
 
 namespace YumYum.Controllers
 {
@@ -20,16 +21,144 @@ namespace YumYum.Controllers
 
 
 
-        //健誠
-        public async Task<IActionResult> Index()
-        {
-            return View();
-        }
 
-
-        public IActionResult EditInfo()
+		//健誠
+		[HttpGet]
+		public async Task<IActionResult> Index()
 		{
-			return View();
+			int? userId = HttpContext.Session.GetInt32("userId");
+			//int? userId = 3207;
+
+			var userQuery = from user in _context.UserBios
+							join userNickname in _context.UserSecretInfos
+							on user.UserId equals userNickname.UserId
+							where user.UserId == userId
+							select new UserQueryViewModel
+							{
+								UserId = user.UserId,
+								UserIntro = user.UserIntro,
+								HeadShot = user.HeadShot,
+								Igaccount = user.Igaccount,
+								Fbnickname = user.Fbnickname,
+								YoutuNickname = user.YoutuNickname,
+								WebNickName = user.WebNickName,
+								YoutuLink = user.YoutuLink,
+								Fblink = user.Fblink,
+								WebLink = user.WebLink,
+								UserNickname = userNickname.UserNickname
+							};
+
+			var recipeQuery = from user in userQuery
+							  join recipe in _context.RecipeBriefs
+							  on user.UserId equals recipe.CreatorId
+							  join recipeInfo in _context.RecipeRecords
+							  on recipe.RecipeId equals recipeInfo.RecipeId
+							  join recipeImage in _context.RecipeRecordFields
+							  on recipe.RecipeId equals recipeImage.RecipeId
+							  where recipeInfo.RecipeStatusCode == 1 || recipeInfo.RecipeStatusCode == 4
+							  where recipeImage.RecipeField == 0
+							  select new RecipeQueryViewModel
+							  {
+								  RecipeId = recipe.RecipeId,
+								  RecipeName = recipe.RecipeName,
+								  RecipeStatusCode = recipeInfo.RecipeStatusCode,
+								  FieldShot = recipeImage.FieldShot,
+							  };
+
+			var recipeDetailQuery = from recipe in recipeQuery
+									join recipeIngredient in _context.RecipeIngredients on recipe.RecipeId equals recipeIngredient.RecipeId
+									join recipeIngredientName in _context.Ingredients on recipeIngredient.IngredientId equals recipeIngredientName.IngredientId
+									select new RecipeDetailQuery
+									{
+										RecipeId = recipeIngredient.RecipeId,
+										IngredientId = recipeIngredient.IngredientId,
+										IngredientName = recipeIngredientName.IngredientName
+									};
+			var AllList = new RecipeAllUser()
+			{
+				userQueryViewModel = userQuery.ToList(),
+				recipeQueryViewModel = recipeQuery.ToList(),
+				recipeDetailQuery = recipeDetailQuery.ToList(),
+			};
+
+			HttpContext.Session.SetInt32("userId", (int)userId);
+			return View(AllList);
+
+
+		}
+
+
+		[HttpGet]
+		public async Task<IActionResult> EditInfo()
+		{
+			int? userId = HttpContext.Session.GetInt32("userId");
+			//int? userId = 3207;//for test
+			UserSecretInfo? userSecretInfo = await _context.UserSecretInfos.Where(p => p.UserId == userId).FirstOrDefaultAsync();
+			UserBio? userBio = await _context.UserBios.Where(p => p.UserId == userId).FirstOrDefaultAsync();
+			if (userSecretInfo == null || userBio == null)
+			{
+				return NotFound();
+			}
+			var viewModel = new UserViewModel
+			{
+				UserId = userBio.UserId,
+				HeadShot = userBio.HeadShot,
+				UserIntro = userBio.UserIntro,
+				Igaccount = userBio.Igaccount,
+				Fbnickname = userBio.Fbnickname,
+				YoutuNickname = userBio.YoutuNickname,
+				WebNickName = userBio.WebNickName,
+				YoutuLink = userBio.YoutuLink,
+				Fblink = userBio.Fblink,
+				WebLink = userBio.WebLink,
+				UserNickname = userSecretInfo.UserNickname
+			};
+			HttpContext.Session.SetInt32("userId", (int)userId);
+			return View(viewModel);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> EditInfo(UserViewModel viewModel)
+		{
+			int? userId = HttpContext.Session.GetInt32("userId");
+
+			//int? userId = 3207;//for test					
+
+			if (ModelState.IsValid)
+			{
+				UserSecretInfo? userSecretInfo = await _context.UserSecretInfos.Where(p => p.UserId == userId).FirstOrDefaultAsync();
+				UserBio? userBio = await _context.UserBios.Where(p => p.UserId == userId).FirstOrDefaultAsync();
+
+				if (userSecretInfo == null || userBio == null)
+				{
+					return NotFound();
+				}
+
+				userBio.UserIntro = viewModel.UserIntro;
+				userBio.HeadShot = viewModel.HeadShot;
+				userBio.Igaccount = viewModel.Igaccount;
+				userBio.Fbnickname = viewModel.Fbnickname;
+				userBio.YoutuNickname = viewModel.YoutuNickname;
+				userBio.WebNickName = viewModel.WebNickName;
+				userBio.YoutuLink = viewModel.YoutuLink;
+				userBio.Fblink = viewModel.Fblink;
+				userBio.WebLink = viewModel.WebLink;
+				userSecretInfo.UserNickname = viewModel.UserNickname;
+
+				_context.Update(userBio);
+				_context.Update(userSecretInfo);
+				await _context.SaveChangesAsync();
+				return RedirectToAction(nameof(Index));
+			}
+
+			HttpContext.Session.SetInt32("userId", (int)userId);
+			return View(viewModel);
+
+		}
+		private bool UserBioExists(int id)
+		{
+			return _context.UserBios.Any(e => e.UserId == id);
 		}
 
 
@@ -100,7 +229,7 @@ namespace YumYum.Controllers
             if (users != null)
             {
                 HttpContext.Session.SetInt32("userId", users.UserId);
-                return Json(new { redirectUrl = Url.Action("Index", "Home") });
+                return Json(new { redirectUrl = Url.Action("Index", "Recipe") });
             }
             else
             {
