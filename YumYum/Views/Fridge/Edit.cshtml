@@ -103,11 +103,11 @@
         </div>
         <div class="d-flex flex-column align-items-center" id="Ifilter">
             @foreach (var item in Model.IngredAttributeData!) {
-                <label class="btn-outline-success btn rounded-4 align-content-center mb-4 fw-600 d-flex justify-content-center align-items-center" for="IAttr-1">
+                <label class="btn-outline-success btn rounded-4 align-content-center mb-4 fw-600 d-flex justify-content-center align-items-center" for="IAttr-@item.IngredAttributeID">
                     <img class="img-fluid mx-auto" style="object-fit: cover; width:30px; height: 30px;" src="@Url.Content($"~{item.IngredAttributePhoto}")">
                     <span>@item.IngredAttributeName</span>
                 </label>
-                <input type="checkbox" name="filter-IAttr" id="" hidden>
+                <input type="checkbox" name="filter-IAttr" id="IAttr-@item.IngredAttributeID" hidden>
             }
         </div>
     </div>
