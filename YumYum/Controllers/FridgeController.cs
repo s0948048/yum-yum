@@ -31,11 +31,13 @@ namespace YumYum.Controllers
         {
             var fridgeItemData = GetFridgeItemData();
             var ingredientData = GetIngredientData(userId: 3204);
+            var ingredAttributeData = GetIngredAttributeData();
 
             var viewModel = new FridgeViewModel
             {
                 RefrigeratorData = fridgeItemData,
-                IngredientData = ingredientData
+                IngredientData = ingredientData,
+                IngredAttributeData = ingredAttributeData
             };
             
             return View(viewModel);
@@ -76,6 +78,19 @@ namespace YumYum.Controllers
                 IngredientName = igd.IngredientName,
                 IngredientIcon = igd.IngredientIcon
             }).ToList();
+        }
+
+        private List<IngredAttributeViewModel> GetIngredAttributeData()
+        {
+            return (from ia in _context.IngredAttributes
+                    orderby ia.IngredAttributeId
+                    select new IngredAttributeViewModel
+                    {
+                        IngredAttributeID = ia.IngredAttributeId,
+                        IngredAttributeName = ia.IngredAttributeName,
+                        IngredAttributePhoto = ia.IngredAttributePhoto
+                    }
+                ).ToList(); 
         }
     }
 }
