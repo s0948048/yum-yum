@@ -229,7 +229,7 @@ namespace YumYum.Controllers
             if (users != null)
             {
                 HttpContext.Session.SetInt32("userId", users.UserId);
-                return Json(new { redirectUrl = Url.Action("Index", "Home") });
+                return Json(new { redirectUrl = Url.Action("Index", "Recipe") });
             }
             else
             {
