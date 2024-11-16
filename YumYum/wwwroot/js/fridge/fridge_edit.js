@@ -4,7 +4,8 @@
 
 // Add Ajax HERE in this function!
 $('#Ifilter input[type="checkbox"]').on('change', function () {
-    console.log($(this).prop('checked'));
-    console.log($('#Ifilter input[type="checkbox"]:checked'));
+    //console.log($(this).prop('checked'));
+    //console.log($('#Ifilter input[type="checkbox"]:checked'));
+    console.log($(this).prev());
     $(this).prev().toggleClass('selected');
 });
