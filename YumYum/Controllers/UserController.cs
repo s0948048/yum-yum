@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Net.Mail;
 using System.Net;
 using YumYum.Models;
+using YumYum.Models.ViewModels;
 
 namespace YumYum.Controllers
 {
@@ -20,14 +21,74 @@ namespace YumYum.Controllers
 
 
 
-        //健誠
-        public async Task<IActionResult> Index()
-        {
-            return View();
-        }
+		//健誠
+		//健誠
+		[HttpGet]
+		public async Task<IActionResult> Index()
+		{
+			int? userId = HttpContext.Session.GetInt32("userId");
+			//int? userId = 3207;
+
+			var userQuery = from user in _context.UserBios
+							join userNickname in _context.UserSecretInfos
+							on user.UserId equals userNickname.UserId
+							where user.UserId == userId
+							select new UserQueryViewModel
+							{
+								UserId = user.UserId,
+								UserIntro = user.UserIntro,
+								HeadShot = user.HeadShot,
+								Igaccount = user.Igaccount,
+								Fbnickname = user.Fbnickname,
+								YoutuNickname = user.YoutuNickname,
+								WebNickName = user.WebNickName,
+								YoutuLink = user.YoutuLink,
+								Fblink = user.Fblink,
+								WebLink = user.WebLink,
+								UserNickname = userNickname.UserNickname
+							};
+
+			var recipeQuery = from user in userQuery
+							  join recipe in _context.RecipeBriefs
+							  on user.UserId equals recipe.CreatorId
+							  join recipeInfo in _context.RecipeRecords
+							  on recipe.RecipeId equals recipeInfo.RecipeId
+							  join recipeImage in _context.RecipeRecordFields
+							  on recipe.RecipeId equals recipeImage.RecipeId
+							  where recipeInfo.RecipeStatusCode == 1 || recipeInfo.RecipeStatusCode == 4
+							  where recipeImage.RecipeField == 0
+							  select new RecipeQueryViewModel
+							  {
+								  RecipeId = recipe.RecipeId,
+								  RecipeName = recipe.RecipeName,
+								  RecipeStatusCode = recipeInfo.RecipeStatusCode,
+								  FieldShot = recipeImage.FieldShot,
+							  };
+
+			var recipeDetailQuery = from recipe in recipeQuery
+									join recipeIngredient in _context.RecipeIngredients on recipe.RecipeId equals recipeIngredient.RecipeId
+									join recipeIngredientName in _context.Ingredients on recipeIngredient.IngredientId equals recipeIngredientName.IngredientId
+									select new RecipeDetailQuery
+									{
+										RecipeId = recipeIngredient.RecipeId,
+										IngredientId = recipeIngredient.IngredientId,
+										IngredientName = recipeIngredientName.IngredientName
+									};
+			var AllList = new RecipeAllUser()
+			{
+				userQueryViewModel = userQuery.ToList(),
+				recipeQueryViewModel = recipeQuery.ToList(),
+				recipeDetailQuery = recipeDetailQuery.ToList(),
+			};
+
+			HttpContext.Session.SetInt32("userId", (int)userId);
+			return View(AllList);
 
 
-        public IActionResult EditInfo()
+		}
+
+
+		public IActionResult EditInfo()
 		{
 			return View();
 		}
