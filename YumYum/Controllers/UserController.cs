@@ -21,7 +21,7 @@ namespace YumYum.Controllers
 
 
 
-		//健誠
+
 		//健誠
 		[HttpGet]
 		public async Task<IActionResult> Index()
@@ -88,9 +88,77 @@ namespace YumYum.Controllers
 		}
 
 
-		public IActionResult EditInfo()
+		[HttpGet]
+		public async Task<IActionResult> EditInfo()
 		{
-			return View();
+			int? userId = HttpContext.Session.GetInt32("userId");
+			//int? userId = 3207;//for test
+			UserSecretInfo? userSecretInfo = await _context.UserSecretInfos.Where(p => p.UserId == userId).FirstOrDefaultAsync();
+			UserBio? userBio = await _context.UserBios.Where(p => p.UserId == userId).FirstOrDefaultAsync();
+			if (userSecretInfo == null || userBio == null)
+			{
+				return NotFound();
+			}
+			var viewModel = new UserViewModel
+			{
+				UserId = userBio.UserId,
+				HeadShot = userBio.HeadShot,
+				UserIntro = userBio.UserIntro,
+				Igaccount = userBio.Igaccount,
+				Fbnickname = userBio.Fbnickname,
+				YoutuNickname = userBio.YoutuNickname,
+				WebNickName = userBio.WebNickName,
+				YoutuLink = userBio.YoutuLink,
+				Fblink = userBio.Fblink,
+				WebLink = userBio.WebLink,
+				UserNickname = userSecretInfo.UserNickname
+			};
+			HttpContext.Session.SetInt32("userId", (int)userId);
+			return View(viewModel);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> EditInfo(UserViewModel viewModel)
+		{
+			int? userId = HttpContext.Session.GetInt32("userId");
+
+			//int? userId = 3207;//for test					
+
+			if (ModelState.IsValid)
+			{
+				UserSecretInfo? userSecretInfo = await _context.UserSecretInfos.Where(p => p.UserId == userId).FirstOrDefaultAsync();
+				UserBio? userBio = await _context.UserBios.Where(p => p.UserId == userId).FirstOrDefaultAsync();
+
+				if (userSecretInfo == null || userBio == null)
+				{
+					return NotFound();
+				}
+
+				userBio.UserIntro = viewModel.UserIntro;
+				userBio.HeadShot = viewModel.HeadShot;
+				userBio.Igaccount = viewModel.Igaccount;
+				userBio.Fbnickname = viewModel.Fbnickname;
+				userBio.YoutuNickname = viewModel.YoutuNickname;
+				userBio.WebNickName = viewModel.WebNickName;
+				userBio.YoutuLink = viewModel.YoutuLink;
+				userBio.Fblink = viewModel.Fblink;
+				userBio.WebLink = viewModel.WebLink;
+				userSecretInfo.UserNickname = viewModel.UserNickname;
+
+				_context.Update(userBio);
+				_context.Update(userSecretInfo);
+				await _context.SaveChangesAsync();
+				return RedirectToAction(nameof(Index));
+			}
+
+			HttpContext.Session.SetInt32("userId", (int)userId);
+			return View(viewModel);
+
+		}
+		private bool UserBioExists(int id)
+		{
+			return _context.UserBios.Any(e => e.UserId == id);
 		}
 
 
