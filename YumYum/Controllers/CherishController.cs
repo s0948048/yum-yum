@@ -1,11 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging.Signing;
 using YumYum.Models;
+using YumYum.Models.DataTransferObject;
 
 namespace YumYum.Controllers
 {
 	public class CherishController : Controller
 	{
-		public IActionResult Introduce()
+		private readonly YumYumDbContext _context;
+
+        public CherishController(YumYumDbContext context)
+        {
+            _context = context;
+        }
+
+        public IActionResult Introduce()
 		{
 			return View();
 		}
@@ -21,17 +32,76 @@ namespace YumYum.Controllers
 		}
 
 		public IActionResult ManageEdit()
+        {
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> Match()
 		{
-			return View();
+            ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
+			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+			 new BreadcrumbItem("良食配對", "#") // 當前的頁面
+             };
+
+			var chrishOrders = from c in _context.CherishOrders
+                               select new CherishMatch
+                               {
+                                   CherishId = c.CherishId,
+                                   EndDate = c.EndDate,
+                                   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+                                   IngredientName = c.Ingredient.IngredientName,
+                                   Quantity = c.Quantity,
+                                   ObtainSource = c.ObtainSource,
+                                   ObtainDate = c.ObtainDate,
+                                   UserNickname = c.GiverUser.UserNickname!,
+                                   CityName = c.CherishOrderInfo!.TradeCityKey,
+                                   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+                                   ContactLine = c.CherishOrderInfo.ContactLine,
+                                   ContactPhone = c.CherishOrderInfo.ContactPhone,
+                                   ContactOther = c.CherishOrderInfo.ContactOther,
+                                   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
+                                   CherishValidDate = c.CherishOrderCheck.CherishValidDate  == null ? null : c.CherishOrderCheck.CherishValidDate.Value
+                               };
+
+            return View(await chrishOrders.ToListAsync());
 		}
 
-		public IActionResult Match()
-		{
-			return View();
-		}
+        [HttpPost]
+        public IActionResult Match([Bind("IngredientSelect", "CitySelect", "RegionSelect")] CherishMatchSearch search )
+        {
+            ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
+             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+             new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+             new BreadcrumbItem("良食配對", "#") // 當前的頁面
+             };
 
-		//芳慈
-		public IActionResult MatchHistory()
+			var chrishSearchOrders = from c in _context.CherishOrders
+						where (search.CityKey == null || c.CherishOrderInfo!.TradeCityKey == search.CityKey) &&
+							  (search.RegionId > 0 || c.CherishOrderInfo!.TradeRegionId == search.RegionId) &&
+							  (search.IngredientId > 0 || c.IngredientId == search.IngredientId)
+						select new CherishMatch
+						{
+							CherishId = c.CherishId,
+							EndDate = c.EndDate,
+							IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+							IngredientName = c.Ingredient.IngredientName,
+							Quantity = c.Quantity,
+							ObtainSource = c.ObtainSource,
+							ObtainDate = c.ObtainDate,
+							UserNickname = c.GiverUser.UserNickname!,
+							CityName = c.CherishOrderInfo!.TradeCityKey,
+							RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+							ContactLine = c.CherishOrderInfo.ContactLine,
+							ContactPhone = c.CherishOrderInfo.ContactPhone,
+							ContactOther = c.CherishOrderInfo.ContactOther
+						};
+
+            return View(chrishSearchOrders.ToListAsync());
+        }
+
+        //芳慈
+        public IActionResult MatchHistory()
 		{
 			return View();
 		}
@@ -61,5 +131,17 @@ namespace YumYum.Controllers
 
 			return View();
 		}
-	}
+
+        [HttpGet]
+        public JsonResult GetRegions(string CityKey)
+        {
+            var regions = _context.Regions
+                .Where(r => r.CityKey == CityKey)
+                .Select(r => new { r.RegionId, r.RegionName })
+                .ToList();
+
+            return Json(regions);
+        }
+
+    }
 }

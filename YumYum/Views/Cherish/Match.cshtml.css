@@ -84,11 +84,11 @@ button {
     z-index: 97;
 }
 
-#searchbar-addr select {
+#searchbar-addr select,select[id="CitySelect"] {
     margin: 0 0.5rem;
     padding: auto 10%;
     height: 30px;
-    width: 6.5rem;
+    width: 10rem;
     background-color: var(--yum-secondary-3);
     border: 0;
     border-radius: 0.2rem;
