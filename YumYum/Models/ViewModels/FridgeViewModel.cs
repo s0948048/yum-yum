@@ -21,6 +21,7 @@
     {
         public string? IngredientName { get; set; }
         public string? IngredientIcon { get; set; }
+        public int? AttributionID { get; set; }
     }
 
     public class IngredAttributeViewModel
