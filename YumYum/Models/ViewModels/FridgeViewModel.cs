@@ -4,6 +4,7 @@
     {
         public List<FridgeItemViewModel>? RefrigeratorData { get; set; }
         public List<IngredientViewModel>? IngredientData { get; set; }
+        public List<IngredAttributeViewModel>? IngredAttributeData { get; set; }
     }
 
     public class FridgeItemViewModel
@@ -20,5 +21,12 @@
     {
         public string? IngredientName { get; set; }
         public string? IngredientIcon { get; set; }
+    }
+
+    public class IngredAttributeViewModel
+    {
+        public int? IngredAttributeID { get; set; }
+        public string? IngredAttributeName { get; set; }
+        public string? IngredAttributePhoto { get; set; }
     }
 }
