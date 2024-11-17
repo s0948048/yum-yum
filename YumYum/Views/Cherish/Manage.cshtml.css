@@ -39,3 +39,7 @@ svg {
     svg path {
         fill: var(--yum-primary-2);
     }
+
+.mask {
+    background-color: rgba(0, 0, 0, 0.4);
+}
