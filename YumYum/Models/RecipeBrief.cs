@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
-
+using System.Text.Json.Serialization;
 namespace YumYum.Models;
 
 public partial class RecipeBrief
@@ -17,12 +18,12 @@ public partial class RecipeBrief
 
     public byte PersonQuantity { get; set; }
 
-    public DateOnly CreateDate { get; set; }
+    public DateTime CreateDate { get; set; }
 
     public short ClickTime { get; set; }
-
+    [ValidateNever]
     public virtual UserSecretInfo Creator { get; set; } = null!;
-
+    [ValidateNever]
     public virtual RecipeClass RecipeClass { get; set; } = null!;
 
     public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();

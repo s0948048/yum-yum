@@ -24,7 +24,25 @@ var steps = 2;
 $('#step-plus').on('click', function () {
     steps += 1;
     //如果step是偶數的話就在right-steps下append新的步驟框
-    if (steps % 2 == 0) {
+    if (steps == 1) {
+        var stepLeft = $('<div>', {
+            id: `step0${steps}`,
+            class: 'card mt-5 step',    // 設定 class 屬性
+            style:'width: 18rem; margin-left: 7rem',
+            html: `<img b-mc3u0u1te1  src="/img/icon/AddPhoto.png" class="card-img-top img-load" alt="哈哈" style="height: 13rem;"><div b-mc3u0u1te1 class= "text-center m-0 step-bk"><p b-mc3u0u1te1  class="m-0 mt-1" style="font-size: 1.5rem;">STEP 0${steps}</p></div ><div b-mc3u0u1te1  class="card-body" style="width:286px;height:152px"><textarea b-mc3u0u1te1 id="step-text0${steps}" class="card-text" style="width:100%;height:100%;border-color:transparent" placeholder="點我輸入內容"></textarea></div>`
+        }).attr('b-mc3u0u1te1', '');
+        //把前一個步驟的mb-200屬性移除
+        $(`#step-countdiv0${steps - 1}`).removeClass('mb-200')
+        //中間連線
+        $('#left-steps').append('<div b-mc3u0u1te1 style="position: absolute;margin-top: 15.2rem;margin-left: 24.7rem;color:var(--yum-secondary-4)"> ─────────────<img b-mc3u0u1te1 class="remove-steps" style="width:50px;height:50px" src="/img/icon/close.svg"/></div>')
+        //步驟本人
+        $('#left-steps').append(stepLeft);
+        //計數
+        $('#left-steps').append(`<div id="step-countdiv0${steps}" class="d-flex mb-200" style="margin-right: 260px"><label id ="step-count0${steps}" class="d-flex ms-auto">0/100</label></div>`);
+        //新增計數邏輯
+        $('#left-steps').append(`<script>$('#step-text0${steps}').on('input', function () {$('#step-count0${steps}').text(\`\${$('#step-text0${steps}').val().length}/100\`);}) </script>`)
+    }
+    else if (steps % 2 == 0 && steps != 0) {
 
         var stepRight = $('<div>', {
             id: `step0${steps}`,
