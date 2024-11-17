@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Signing;
+using System.Data;
 using YumYum.Models;
 using YumYum.Models.DataTransferObject;
+using static Azure.Core.HttpHeader;
 
 namespace YumYum.Controllers
 {
@@ -11,19 +13,36 @@ namespace YumYum.Controllers
 	{
 		private readonly YumYumDbContext _context;
 
-        public CherishController(YumYumDbContext context)
-        {
-            _context = context;
-        }
+		public CherishController(YumYumDbContext context)
+		{
+			_context = context;
+		}
 
-        public IActionResult Introduce()
+		public IActionResult Introduce()
 		{
 			return View();
 		}
 
-		public IActionResult Manage()
+		public async Task<IActionResult> Manage()
 		{
-			return View();
+			// 設定 Breadcrumb
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+			 new BreadcrumbItem("管理良食", "#") // 當前的頁面
+             };
+
+			// 抓到 userId (是從何而來? 在 UserController LogInPage 這邊有set)
+			//int? userId = HttpContext.Session.GetInt32("userId");
+			//ViewBag.Catch = userId;
+
+			int userId = 3238;
+			var query = from o in _context.CherishOrders
+						where o.GiverUserId == userId
+						select o;
+			ViewBag.See = query.ToList();
+
+			return View(await query.ToListAsync());
 		}
 
 		public IActionResult ManageAdd()
@@ -32,76 +51,76 @@ namespace YumYum.Controllers
 		}
 
 		public IActionResult ManageEdit()
-        {
-            return View();
-        }
-        [HttpGet]
-        public async Task<IActionResult> Match()
 		{
-            ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
+			return View();
+		}
+		[HttpGet]
+		public async Task<IActionResult> Match()
+		{
+			ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
 			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
 			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
 			 new BreadcrumbItem("良食配對", "#") // 當前的頁面
              };
 
 			var chrishOrders = from c in _context.CherishOrders
-                               select new CherishMatch
-                               {
-                                   CherishId = c.CherishId,
-                                   EndDate = c.EndDate,
-                                   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
-                                   IngredientName = c.Ingredient.IngredientName,
-                                   Quantity = c.Quantity,
-                                   ObtainSource = c.ObtainSource,
-                                   ObtainDate = c.ObtainDate,
-                                   UserNickname = c.GiverUser.UserNickname!,
-                                   CityName = c.CherishOrderInfo!.TradeCityKey,
-                                   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
-                                   ContactLine = c.CherishOrderInfo.ContactLine,
-                                   ContactPhone = c.CherishOrderInfo.ContactPhone,
-                                   ContactOther = c.CherishOrderInfo.ContactOther,
-                                   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
-                                   CherishValidDate = c.CherishOrderCheck.CherishValidDate  == null ? null : c.CherishOrderCheck.CherishValidDate.Value
-                               };
+							   select new CherishMatch
+							   {
+								   CherishId = c.CherishId,
+								   EndDate = c.EndDate,
+								   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+								   IngredientName = c.Ingredient.IngredientName,
+								   Quantity = c.Quantity,
+								   ObtainSource = c.ObtainSource,
+								   ObtainDate = c.ObtainDate,
+								   UserNickname = c.GiverUser.UserNickname!,
+								   CityName = c.CherishOrderInfo!.TradeCityKey,
+								   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+								   ContactLine = c.CherishOrderInfo.ContactLine,
+								   ContactPhone = c.CherishOrderInfo.ContactPhone,
+								   ContactOther = c.CherishOrderInfo.ContactOther,
+								   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
+								   CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
+							   };
 
-            return View(await chrishOrders.ToListAsync());
+			return View(await chrishOrders.ToListAsync());
 		}
 
-        [HttpPost]
-        public IActionResult Match([Bind("IngredientSelect", "CitySelect", "RegionSelect")] CherishMatchSearch search )
-        {
-            ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
-             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
-             new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
-             new BreadcrumbItem("良食配對", "#") // 當前的頁面
+		[HttpPost]
+		public IActionResult Match([Bind("IngredientSelect", "CitySelect", "RegionSelect")] CherishMatchSearch search)
+		{
+			ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
+			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+			 new BreadcrumbItem("良食配對", "#") // 當前的頁面
              };
 
 			var chrishSearchOrders = from c in _context.CherishOrders
-						where (search.CityKey == null || c.CherishOrderInfo!.TradeCityKey == search.CityKey) &&
-							  (search.RegionId > 0 || c.CherishOrderInfo!.TradeRegionId == search.RegionId) &&
-							  (search.IngredientId > 0 || c.IngredientId == search.IngredientId)
-						select new CherishMatch
-						{
-							CherishId = c.CherishId,
-							EndDate = c.EndDate,
-							IngredAttributeName = c.IngredAttribute.IngredAttributeName,
-							IngredientName = c.Ingredient.IngredientName,
-							Quantity = c.Quantity,
-							ObtainSource = c.ObtainSource,
-							ObtainDate = c.ObtainDate,
-							UserNickname = c.GiverUser.UserNickname!,
-							CityName = c.CherishOrderInfo!.TradeCityKey,
-							RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
-							ContactLine = c.CherishOrderInfo.ContactLine,
-							ContactPhone = c.CherishOrderInfo.ContactPhone,
-							ContactOther = c.CherishOrderInfo.ContactOther
-						};
+									 where (search.CityKey == null || c.CherishOrderInfo!.TradeCityKey == search.CityKey) &&
+										   (search.RegionId > 0 || c.CherishOrderInfo!.TradeRegionId == search.RegionId) &&
+										   (search.IngredientId > 0 || c.IngredientId == search.IngredientId)
+									 select new CherishMatch
+									 {
+										 CherishId = c.CherishId,
+										 EndDate = c.EndDate,
+										 IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+										 IngredientName = c.Ingredient.IngredientName,
+										 Quantity = c.Quantity,
+										 ObtainSource = c.ObtainSource,
+										 ObtainDate = c.ObtainDate,
+										 UserNickname = c.GiverUser.UserNickname!,
+										 CityName = c.CherishOrderInfo!.TradeCityKey,
+										 RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+										 ContactLine = c.CherishOrderInfo.ContactLine,
+										 ContactPhone = c.CherishOrderInfo.ContactPhone,
+										 ContactOther = c.CherishOrderInfo.ContactOther
+									 };
 
-            return View(chrishSearchOrders.ToListAsync());
-        }
+			return View(chrishSearchOrders.ToListAsync());
+		}
 
-        //芳慈
-        public IActionResult MatchHistory()
+		//芳慈
+		public IActionResult MatchHistory()
 		{
 			return View();
 		}
@@ -132,16 +151,16 @@ namespace YumYum.Controllers
 			return View();
 		}
 
-        [HttpGet]
-        public JsonResult GetRegions(string CityKey)
-        {
-            var regions = _context.Regions
-                .Where(r => r.CityKey == CityKey)
-                .Select(r => new { r.RegionId, r.RegionName })
-                .ToList();
+		[HttpGet]
+		public JsonResult GetRegions(string CityKey)
+		{
+			var regions = _context.Regions
+				.Where(r => r.CityKey == CityKey)
+				.Select(r => new { r.RegionId, r.RegionName })
+				.ToList();
 
-            return Json(regions);
-        }
+			return Json(regions);
+		}
 
-    }
+	}
 }
