@@ -59,7 +59,7 @@ namespace YumYum.Controllers
                     IngredientIcon = Url.Content($"~{i.IngredientIcon}")
                 }).ToList();
 
-            return Json(filteredIngredients);
+            return Json(result);
         }
 
         private List<FridgeItemViewModel> GetFridgeItemData()
