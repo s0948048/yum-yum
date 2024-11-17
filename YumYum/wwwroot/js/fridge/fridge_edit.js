@@ -1,20 +1,19 @@
-﻿const { type, error } = require("jquery");
+﻿//const { type, error } = require("jquery");
 
 $("#btn-return").on("click", function () {
     window.location.href = "/fridge/index";
 });
 
-// Toggle selected class effect
-$('#Ifilter input[type="checkbox"]').on('change', function () {
-    $(this).prev().toggleClass('selected');
-});
-
 $('.ingredient-attribute-checkbox').on('change', function () {
+    //console.log($(this).prop('checked'));
+    $(this).prev().toggleClass('selected');
+
     // Get all selected ID
     let selectedId = [];
     $('.ingredient-attribute-checkbox:checked').each(function () {
         selectedId.push($(this).val());
     });
+    console.log(selectedId);
 
     // Ajax request to get filtered tags
     $.ajax(
