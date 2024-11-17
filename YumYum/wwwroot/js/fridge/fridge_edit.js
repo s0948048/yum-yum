@@ -25,10 +25,13 @@ $('.ingredient-attribute-checkbox').on('change', function () {
             success: function (response) {
                 // Update tag section dynamically
 
+                // Check selected ID
+                console.log(response);
+
                 // Clear section
                 $('#ingredient-list').empty();
 
-                // Update
+                // Append updated ingredients
                 $.each(response, function (index, item) {
                     $('#ingredient-list').append(
                         `
