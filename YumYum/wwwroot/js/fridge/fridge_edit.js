@@ -18,7 +18,7 @@ $('.ingredient-attribute-checkbox').on('change', function () {
     // Ajax request to get filtered tags
     $.ajax(
         {
-            url: '@Url.Action("FilterIngredients", "Fridge")',
+            url: 'FilterIngredients',
             type: 'POST',
             data: JSON.stringify(selectedId),
             contentType: 'application/json',
