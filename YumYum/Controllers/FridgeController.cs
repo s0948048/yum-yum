@@ -46,14 +46,19 @@ namespace YumYum.Controllers
         [HttpPost]
         public JsonResult FilterIngredients([FromBody] List<int> selectedIds)
         {
-            var filteredIngredients = _context.Ingredients
-                .Where(i => selectedIds.Contains(i.AttributionId))
-                .Select(i => new
+            var filteredIngredients = _context.Ingredients.AsQueryable();
+            if (selectedIds != null && selectedIds.Any()) 
+            {
+                filteredIngredients = filteredIngredients.Where(i => selectedIds.Contains(i.AttributionId));
+            }
+
+            var result = filteredIngredients
+                .Select(i  => new
                 {
                     IngredientName = i.IngredientName,
                     IngredientIcon = Url.Content($"~{i.IngredientIcon}")
                 }).ToList();
-                            
+
             return Json(filteredIngredients);
         }
 
