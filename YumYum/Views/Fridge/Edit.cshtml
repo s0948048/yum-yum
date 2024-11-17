@@ -16,6 +16,7 @@
                 <input type="text" class="form-control" placeholder="輸入食材關鍵字">
             </div>
 
+            @* Ingredient List Section *@
             <div class="tag-section">
                 <div class="d-flex flex-wrap">
                     @foreach (var item in Model.IngredientData!)
@@ -95,7 +96,7 @@
             </div>
         </div>
     </div>
-    @* 選單 *@
+    @* offcanvas選單 *@
     <div class="offcanvas offcanvas-start" style="background-color:var(--yum-primary-1);max-width:270px;" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
         <div class="offcanvas-header mb-3">
             <h4 class="offcanvas-title ms-0 pt-3" id="offcanvasWithBothOptionsLabel">分類</h4>
