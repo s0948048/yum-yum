@@ -43,6 +43,20 @@ namespace YumYum.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        public JsonResult FilterIngredients([FromBody] List<int> selectedIds)
+        {
+            var filteredIngredients = _context.Ingredients
+                .Where(i => selectedIds.Contains(i.AttributionId))
+                .Select(i => new
+                {
+                    IngredientName = i.IngredientName,
+                    IngredientIcon = Url.Content($"~{i.IngredientIcon}")
+                }).ToList();
+                            
+            return Json(filteredIngredients);
+        }
+
         private List<FridgeItemViewModel> GetFridgeItemData()
         {
             return (from fridge in _context.RefrigeratorStores
