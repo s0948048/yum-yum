@@ -14,22 +14,21 @@
     <div class="row justify-content-around align-items-center">
         <!-- 左邊 -->
         <!-- 食譜圖片 -->
-        <div class="col-6 p-5 flex-column" style="height: 1000px;justify-content: center;">
+        <div class="col-6 p-5" style="height: 1000px;justify-content: center;">
             <div class="d-flex justify-content-center mb-5">
-                <img src="~/img/icon/AddPhoto.png" alt="食譜照片" class="m-0 br-black img-load" style="height: 400px;width: 600px;object-fit:cover;">
+                <img id="recipe-photo" src="~/img/icon/AddPhoto.png" alt="食譜照片" class="m-0 br-black img-load" style="height: 400px;width: 600px;object-fit:cover;">
             </div>
             <!-- 料理類型 -->
             <div class="d-block mt-4" style="border-color:azure ;">
                 <p class="mt-3 mb-2  text-big" style="padding-top: 4px;">料理類型</p>
-                <select class="form-select form-select-lg br-black" aria-label=".form-select-lg example">
-                    @foreach (var className in Model.className)
+                <select id="select-recipeclass" class="form-select form-select-lg br-black" aria-label=".form-select-lg example">
+                    @foreach (var className in Model.className!)
                     {
-                        <option>@className.RecipeClassName</option>
+                        <option id=@($"class0{className.RecipeClassId}")>@className.RecipeClassName</option>
                     }
                 </select>
             </div>
             <div class="d-flex mt-3" style="flex-direction: column;">
-
                 <!--查詢食材-->
                 <div class="input-group my-3" style="position:relative">
                     <!--依照分類查詢-->
@@ -57,9 +56,9 @@
                 </div>
                 <!--挑選食材區-->
                 <div id="search-ingredients" class="d-flex br-black flex-wrap ps-4 bg-gray" style="height: 256px;width:100%;overflow-y:scroll;position:relative;border-radius:6px">
-                    @foreach (var ingredient in Model.Ingredients)
+                    @foreach (var ingredient in Model.Ingredients!)
                     {
-                        var unitJson = JsonSerializer.Serialize(Model.units.Where(p => p.IngredAttributeId == ingredient.AttributionId));
+                        var unitJson = JsonSerializer.Serialize(Model.units!.Where(p => p.IngredAttributeId == ingredient.AttributionId));
                         <button data-units="@unitJson" class="tag-button d-inline-flex align-items-center btn database-ingredient" id=@($"ingredient0{ingredient.IngredientId}-{ingredient.AttributionId}")>
                             <img class="ingredient-icon" src="@ingredient.IngredientIcon"><span class="ms-2" style="color:var(--yum-primary-2)">@ingredient.IngredientName</span>
                         </button>
@@ -97,11 +96,11 @@
             <div class="d-flex justify-content-start" style="border-color: aliceblue;margin-top:20px">
                 <div class="ms-0" style="width: 50%;border-color: aliceblue;">
                     <p class="mb-2 text-big">份量<small>(人份)</small></p>
-                    <input type="number" class="input-type" style="border:1px solid var(--yum-secondary-4)" placeholder="幾人份">
+                    <input id="recipe-personquantity" type="number" class="input-type" style="border:1px solid var(--yum-secondary-4)" placeholder="幾人份">
                 </div>
                 <div class="ms-5" style="width: 50%;">
                     <p class="mb-2 text-big">烹調時間<small>(分鐘)</small></p>
-                    <input type="number" class="input-type" style="border:1px solid var(--yum-secondary-4)" placeholder="幾分鐘">
+                    <input id="recipe-finishtime" type="number" class="input-type" style="border:1px solid var(--yum-secondary-4)" placeholder="幾分鐘">
                 </div>
             </div>
 
@@ -165,10 +164,18 @@
 </div>
 <div class="d-flex justify-content-end" style="margin-top:200px;margin-right:20px">
     <a href="/User/MyRecipeEdit" class="btn mx-2 btn-push">返回</a>
-    <button class="btn mx-2 btn-push">儲存草稿</button>
-    <button class="btn mx-2 btn-push">發布</button>
+    <button class="btn mx-2 btn-push" id="recipe-draft">儲存草稿</button>
+    <button class="btn mx-2 btn-push" id="recipe-release">發布</button>
 </div>
-<input type="file" id="file-load" style="display:none" accept="image/*" />
+<!--隱形元素-->
+<!--用來載入圖片的-->
+<input type="file" id="file-load" style="display:none" accept="image/jpeg,image/png" />
+<!--用來將model的資料變成參來接收的-->
+<input type="text" value="@Model.userId" id="recipe-userid" style="display:none">
+
+
+
+
 
 
 <script>
@@ -186,7 +193,7 @@
         //數量
         var elementCount = $('<div>', {
             class: 'col-3 d-flex justify-content-center align-items-center',
-            html: '<input type="number" name="" id="" style="width: 80px;" class="ms-2 me-4 br-black d-flex" placeholder="數量">'
+            html: '<input type="text" name="" id="" style="width: 80px;" class="ms-2 me-4 br-black d-flex" placeholder="數量">'
         }).attr('b-mc3u0u1te1', '');
         //單位
         var elementUnit = $('<div>', {
@@ -243,23 +250,26 @@
         //標籤元素
         var elementLabel = $('<div>', {
             class: 'col-4 d-flex justify-content-center align-center',
-            html: $(this).removeClass('d-inline-flex database-ingredient').addClass('d-flex').attr('b-mc3u0u1te1', '')
+            html: $(this).removeClass('d-inline-flex database-ingredient').addClass('d-flex').attr('b-mc3u0u1te1', ''),
+            name:'div-label',
         }).attr('b-mc3u0u1te1', '');
         //數量
         var elementCount = $('<div>', {
             class: 'col-3 d-flex justify-content-center align-items-center',
-            html: '<input type="number" name="" id="" style="width: 80px;" class="ms-2 me-4 br-black d-flex" placeholder="數量">'
+            html: '<input type="text" style="width: 80px;" class="ms-2 me-4 br-black d-flex" placeholder="數量">',
+            name: 'div-count',
         }).attr('b-mc3u0u1te1', '');
         //單位
         var units = $(this).data('units')
 
         var selectElement = $('<select>', { class: 'mx-4 br-black d-flex', style: 'width: 80px' })
         var option = units.forEach(function (unit) {
-            $('<option>', { text: unit.UnitName }).appendTo(selectElement)
+            $('<option>', { text: unit.UnitName,id:unit.UnitId }).appendTo(selectElement)
         })
         var elementUnit = $('<div>', {
             class: 'col-3 d-flex justify-content-center align-items-center',
             html: selectElement,
+            name: 'div-unit',
         }).attr('b-mc3u0u1te1', '');
         //垃圾桶
         var elementDelete = $('<button>', {
@@ -319,5 +329,237 @@
             }
         })
     })
-    
+    //發布按鈕
+    $('#recipe-release').on('click', function () {
+        //要回傳的資料
+        //食譜資料
+        //-----------------------------------------------------------------
+        //食譜需要食材
+        let recipeIngredient = $('#ingredient-need > .d-flex').map(function () {
+            let ingredientId = $(this).find('div[name="div-label"]').find('button').attr('id').match(/ingredient(\d+)-\d+/)[1];
+            let quantity = $(this).find('div[name="div-count"]').find('input').val();
+            let unitId = $(this).find('div[name="div-unit"]').find('select option:selected').attr('id');
+
+            return {
+                IngredientId:parseInt(ingredientId),
+                Quantity: quantity,
+                UnitId: parseInt(unitId)
+            }
+        }).get();
+
+        //-----------------------------------------------------------------
+        //食譜步驟
+        let recipeRecordFields = [];
+        //簡介及圖片
+        let recipeImgAndIntro = {
+            RecipeRecVersion:1,
+            RecipeField: 0,
+            FieldShot: $('#recipe-photo').attr('src'),
+            FieldDescript: $('#recipe-introduction').val(),
+            FieldCheck: false,
+            FieldComment: "",
+        };
+        recipeRecordFields.push(recipeImgAndIntro);
+        //奇數步驟
+        let leftsteps = $('#left-steps > .card').map(function () {
+            let recipeField = parseInt($(this).attr('id').match(/step0(\d+)/)[1]);
+            let fieldShot = $(this).find('img').attr('src');
+            let fieldDescript = $(this).find('textarea').val()
+            
+            let leftstep =  {
+                RecipeRecVersion: 1,
+                RecipeField: recipeField,
+                FieldShot: fieldShot,
+                FieldDescript: fieldDescript,
+                FieldCheck:false,
+                FieldComment:"",
+            }
+            recipeRecordFields.push(leftstep)
+        })
+        //偶數步驟
+        let rightsteps = $('#right-steps > .card').map(function () {
+            let recipeField = $(this).attr('id').match(/step0(\d+)/)[1];
+            let fieldShot = $(this).find('img').attr('src');
+            let fieldDescript = $(this).find('textarea').val()
+
+            let rightstep = {
+                RecipeRecVersion: 1,
+                RecipeField: recipeField,
+                FieldShot: fieldShot,
+                FieldDescript: fieldDescript,
+                FieldCheck: false,
+                FieldComment: "",
+            }
+            recipeRecordFields.push(rightstep)
+        })
+        
+        
+        //-----------------------------------------------------------------
+        //取得時間(給RecipeRecords和RecipeBrief使用)
+        let clickDate = new Date();
+        let formaterTime = new Intl.DateTimeFormat('zh-TW', 
+        {
+            year:"numeric",
+            month:"2-digit",
+            day:"2-digit"
+        })
+        //食譜版本RecipeRecords
+        let recipeRecord = {
+            RecipeRecVersion:1,
+            RecipeStatusCode:1,
+            RecipeRecDate: clickDate.toISOString()
+        };
+        //-----------------------------------------------------------------
+        let recipeBriefData = {
+            RecipeName: $('#recipe-name').val(),
+            RecipeClassId: parseInt($('#select-recipeclass option:selected').attr('id').slice(-1)),
+            FinishMinute: parseInt($('#recipe-finishtime').val()),
+            CreatorId: parseInt($('#recipe-userid').val()),
+            PersonQuantity: parseInt($('#recipe-personquantity').val()),
+            CreateDate: clickDate.toISOString(),
+            ClickTime: 0,
+        };
+        //食譜基本資料
+        let recipeAllData = {
+            recipeBrief: recipeBriefData,
+            recipeRecord: recipeRecord,
+            recipeRecordFields: recipeRecordFields,
+            recipeIngredients: recipeIngredient,
+        };
+        console.log(recipeAllData);
+        console.log(JSON.stringify(recipeAllData));
+
+        $.ajax({
+            url: '/Recipe/CreateRecipe',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(recipeAllData),
+            success: function (result) {
+                alert(result["success"])
+                if (result["message"] != null) { alert(result["message"]) }
+                else if (result["error"]!=null) { alert(result["error"]) }
+                
+            },
+            error: function (xhr, status, error) {
+                console.error('錯誤', error)
+            }
+        })
+    })
+
+
+    //儲存草稿按鈕
+    $('#recipe-draft').on('click', function () {
+        //要回傳的資料
+        //食譜資料
+        //-----------------------------------------------------------------
+        //食譜需要食材
+        let recipeIngredient = $('#ingredient-need > .d-flex').map(function () {
+            let ingredientId = $(this).find('div[name="div-label"]').find('button').attr('id').match(/ingredient(\d+)-\d+/)[1];
+            let quantity = $(this).find('div[name="div-count"]').find('input').val();
+            let unitId = $(this).find('div[name="div-unit"]').find('select option:selected').attr('id');
+
+            return {
+                IngredientId: parseInt(ingredientId),
+                Quantity: quantity,
+                UnitId: parseInt(unitId)
+            }
+        }).get();
+
+        //-----------------------------------------------------------------
+        //食譜步驟
+        let recipeRecordFields = [];
+        //簡介及圖片
+        let recipeImgAndIntro = {
+            RecipeRecVersion: 1,
+            RecipeField: 0,
+            FieldShot: $('#recipe-photo').attr('src'),
+            FieldDescript: $('#recipe-introduction').val(),
+            FieldCheck: false,
+            FieldComment: "",
+        };
+        recipeRecordFields.push(recipeImgAndIntro);
+        //奇數步驟
+        let leftsteps = $('#left-steps > .card').map(function () {
+            let recipeField = parseInt($(this).attr('id').match(/step0(\d+)/)[1]);
+            let fieldShot = $(this).find('img').attr('src');
+            let fieldDescript = $(this).find('textarea').val()
+
+            let leftstep = {
+                RecipeRecVersion: 1,
+                RecipeField: recipeField,
+                FieldShot: fieldShot,
+                FieldDescript: fieldDescript,
+                FieldCheck: false,
+                FieldComment: "",
+            }
+            recipeRecordFields.push(leftstep)
+        })
+        //偶數步驟
+        let rightsteps = $('#right-steps > .card').map(function () {
+            let recipeField = $(this).attr('id').match(/step0(\d+)/)[1];
+            let fieldShot = $(this).find('img').attr('src');
+            let fieldDescript = $(this).find('textarea').val()
+
+            let rightstep = {
+                RecipeRecVersion: 1,
+                RecipeField: recipeField,
+                FieldShot: fieldShot,
+                FieldDescript: fieldDescript,
+                FieldCheck: false,
+                FieldComment: "",
+            }
+            recipeRecordFields.push(rightstep)
+        })
+
+
+        //-----------------------------------------------------------------
+        //取得時間(給RecipeRecords和RecipeBrief使用)
+        let clickDate = new Date();
+        let formaterTime = new Intl.DateTimeFormat('zh-TW',
+            {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
+            })
+        //食譜版本RecipeRecords
+        let recipeRecord = {
+            RecipeRecVersion: 1,
+            RecipeStatusCode: 0,
+            RecipeRecDate: clickDate.toISOString()
+        };
+        //-----------------------------------------------------------------
+        let recipeBriefData = {
+            RecipeName: $('#recipe-name').val(),
+            RecipeClassId: parseInt($('#select-recipeclass option:selected').attr('id').slice(-1)),
+            FinishMinute: parseInt($('#recipe-finishtime').val()),
+            CreatorId: parseInt($('#recipe-userid').val()),
+            PersonQuantity: parseInt($('#recipe-personquantity').val()),
+            CreateDate: clickDate.toISOString(),
+            ClickTime: 0,
+        };
+        //食譜基本資料
+        let recipeAllData = {
+            recipeBrief: recipeBriefData,
+            recipeRecord: recipeRecord,
+            recipeRecordFields: recipeRecordFields,
+            recipeIngredients: recipeIngredient,
+        };
+        console.log(recipeAllData);
+        console.log(JSON.stringify(recipeAllData));
+
+        $.ajax({
+            url: '/Recipe/CreateRecipe',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(recipeAllData),
+            success: function (result) {
+                alert(result["success"])
+                if (result["message"] != null) { alert(result["message"]) }
+                else if (result["error"] != null) { alert(result["error"]) }
+            },
+            error: function (xhr, status, error) {
+                console.error('錯誤', error)
+            }
+        })
+    })
 </script>
