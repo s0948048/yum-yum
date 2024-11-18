@@ -385,7 +385,7 @@
         })
         //偶數步驟
         let rightsteps = $('#right-steps > .card').map(function () {
-            let recipeField = $(this).attr('id').match(/step0(\d+)/)[1];
+            let recipeField = parseInt($(this).attr('id').match(/step0(\d+)/)[1]);
             let fieldShot = $(this).find('img').attr('src');
             let fieldDescript = $(this).find('textarea').val()
 
@@ -506,7 +506,7 @@
         })
         //偶數步驟
         let rightsteps = $('#right-steps > .card').map(function () {
-            let recipeField = $(this).attr('id').match(/step0(\d+)/)[1];
+            let recipeField = parseInt($(this).attr('id').match(/step0(\d+)/)[1]);
             let fieldShot = $(this).find('img').attr('src');
             let fieldDescript = $(this).find('textarea').val()
 
