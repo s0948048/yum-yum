@@ -23,7 +23,7 @@ namespace YumYum.Controllers
 			return View();
 		}
 
-		public async Task<IActionResult> Manage()
+		public IActionResult Manage()
 		{
 			// 設定 Breadcrumb
 			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
@@ -32,17 +32,41 @@ namespace YumYum.Controllers
 			 new BreadcrumbItem("管理良食", "#") // 當前的頁面
              };
 
-			// 抓到 userId (是從何而來? 在 UserController LogInPage 這邊有set)
+			// 抓到 userId (在 UserController LogInPage 這邊有set)
 			//int? userId = HttpContext.Session.GetInt32("userId");
-			//ViewBag.Catch = userId;
+			int userId = 3238; // 登入者Id（測試用）
 
-			int userId = 3238;
 			var query = from o in _context.CherishOrders
 						where o.GiverUserId == userId
-						select o;
-			ViewBag.See = query.ToList();
+						orderby o.ObtainDate descending
+						select new CherishManageViewModel
+						{
+							// [訂單類]
+							GiverUserId = o.GiverUserId,
+							Quantity = o.Quantity,
+							EndDate = o.EndDate,
+							ObtainSource = o.ObtainSource,
+							ObtainDate = o.ObtainDate,
+							CherishValidDate = o.CherishOrderCheck!.CherishValidDate,
+							CherishPhoto = o.CherishOrderCheck.CherishPhoto,
 
-			return View(await query.ToListAsync());
+							// [食材類]
+							IngredientName = o.Ingredient.IngredientName,
+							IngredAttributeName = o.IngredAttribute.IngredAttributeName,
+
+							// [地區類]
+							CityName = o.CherishOrderInfo!.TradeCityKeyNavigation.CityName,
+							RegionName = o.CherishOrderInfo.TradeRegion.RegionName,
+
+							// [聯絡類]
+							UserNickname = o.CherishOrderInfo.UserNickname,
+							ContactLine = o.CherishOrderInfo.ContactLine,
+							ContactPhone = o.CherishOrderInfo.ContactPhone,
+							ContactOther = o.CherishOrderInfo.ContactOther,
+							//TradeTimeCode
+						};
+
+			return View(query.ToList());
 		}
 
 		public IActionResult ManageAdd()
