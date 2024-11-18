@@ -67,3 +67,37 @@ $('#ingredientInput').on('input', function () {
         }
     );
 });
+
+$('.tag-button').on('click', function () {
+    let clickedButtonHtml = $(this).prop('outerHTML');
+    //console.log(clickedButtonHtml);
+
+    let newRowHtml = `
+        <div class="row align-items-center mb-1">
+            <div class="col-md-3 col-4">
+                ${clickedButtonHtml}
+            </div>
+            <div class="col-md-2 col-4 text-center">
+                <input type="number" class="form-control" value="1" min="1">
+            </div>
+            <div class="col-md-2 col-4">
+                <select class="form-select">
+                    <option selected>Unit</option>
+                </select>
+            </div>
+            <div class="col-md-3 col-8 text-center">
+                <input type="date" class="form-control">
+            </div>
+            <div class="col-md-1 col-4 d-flex justify-content-end">
+                <button class="btn d-flex justify-content-center align-items-center ps-1 pe-1 btn-delete">
+                    <img src="../img/icon/delete.svg" alt="" />
+                </button>
+            </div>
+        </div>
+    `;
+    $('.item-list').prepend(newRowHtml);
+});
+
+$('.item-list').on('click', '.btn-delete', function () {
+    $(this).closest('.row').remove();
+});
