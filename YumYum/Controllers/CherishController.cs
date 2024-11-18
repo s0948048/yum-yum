@@ -5,6 +5,7 @@ using NuGet.Packaging.Signing;
 using System.Data;
 using YumYum.Models;
 using YumYum.Models.DataTransferObject;
+using YumYum.Models.ViewModels;
 using static Azure.Core.HttpHeader;
 
 namespace YumYum.Controllers
