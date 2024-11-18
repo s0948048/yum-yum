@@ -151,8 +151,25 @@ namespace YumYum.Controllers
             var recipe = _context.RecipeBriefs.FirstOrDefault(p => p.RecipeName == saveData.recipeBrief.RecipeName && saveData.recipeBrief.CreateDate.Date == p.CreateDate.Date);
             string recipeID = recipe!.RecipeId.ToString();
             short recipeIDshort = recipe!.RecipeId;
+            //如果是自建食材，就新增食材進入資料庫
+            for (int i = 0; i < saveData.recipeIngredients.Count; i++)
+            {
+                saveData.recipeIngredients[i].RecipeId = recipeIDshort;
+                if (saveData.recipeIngredients[i].IngredientId == 0)
+                {
+                    Ingredient ingredient = new Ingredient()
+                    {
+                        IngredientName = saveData.ingredientNames[i],
+                        AttributionId = 9,
+                        IngredientIcon = "/img/icon/EmptyTag.svg"
+                    };
+                    _context.Ingredients.Add(ingredient);
+                    await _context.SaveChangesAsync();
+                    Ingredient data = await _context.Ingredients.FirstOrDefaultAsync(p => p.IngredientName == saveData.ingredientNames[i] && p.AttributionId == 9);
+                    saveData.recipeIngredients[i].IngredientId = data.IngredientId;
+                }
+            }
             //存取紀錄資料與食材資料
-            saveData.recipeIngredients.ForEach(p => p.RecipeId = recipeIDshort);
             _context.RecipeIngredients.AddRange(saveData.recipeIngredients);
             saveData.recipeRecord.RecipeId = recipeIDshort;
             _context.RecipeRecords.Add(saveData.recipeRecord);

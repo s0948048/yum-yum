@@ -187,18 +187,21 @@
         }).attr('b-mc3u0u1te1', '')
         //標籤元素
         var elementLabel = $('<div>', {
+            name: 'div-label',
             class: 'col-4 d-flex justify-content-center align-center',
-            html: '<button class="tag-button d-flex btn align-items-center new-btn"><img class= "d-flex" src="/img/icon/EmptyTag.svg" style="width:30px;height:30px"><span class="ms-2 d-flex" style="color:black"></span></button>'
+            html: '<button id="ingredient0-9" class="tag-button d-flex btn align-items-center new-btn"><img class= "d-flex" src="/img/icon/EmptyTag.svg" style="width:30px;height:30px"><span class="ms-2 d-flex" style="color:black"></span></button>'
         }).attr('b-mc3u0u1te1', '');
         //數量
         var elementCount = $('<div>', {
             class: 'col-3 d-flex justify-content-center align-items-center',
-            html: '<input type="text" name="" id="" style="width: 80px;" class="ms-2 me-4 br-black d-flex" placeholder="數量">'
+            html: '<input type="text" name="" id="" style="width: 80px;" class="ms-2 me-4 br-black d-flex" placeholder="數量">',
+            name: 'div-count',
         }).attr('b-mc3u0u1te1', '');
         //單位
         var elementUnit = $('<div>', {
             class: 'col-3 d-flex justify-content-center align-items-center',
-            html: '<select name="" id="" style="width: 80px;" class="mx-4 br-black d-flex">@foreach (var unit in Model.units!){if (unit.IngredAttributeId == 9){<option>@unit.UnitName</option>}}</select>'
+            name: 'div-unit',
+            html: '<select name="" id="" style="width: 80px;" class="mx-4 br-black d-flex">@foreach (var unit in Model.units!){if (unit.IngredAttributeId == 9){<option id="@unit.UnitId">@unit.UnitName</option>}}</select>'
                 }).attr('b-mc3u0u1te1', '');
     //垃圾桶
     var elementDelete = $('<button>', {
@@ -346,7 +349,11 @@
                 UnitId: parseInt(unitId)
             }
         }).get();
-
+        //食譜名稱
+        let ingredientName = $('#ingredient-need > .d-flex').map(function () {
+            let name = $(this).find('div[name="div-label"]').find('span').text()
+            return name
+        }).get();
         //-----------------------------------------------------------------
         //食譜步驟
         let recipeRecordFields = [];
@@ -425,10 +432,9 @@
             recipeRecord: recipeRecord,
             recipeRecordFields: recipeRecordFields,
             recipeIngredients: recipeIngredient,
+            ingredientNames: ingredientName,
         };
         console.log(recipeAllData);
-        console.log(JSON.stringify(recipeAllData));
-
         $.ajax({
             url: '/Recipe/CreateRecipe',
             method: 'POST',
@@ -464,7 +470,11 @@
                 UnitId: parseInt(unitId)
             }
         }).get();
-
+        //食譜名稱
+        let ingredientName = $('#ingredient-need > .d-flex').map(function () {
+            let name = $(this).find('div[name="div-label"]').find('span').text()
+            return name
+        }).get();
         //-----------------------------------------------------------------
         //食譜步驟
         let recipeRecordFields = [];
@@ -543,9 +553,9 @@
             recipeRecord: recipeRecord,
             recipeRecordFields: recipeRecordFields,
             recipeIngredients: recipeIngredient,
+            ingredientNames: ingredientName,
         };
         console.log(recipeAllData);
-        console.log(JSON.stringify(recipeAllData));
 
         $.ajax({
             url: '/Recipe/CreateRecipe',
