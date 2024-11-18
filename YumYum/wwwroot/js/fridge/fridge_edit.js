@@ -68,9 +68,9 @@ $('#ingredientInput').on('input', function () {
     );
 });
 
-$('.tag-button').on('click', function () {
+$('#ingredient-list').on('click', '.tag-button', function () {
     let clickedButtonHtml = $(this).prop('outerHTML');
-    //console.log(clickedButtonHtml);
+    console.log(clickedButtonHtml);
 
     let newRowHtml = `
         <div class="row align-items-center mb-1">
@@ -99,5 +99,6 @@ $('.tag-button').on('click', function () {
 });
 
 $('.item-list').on('click', '.btn-delete', function () {
+    console.log("Delete!");
     $(this).closest('.row').remove();
 });
