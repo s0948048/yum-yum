@@ -164,8 +164,8 @@ namespace YumYum.Controllers
 
 
 
-		//芳慈
-		public IActionResult MyRecipeEdit()
+        //芳慈
+        public IActionResult MyRecipeEdit()
         {
             // 設定Breadcrumb 顯示頁面資訊
             ViewBag.Breadcrumbs = new List<BreadcrumbItem>
@@ -176,13 +176,43 @@ namespace YumYum.Controllers
              };
 
 
-            //sql db test--成功連上
-            string? RecipeName = (from xa in _context.RecipeBriefs
-                                  where xa.RecipeId == 1399
-                                  select xa.RecipeName).SingleOrDefault();
-            ViewBag.recipeName = RecipeName;
+            //先設定的userId
+            int userId = 3201;
 
-            return View();
+            // 食譜基本資訊查詢
+            var recipeData = from rb in _context.RecipeBriefs
+                             join us in _context.UserSecretInfos on rb.CreatorId equals us.UserId
+                             join rf in _context.RecipeRecordFields on rb.RecipeId equals rf.RecipeId
+                             join rr in _context.RecipeRecords on rb.RecipeId equals rr.RecipeId
+                             join ri in _context.RecipeIngredients on rb.RecipeId equals ri.RecipeId
+                             join ig in _context.Ingredients on ri.IngredientId equals ig.IngredientId
+                             where rf.RecipeRecVersion == (from r in _context.RecipeRecordFields
+                                                           where r.RecipeId == rb.RecipeId
+                                                           select r.RecipeRecVersion).Max()
+                             && rf.RecipeField == 0
+                             && us.UserId == userId  // Filter by UserID = 3201
+                             select new MyRecipeViewModel.RecipeDetail
+                             {
+                                 RecipeID = (int)rb.RecipeId,
+                                 RecipeName = rb.RecipeName,
+                                 UserNickname = us.UserNickname,
+                                 FinishMinute = rb.FinishMinute,
+                                 FieldShot = rf.FieldShot,
+                                 FieldDescript = rf.FieldDescript,
+                                 RecipeStatusCode = rr.RecipeStatusCode,
+                                 IngredientName = ig.IngredientName
+                             };
+
+
+
+            // 合併data
+            var viewModel = new MyRecipeViewModel
+            {
+                RecipeDetails = recipeData.ToList()
+            };
+
+            return View(viewModel);
+
 
         }
 
