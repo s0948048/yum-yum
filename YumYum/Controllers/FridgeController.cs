@@ -62,6 +62,20 @@ namespace YumYum.Controllers
             return Json(result);
         }
 
+        public IActionResult SearchIngredients(string searchKeyword)
+        {
+            var allIngredients = GetIngredientData();
+
+            if (!string.IsNullOrEmpty(searchKeyword))
+            {
+                allIngredients = allIngredients
+                    .Where(i => i.IngredientName!.Contains(searchKeyword, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            return PartialView("_IngredientListPartial", allIngredients);
+        }
+
         private List<FridgeItemViewModel> GetFridgeItemData()
         {
             return (from fridge in _context.RefrigeratorStores
