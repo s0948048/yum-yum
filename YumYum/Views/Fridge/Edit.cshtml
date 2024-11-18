@@ -73,15 +73,23 @@
                                 <span>@item.IngredientName</span>
                             </button>
                         </div>
-                        <div class="col-md-2 col-2 text-center">
-                            <span class="bottom-line">
-                                @($"{item.Quantity} {item.UnitName}")
-                            </span>
+                        <div class="col-md-2 col-4 text-center">
+                            <input type="number" class="form-control" value="@item.Quantity" min="1">
                         </div>
-                        <div class="col-md-3 col-3 text-center">
-                            <span class="bottom-line">有效天數: 2日</span>
+                        <div class="col-md-2 col-4">
+                            <select class="form-select">
+                                <option>顆</option>
+                                <option>份</option>
+                            </select>
                         </div>
-
+                        <div class="col-md-3 col-8 text-center">
+                            <input type="date" class="form-control" value="2024-12-13">
+                        </div>
+                        <div class="col-md-1 col-4 d-flex justify-content-end">
+                            <button class="btn d-flex justify-content-center align-items-center ps-1 pe-1" id="b tn-delete">
+                                <img src="~/img/icon/delete.svg" alt="" />
+                            </button>
+                        </div>
                     </div>
                 }
                 <!-- Repeat above block for each item -->
