@@ -14,9 +14,11 @@ public partial class RecipeIngredient
 
     public short UnitId { get; set; }
     [ValidateNever]
+    [JsonIgnore]
     public virtual Ingredient? Ingredient { get; set; } = null!;
     [ValidateNever]
     public virtual RecipeBrief? Recipe { get; set; } = null!;
     [ValidateNever]
+    [JsonIgnore]
     public virtual Unit? Unit { get; set; } = null!;
 }
