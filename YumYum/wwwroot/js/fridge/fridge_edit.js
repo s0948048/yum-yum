@@ -49,3 +49,21 @@ $('.ingredient-attribute-checkbox').on('change', function () {
         }
     );
 });
+
+$('#ingredientInput').on('input', function () {
+    var keyword = $(this).val();
+
+    $.ajax(
+        {
+            url: 'SearchIngredients',
+            type: 'GET',
+            data: { searchKeyword: keyword },
+            success: function (data) {
+                $('#ingredient-list').html(data);
+            },
+            error: function () {
+                console.log('An error occurred while fetching the data.');
+            }
+        }
+    );
+});
