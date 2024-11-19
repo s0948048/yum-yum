@@ -11,5 +11,7 @@
 		public byte RecipeStatusCode { get; set; }
 
 		public string? FieldShot { get; set; }
+
+		public short? FinishMinute { get; set; }
 	}
 }
