@@ -1,4 +1,5 @@
-﻿<style>
+﻿
+<style>
 	h1, p, h5 {
 		color: var(--yum-primary-2);
 	}
@@ -45,99 +46,58 @@
 	}
 </style>
 
+@model IEnumerable<dynamic>
 <div style="text-align:center">
 	<h1 class="mb-4 fw-600">食材在手 靈感不愁</h1>
 	<p class="fw-600">請點選食材Tag 或 查詢食材</p>
 	@* 搜尋列 *@
 	<div class="mb-4">
 		<nav class="navbar">
-			<form class="container-fluid" style="width:60%">
+			<div class="container-fluid" style="width:60%">
 				<div class="input-group">
-					<button class="btn btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+					<button class="btn btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" id="filter-menu">
 						<img src="./Img/filter.svg" alt="fliter" />
 					</button>
-					<input type="text" class="form-control" placeholder="查詢食材" aria-label="Username" aria-describedby="basic-addon1">
+					<input type="text" class="form-control" placeholder="查詢食材" aria-label="Username" aria-describedby="basic-addon1" id="search-input">
 					<button class="btn btn-menu input-group-text" id="basic-addon1">
 						<img src="./Img/search.svg" alt="search" />
 					</button>
 				</div>
-			</form>
+			</div>
 		</nav>
 	</div>
 	@* 食材標籤 *@
 	<div id="tags" class="mb-4">
-		<div id="carouselExampleDark" class="carousel carousel-dark slide carousel-fade" data-bs-ride="carousel">
-			<div class="carousel-indicators">
-				<button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-				<button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
-				<button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
-			</div>
-			<div class="carousel-inner">
-				<div class="carousel-item active" data-bs-interval="99999">
-					<div class="ms-5 mb-5">
-						@for (int i = 1; i < 51; i++)
-						{
-							<button class="btn-tags btn mb-4 me-5" style="border-radius:20px;">
-								<img src="./Img/@(i+3).svg" width="25" height="25" class="pe-1 pb-0">牛奶
-							</button>
-							if (i % 7 == 0)
-							{
-								<br />
-							}
-						}
-					</div>
-				</div>
-				<div class="carousel-item" data-bs-interval="99999">
-					<div class="ms-5 mb-5">
-						@for (int i = 1; i < 51; i++)
-						{
-							<button class="btn-tags btn mb-4 me-5" style="border-radius:20px;">
-								<img src="./Img/@(i+3).svg" width="25" height="25" class="pe-1 pb-0">牛奶糖
-							</button>
-							if (i % 7 == 0)
-							{
-								<br />
-							}
-						}
-					</div>
-				</div>
-				<div class="carousel-item">
-					<div class="ms-5 mb-5">
-						@for (int i = 1; i < 51; i++)
-						{
-							<button class="btn-tags btn mb-4 me-5" style="border-radius:20px;">
-								<img src="./Img/@(i+3).svg" width="25" height="25" class="pe-1 pb-0">牛奶饅頭
-							</button>
-							if (i % 8 == 0)
-							{
-								<br />
-							}
-						}
-					</div>
-				</div>
-			</div>
-			<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Previous</span>
-			</button>
-			<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Next</span>
-			</button>
+		@foreach (var userId in Model)
+		{
+			@if (userId.GetType().GetProperty("UserId") != null)
+			{
+				<p>這是冰箱的食材，建議優先使用</p>
+				<p>或使用搜尋功能，瀏覽所有食材</p>
+				break;
+			}
+		}
+
+		<div class="ms-5 mb-5">
+			@{
+				int count = 0;
+			}
+			@foreach (var tag in Model)
+			{
+				count++;
+				<label class="btn-tags btn mb-4 me-5" style="border-radius:20px;" for="tag-id@(tag.IngredientId)">
+					<img src="@tag.IngredientIcon" width="25" height="25" class="pe-1 pb-0"><text>@tag.IngredientName</text>
+				</label>
+				<input type="checkbox" name="tags" id="tag-id@(tag.IngredientId)" value="@(tag.IngredientId)" hidden>
+				if (count % 8 == 0)
+				{
+					<br />
+				}
+			}
 		</div>
 	</div>
 	<p class="mb-3 fs-4 fw-600">已選的食材</p>
 	<div id="tags-selected" class="mb-4">
-		@for (int i = 1; i < 11; i++)
-		{
-			<button class="btn-tags btn mb-4 me-5" style="border-radius:20px;">
-				<img src="./Img/@(i+3).svg" width="25" height="25" class="pe-1 pb-0">牛奶
-			</button>
-			if (i % 8 == 0)
-			{
-				<br />
-			}
-		}
 	</div>
 	<button class="btn btn-primary mb-5 fs-4" id="btn-select">
 		查食譜
@@ -145,17 +105,6 @@
 	<div>
 		@* 搜尋結果 *@
 		<div class="card-body" style="display:flex; flex-flow:wrap row;justify-content:space-around" id="context">
-			@for (int i = 0; i < 9; i++)
-			{
-				<div class="card contentcard mb-4" style="width: 30%;">
-					<img src="~/img/close-up-delicious-asian-food.jpg" class="card-img-top" alt="...">
-					<div class="card-body">
-						<h5 class="card-title mb-3 fs-3 fw-600">日式燒肉飯</h5>
-						<p class="card-text fs-6">雞蛋、鹽、黑胡椒...</p>
-						<p class="card-text fs-6">30分鐘</p>
-					</div>
-				</div>
-			}
 		</div>
 	</div>
 	@* 選單 *@
@@ -169,32 +118,32 @@
 				<img src="../../img/img/food_attr/1.svg">
 				<span>全穀雜糧類</span>
 			</label>
-			<input type="checkbox" name="filter-IAttr" id="IAttr-1" hidden>
+			<input type="checkbox" name="filter-IAttr" id="IAttr-1" value="1" hidden>
 			<label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-2">
 				<img src="../../img/img/food_attr/2.svg">
 				<span>豆魚蛋肉類</span>
 			</label>
-			<input type="checkbox" name="filter-IAttr" id="IAttr-2" hidden>
+			<input type="checkbox" name="filter-IAttr" id="IAttr-2" value="2" hidden>
 			<label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-3">
 				<img src="../../img/img/food_attr/3.svg">
 				<span>乳品類</span>
 			</label>
-			<input type="checkbox" name="filter-IAttr" id="IAttr-3" hidden>
+			<input type="checkbox" name="filter-IAttr" id="IAttr-3" value="3" hidden>
 			<label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-4">
 				<img src="../../img/img/food_attr/4.svg">
 				<span>蔬菜類</span>
 			</label>
-			<input type="checkbox" name="filter-IAttr" id="IAttr-4" hidden>
+			<input type="checkbox" name="filter-IAttr" id="IAttr-4" value="4" hidden>
 			<label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-5">
 				<img src="../../img/img/food_attr/5.svg">
 				<span>水果類</span>
 			</label>
-			<input type="checkbox" name="filter-IAttr" id="IAttr-5" hidden>
+			<input type="checkbox" name="filter-IAttr" id="IAttr-5" value="5" hidden>
 			<label class="btn-outline-success btn rounded-4 align-content-center mb-5 fw-600" for="IAttr-6">
 				<img src="../../img/img/food_attr/6.svg">
 				<span>油與堅果類</span>
 			</label>
-			<input type="checkbox" name="filter-IAttr" id="IAttr-6" hidden>
+			<input type="checkbox" name="filter-IAttr" id="IAttr-6" value="6" hidden>
 		</div>
 	</div>
 </div>
@@ -221,6 +170,7 @@
 		font-size: 1.25rem;
 		box-shadow: 2px 2px var(--yum-primary-2);
 	}
+
 		#Ifilter label:hover {
 			background-color: var(--yum-primary-2);
 			box-shadow: 2px 2px var(--yum-secondary-4);
@@ -233,14 +183,87 @@
 		opacity: 50%;
 	}
 </style>
+
+
+<script src="~/js/shared/jquery.js"></script>
 <script>
-	window.addEventListener('load', function () {
+	$(document).ready(function () {
 		$('#Ifilter input[type="checkbox"]').change(function () {
-			console.log($(this).prop('checked'));
 			console.log($('#Ifilter input[type="checkbox"]:checked'));
-			$(this).prev().toggleClass('selected')
+			var selectedCheckboxes = $('#Ifilter input[type="checkbox"]:checked').map(
+				function () {
+					return $(this).val();
+				}).get();
+			$(this).prev().toggleClass('selected');
+			loadPartialView();
+			// 發送AJAX請求到Controller
+			function loadPartialView() {
+				$.ajax(
+					{
+						url: '/Recipe/Index', // 伺服器的URL
+						type: 'POST', // 請求類型
+						data: JSON.stringify(selectedCheckboxes), // 傳送數據
+						contentType: 'application/json; charset=utf-8',
+						success: function (response) {
+							console.log('成功:', response);
+							//更新畫面
+							$('#tags').html(response);
+						}, error: function (xhr, status, error) { console.log('發生錯誤:', error); }
+					});
+			};
 		});
-	})
+		$("body").on("click", "#tags > div > label", function () {
+			Element = $(this);
+			ElementNext = Element.next();
+			$("#tags-selected").append(Element);
+			$("#tags-selected").append(ElementNext);
+		});
+		$("#btn-select").on('click', () => {
+			console.log($('#tags-selected input[type="checkbox"]:checked'));
+			var selectedtags = $('#tags-selected input[type="checkbox"]:checked').map(
+				function () {
+					return $(this).val();
+				}).get();
+			console.log(selectedtags);
+			$.ajax(
+				{
+					url: '/Recipe/IndexQuery', //伺服器的URL
+					type: 'POST', //請求類型
+					data: JSON.stringify(selectedtags), //傳送數據
+					contentType: 'application/json; charset=utf-8',
+					success: function (response) {
+						console.log('成功:', response);
+						//更新畫面
+						$('#context').html(response);
+					},
+					error: function (xhr, status, error) { console.log('發生錯誤:', error); }
+				});
+		})
+
+		// $("body").on('click', '#filter-menu', function () {
+		// 	console.log("hello");
+		// 	$(this).toggleClass("btn btn-menu");
+		// })
+
+		$("#basic-addon1").on('click', () => {
+			var inputValue = $('#search-input').val();
+			// alert('輸入的值是: ' + inputValue);
+			$.ajax(
+				{
+					url: '/Recipe/IngredientQuery', //伺服器的URL
+					type: 'POST', //請求類型
+					data: JSON.stringify({ searchString: inputValue }),//傳送數據
+					contentType: 'application/json; charset=utf-8',
+					success: function (response) {
+						console.log('成功:', response);
+						//更新畫面
+						$('#tags').html(response);
+					},
+					error: function (xhr, status, error) { console.log('發生錯誤:', error); }
+				});
+		});
+
+	});
 </script>
 
 
