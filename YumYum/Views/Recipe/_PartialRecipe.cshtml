@@ -1,0 +1,23 @@
+﻿@model YumYum.Models.ViewModels.RecipeAllUser
+@* @model IEnumerable<dynamic> *@
+
+@foreach (var card in Model.recipeQueryViewModel)
+{
+	<div class="card contentcard mb-4" style="width: 30%;">
+		<img src="@card.FieldShot" class="card-img-top" alt="...">
+		<div class="card-body">
+			<h5 class="card-title mb-3 fs-3 fw-600">@card.RecipeName</h5>
+			<p class="card-text fs-6">
+				@foreach (var item in Model.recipeDetailQuery)
+				{
+					if (card.RecipeId == item.RecipeId)
+					{
+						<text> @(item.IngredientName)</text>
+					}
+				}
+			</p>
+			<p class="card-text fs-6">@(card.FinishMinute)分鐘</p>
+		</div>
+	</div>
+}
+
