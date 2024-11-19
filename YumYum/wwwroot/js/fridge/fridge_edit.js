@@ -82,10 +82,11 @@ $('#ingredient-list').on('click', '.tag-button', function () {
         success: function (response) {
             console.log(response);
 
-            let optionsHTML = '';
+            let optionsHtml = '';
             response.forEach(function (unit) {
-               optionsHTML += `<option value="${unit.UnitID}">${unit.UnitName}</option>`
+                optionsHtml += `<option value="${unit.UnitId}">${unit.UnitName}</option>`
             })
+            console.log(optionsHtml);
 
             let newRowHtml = `
                 <div class="row align-items-center mb-1">
@@ -97,7 +98,7 @@ $('#ingredient-list').on('click', '.tag-button', function () {
                     </div>
                     <div class="col-md-2 col-4">
                         <select class="form-select">
-                            <option selected>Unit</option>
+                            ${optionsHtml}
                         </select>
                     </div>
                     <div class="col-md-3 col-8 text-center">
