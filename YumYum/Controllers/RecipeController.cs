@@ -577,7 +577,7 @@ namespace YumYum.Controllers
 
 
             //回傳新建食譜成功
-            return Json(new { success = "新建食譜成功" });
+            return Json(new { success = "編輯食譜成功" });
         }
 
 
