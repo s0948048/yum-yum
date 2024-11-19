@@ -309,7 +309,12 @@ namespace YumYum.Controllers
                     {
                         From = new MailAddress("yumyumService@gmail.com"),
                         Subject = "YumYum註冊會員驗證信",
-                        Body = $"感謝您註冊yumyum會員，以下是您的驗證碼「{varifycode}」",
+                        Body = @$"
+                           <div style=""width: 500px; height: 200px;border: 2px solid black;text-align: center;background-color: #fffae6;border-radius:10px"">
+                           <p
+                           style="" margin-top:88px;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:16px"">
+                           感謝您註冊YumYum信箱，以下是您的驗證碼<b>「{varifycode}」</b></p>
+                           </div>",
                         IsBodyHtml = true, // 設定為 HTML 格式
                     };
                     mailMessage.To.Add(user.Email);
