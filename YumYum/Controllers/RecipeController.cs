@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Text.Json;
 using YumYum.Models;
 using YumYum.Models.Recipe;
+using YumYum.Models.ViewModels;
 
 namespace YumYum.Controllers
 {
@@ -20,15 +21,142 @@ namespace YumYum.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        //Index
-        public async Task<IActionResult> Index()
-        {
-            return View();
-        }
+		//Index
+
+		//健誠
+		public async Task<IActionResult> Index()
+		{
+			int? userId = HttpContext.Session.GetInt32("userId");
+			//int? userId = 3204;
+
+			// 查詢所有食材
+			var ingredientQuery = from ingredient in await _context.Ingredients.ToListAsync()
+								  select new
+								  {
+									  IngredientName = ingredient.IngredientName,
+									  IngredientId = ingredient.IngredientId,
+									  IngredientIcon = ingredient.IngredientIcon,
+								  };
+			if (userId != null)
+			{
+				// 查詢使用者擁有的食材
+				var userIngredientQuery = from user in await _context.RefrigeratorStores.ToListAsync()
+										  join userIngredient in ingredientQuery on user.IngredientId equals userIngredient.IngredientId
+										  where user.UserId == userId
+										  select new
+										  {
+											  UserId = user.UserId,
+											  IngredientName = userIngredient.IngredientName,
+											  IngredientId = userIngredient.IngredientId,
+											  IngredientIcon = userIngredient.IngredientIcon
+										  };
+				return View(userIngredientQuery);
+			}
+			else
+			{
+				return View(ingredientQuery);
+			}
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Index([FromBody] List<string> selectedValues)
+		{
+			//int? userId = HttpContext.Session.GetInt32("userId");		
+
+			var ingredientQuery = from attr in await _context.IngredAttributes.ToListAsync()
+								  join ingredient in await _context.Ingredients.ToListAsync()
+								  on attr.IngredAttributeId equals ingredient.AttributionId
+								  where selectedValues.Contains(ingredient.AttributionId.ToString())
+								  select new
+								  {
+									  IngredientName = ingredient.IngredientName,
+									  IngredientId = ingredient.IngredientId,
+									  IngredientIcon = ingredient.IngredientIcon
+								  };
+
+			return PartialView("_PartialTags", ingredientQuery);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> IndexQuery([FromBody] List<string> selectedValues)
+		{
+			foreach (var item in selectedValues)
+			{
+				Console.WriteLine(item);
+			}
+			var recipeQuery = from recipe in _context.RecipeBriefs
+							  join recipeInfo in _context.RecipeRecords
+							  on recipe.RecipeId equals recipeInfo.RecipeId
+							  join recipeImage in _context.RecipeRecordFields
+							  on recipe.RecipeId equals recipeImage.RecipeId
+							  join recipeIngredient in _context.RecipeIngredients
+							  on recipe.RecipeId equals recipeIngredient.RecipeId
+							  where (recipeInfo.RecipeStatusCode == 1 || recipeInfo.RecipeStatusCode == 4)
+							  && (recipeImage.RecipeField == 0)
+							  && selectedValues.Contains(recipeIngredient.IngredientId.ToString())
+							  select new RecipeQueryViewModel
+							  {
+								  RecipeId = recipe.RecipeId,
+								  RecipeName = recipe.RecipeName,
+								  FieldShot = recipeImage.FieldShot,
+								  FinishMinute = recipe.FinishMinute
+							  };
+
+			var recipeDetailQuery = from recipe in recipeQuery.Distinct()
+									join recipeIngredient in _context.RecipeIngredients on recipe.RecipeId equals recipeIngredient.RecipeId
+									join recipeIngredientName in _context.Ingredients on recipeIngredient.IngredientId equals recipeIngredientName.IngredientId
+									select new RecipeDetailQuery
+									{
+										RecipeId = recipeIngredient.RecipeId,
+										IngredientId = recipeIngredient.IngredientId,
+										IngredientName = recipeIngredientName.IngredientName
+									};
+			var AllList = new RecipeAllUser()
+			{
+				recipeQueryViewModel = recipeQuery.Distinct().ToList(),
+				recipeDetailQuery = recipeDetailQuery.ToList()
+			};
+			return PartialView("_PartialRecipe", AllList);
+
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> IngredientQuery([FromBody] SearchRequest request)
+		{
+
+			string searchString = request.SearchString;
+			if (searchString != String.Empty)
+			{
+				// 查詢食材
+				var ingredientQuery = from ingredient in await _context.Ingredients.ToListAsync()
+									  where ingredient.IngredientName.Contains(searchString)
+									  select new
+									  {
+										  IngredientName = ingredient.IngredientName,
+										  IngredientId = ingredient.IngredientId,
+										  IngredientIcon = ingredient.IngredientIcon,
+									  };
+				return PartialView("_PartialTags", ingredientQuery);
+			}
+			else
+			{
+				// 查詢食材
+				var ingredientQueryAll = from ingredient in await _context.Ingredients.ToListAsync()
+										 select new
+										 {
+											 IngredientName = ingredient.IngredientName,
+											 IngredientId = ingredient.IngredientId,
+											 IngredientIcon = ingredient.IngredientIcon,
+										 };
+				return PartialView("_PartialTags", ingredientQueryAll);
+			}
+
+		}
+		public class SearchRequest { public string SearchString { get; set; } }
 
 
-        //毅祥
-        public async Task<IActionResult> WatchRecipe()
+		//毅祥
+		public async Task<IActionResult> WatchRecipe()
         {
             //此區與此區的view更動中
             //接收食譜的id
