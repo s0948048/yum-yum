@@ -43,6 +43,24 @@ namespace YumYum.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
+        public IActionResult GetUnitsByIngredientName(string ingredientName)
+        {
+            var unitsList = (
+                from u in _context.Units
+                join i in _context.Ingredients on u.IngredAttributeId equals i.AttributionId
+                where i.IngredientName == ingredientName
+                orderby i.AttributionId
+                select new
+                {
+                    UnitId = u.UnitId,
+                    UnitName = u.UnitName
+                }
+                ).ToList();
+
+            return Json(unitsList);
+        }
+
         [HttpPost]
         public JsonResult FilterIngredients([FromBody] List<int> selectedIds)
         {
