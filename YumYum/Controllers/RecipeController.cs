@@ -383,7 +383,7 @@ namespace YumYum.Controllers
         }
 
 
-        //接收創建食譜的資訊
+        //編輯食譜的資訊
 
         [HttpPost]
         public async Task<IActionResult> EditRecipe([FromBody] RecipeCreate_Save saveData)
