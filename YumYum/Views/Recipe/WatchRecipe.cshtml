@@ -4,7 +4,7 @@
 @using System.Text.Json;
 @using YumYum.Models;
 @{
-
+    string userPhoto = Model.recipeWatchBrief[0].userPhoto == null ? "~/img/icon/EmptyAvatar.svg" : Model.recipeWatchBrief[0].userPhoto;
 }
 
 @model RecipeWatch
@@ -33,7 +33,23 @@
                     <b style="font-size: 1.25rem;">@Model.recipeWatchBrief[0].className</b>
                 </div>
             </div>
-
+            <!--創建者資訊及照片和收藏-->
+            <div class="d-flex justify-content-start" style="border-color: aliceblue;margin-top: 1rem;">
+                <div class="m-0" style="width: 50%;border-color: aliceblue;">
+                    <p style="font-size:22px"><img class="me-2" style="width:50px;height:50px;border-radius:100px" src=@($"{userPhoto}") />@Model.recipeWatchBrief[0].userNickName</p>
+                </div>
+                <div class="ms-auto">
+                    <button id="svg-collect" class="tag-button d-inline-flex btn align-items-center" style="margin-right:0px">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="30px" height="30px">
+                            <!-- 外框 -->
+                            <path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z"></path>
+                            <!-- 內部 -->
+                            <path id="svg-path" d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Z" fill="transparent" transform="scale(0.8, 0.8) translate(100,-140)"></path>
+                        </svg>
+                        <span class="ms-2" style="color:var(--yum-primary-2);font-size:20px">收藏</span>
+                    </button>
+                </div>
+            </div>
             <!-- 烹煮時間與份量 -->
             <div class="d-flex justify-content-start" style="border-color: aliceblue;margin-top: 1rem;">
                 <div class="ms-0" style="width: 50%;border-color: aliceblue;">
@@ -41,15 +57,15 @@
                     <input type="text" class="br-gray input-type" value="@Model.recipeWatchBrief[0].recipePeople" readonly>
                 </div>
                 <div class="ms-5" style="width: 50%;">
-                    <p class="mb-2 text-big">烹調時間<small>(分鐘)</small></p>
+                    <p class="mb-2 text-big"><img src="~/img/icon/timer.svg" class="ingredient-icon">烹調時間<small>(分鐘)</small></p>
                     <input type="text" class="br-gray input-type" value="@Model.recipeWatchBrief[0].recipeFinishTime" readonly>
                 </div>
             </div>
             <!-- 簡介 -->
-            <div class="d-inline-block mb-0 w-100" style="margin-top: 31px;">
+            <div class="d-inline-block mb-0 w-100" style="margin-top: 10px;">
                 <p class="m-2 text-big">簡介：</p>
-                <textarea class="mb-2 br-gray p-3" style="width: 100%; border-radius: 4px;font-size: 1rem;"
-                          rows="6" readonly>@Model.recipeRecordFields[0].FieldDescript</textarea>
+                <textarea class="mb-2 br-gray p-3" style="width: 100%;overflow-y:auto;border-radius: 4px;font-size: 1rem;"
+                          rows="4" readonly>@Model.recipeRecordFields[0].FieldDescript</textarea>
             </div>
         </div>
     </div>
@@ -64,7 +80,7 @@
                      style="height: 320px ;width:100%; overflow-y: auto;border-radius: 6px;">
                     @foreach (var item in Model.recipeIngredient)
                     {
-                        <!-- 左邊 -->
+                    //左邊
                         <div class="col-4 d-flex justify-content-center" style="height:64.45px">
 
                             <!-- 標籤 -->
@@ -93,8 +109,8 @@
             {
                 if (item.RecipeField == 1)
                 {
-                    <!-- 步驟1 -->
-                    <!--空的樣式-->
+                    //步驟1
+                    //空的樣式
 
                     <p style="position: absolute;margin-top: 15.2rem;margin-left: 23.76rem;color:var(--yum-secondary-4)">
                         ──────────────●
@@ -193,3 +209,34 @@
         <div class="finish-block"> <div class="d-inline-block align-content-center finish-ineer">FINISH</div> </div>
     </div>
 </div>
+<script>
+    $(function () {
+        $('#svg-collect').on('click', function () {
+            if (@Model.userId == 0) {
+                alert('會員未登入，登入後才能使用收藏食譜功能')
+                return
+            };
+            //變更標籤顏色
+            let svgColor = $('#svg-path').attr('fill');
+            if (svgColor == "transparent") {
+                $('#svg-path').attr('fill', "#30533f")
+            }
+            else {
+                $('#svg-path').attr('fill', "transparent")
+            };
+            let data = {
+                UserID: @Model.userId,
+                RecipeID: @Model.recipeId,
+                VerifyColor: $('#svg-path').attr('fill'),
+            };
+            $.ajax({
+                url: '/Recipe/WatchRecipe',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (result) { alert(result["success"]); alert(result["message"]) },
+                error: function (xhr, status, error) { console.error('錯誤', error) }
+            })
+        });
+    });
+</script>
