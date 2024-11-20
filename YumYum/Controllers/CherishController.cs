@@ -287,6 +287,24 @@ namespace YumYum.Controllers
              new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryOthers", "Cherish") ?? "#"),
              new BreadcrumbItem("別人的食材", "#") // 當前的頁面
              };
+
+            //設定可面交時間
+
+            // 先抓到該筆訂單or該預設聯絡資訊的所有面交時段
+            var timeSpan = await (from d in _context.CherishTradeTimes
+                                  where d.CherishId == cherishId
+                                  select d).ToListAsync();
+
+            // 進行篩選，並傳遞給ViewBag
+            ViewBag.Mon = timeSpan.Where(d => d.TradeTimeCode.Contains("Mon"));
+            ViewBag.Tue = timeSpan.Where(d => d.TradeTimeCode.Contains("Tue"));
+            ViewBag.Wes = timeSpan.Where(d => d.TradeTimeCode.Contains("Wes"));
+            ViewBag.Thr = timeSpan.Where(d => d.TradeTimeCode.Contains("Thr"));
+            ViewBag.Fri = timeSpan.Where(d => d.TradeTimeCode.Contains("Fri"));
+            ViewBag.Sat = timeSpan.Where(d => d.TradeTimeCode.Contains("Sat"));
+            ViewBag.Sun = timeSpan.Where(d => d.TradeTimeCode.Contains("Sun"));
+
+
             var chrishOrders = from c in _context.CherishOrders
                                join coa in _context.CherishOrderApplicants
                                on c.CherishId equals coa.CherishId
@@ -311,6 +329,10 @@ namespace YumYum.Controllers
                                    CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
                                    CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
                                };
+
+            
+
+
 
             return View(await chrishOrders.ToListAsync());
         }
