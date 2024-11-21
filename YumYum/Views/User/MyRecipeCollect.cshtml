@@ -1,5 +1,5 @@
-﻿@* 資料引用  顯示食譜簡介列表*@
-@model List<RecipeBrief>
+﻿@model YumYum.Models.ViewModels.MyRecipeViewModel
+
 
 @* --麵包屑導覽-- *@
 <div class="container custom-left mt-4 mb-4">
@@ -7,7 +7,6 @@
     @await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
 
 </div>
-
 
 
 @* --tabs 卡片-- *@
@@ -30,49 +29,79 @@
                 </ul>
             </div>
 
-            @for (int k = 0; k < Model.Count; k++)
+            @if (Model.RecipeDetails != null && Model.RecipeDetails.Any())
             {
 
-            @* -----一般食譜---- *@
-            <div class="card mb-3 mx-auto " style="max-width: 95%;">
-                <div class="row">
+                @foreach (var recipe in Model.RecipeDetails.GroupBy(r => r.RecipeID))
+                {
 
-                    <div class="col-md-3 d-flex justify-content-center align-items-center">
-                        <div class="card-img">
-                                <img src="~/img/recipe/recipe_intro/1402.jpg" class="rounded" style="max-width: 100%;" alt="...">
-                        </div>
-                    </div>
-                    <div class="col-md-7">
-                        <div class="card-body2">
-                                <h4 class="card-title text-start">@Model[k].RecipeName</h4>
-                            <p class="card-title text-start" id="UserID">作者</p>
-                            <p class="card-text text-start" id="RecipeDescript">
-                                周末不一定要跑咖啡廳
-                                在家也能享有健康早午餐
-                                <br>
-                                酪梨控一定要試看看!
+                    <div class="card mb-3 mx-auto" style="max-width: 95%;width: 100%;">
+                        <div class="row">
+                            <div class="col-md-3 d-flex justify-content-center align-items-center">
+                                <div class="card-img">
+                                    @if (!string.IsNullOrEmpty(recipe.First().FieldShot))
+                                    {
+                                        <img src="@recipe.First().FieldShot"
+                                             class="rounded"
+                                             style="max-width: 100%;"
+                                             alt="recipe_intro"
+                                             onerror="this.src='/img/icon/EmptyPhoto.png';">
+                                    }
+                                    else
+                                    {
+                                        <img src="/img/icon/EmptyPhoto.png"
+                                             class="rounded"
+                                             style="max-width: 100%;"
+                                             alt="recipe_intro">
+                                    }
 
-                            </p>
-                            <p class="card-title text-start" id="RecipeIngredients">食材: 酪梨,雞蛋,吐司,鹽,黑胡椒</p>
-                            <p class="card-text text-start"></p>
-                            <div class="d-flex align-items-center">
-                                <img src="/img/icon/timer.svg" alt="timer">
-                                <div class="card-text text-start mb-0"><small class="text-muted">10 min</small></div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="card-body2">
+                                    <h4 class="card-title text-start">@recipe.First().RecipeName</h4>
+                                    <p class="card-title text-start" id="UserID">@recipe.First().UserNickname</p>
+                                    <p class="card-text text-start" id="RecipeDescript">@recipe.First().FieldDescript</p>
+                                    <p class="card-title text-start" id="RecipeIngredients">
+                                        食材:
+                                        @foreach (var ingredient in recipe)
+                                        {
+                                            @ingredient.IngredientName
+                                            <span>,</span>
+                                        }
+
+                                    </p>
+                                    <div class="d-flex align-items-center">
+                                        <img src="/img/icon/timer.svg" alt="timer">
+                                        <div class="card-text text-start mb-0">
+                                            <small class="text-muted">@recipe.First().FinishMinute min</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 d-flex justify-content-center align-items-center">
+                                <button type="button" class="btn btn-secondary ">
+                                    <svg height="24px" viewBox="0 -960 960 960" width="24px">
+                                        <path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z" fill="#e2e3cf" />
+                                    </svg>
+
+                                    收藏食譜
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2 d-flex justify-content-center align-items-center">
-                        <button type="button" class="btn btn-secondary ">
-                                <svg height="24px" viewBox="0 -960 960 960" width="24px">
-                                    <path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z" fill="#e2e3cf" /></svg>
 
-                            收藏食譜</button>
-                    </div>
-                </div>
-            </div>
-
-
+                }
             }
+            else
+            {
+                <p>No recipes available.</p>
+            }
+
+
+
+
 
 
         </div>
