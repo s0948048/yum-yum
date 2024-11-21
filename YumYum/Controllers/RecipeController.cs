@@ -222,7 +222,45 @@ namespace YumYum.Controllers
             return View(AllList);
         }
 
+        //收藏食譜
+        [HttpPost]
+        public async Task<IActionResult> WatchRecipe([FromBody] ReipeWatch_Collect uc)
+        {
+            try
+            {
+                var collect = await _context.UserCollectRecipes.FirstOrDefaultAsync(p => p.UserID == uc.UserID && p.RecipeID == (short)uc.RecipeID);
 
+
+                if (uc.verifyColor == "transparent")
+                {
+                    if (collect != null)
+                    {
+                        _context.UserCollectRecipes.Remove(collect);
+
+                    }
+                }
+                else if (uc.verifyColor == "#30533f")
+                {
+                    if (collect == null)
+                    {
+                        UserCollectRecipe data = new UserCollectRecipe()
+                        {
+                            RecipeID = (short)uc.RecipeID,
+                            UserID = uc.UserID,
+                        };
+                        _context.UserCollectRecipes.Add(data);
+
+                    }
+                }
+                await _context.SaveChangesAsync();
+                return Json(new { success = "成功", message = collect });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { success = uc.verifyColor, message = ex.InnerException != null ? ex.InnerException.Message : ex.Message });
+            }
+        }
         public async Task<IActionResult> CreateRecipe()
         {
             var ingredientList = await _context.Ingredients.ToListAsync();
