@@ -44,6 +44,21 @@ namespace YumYum.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetOtherUnits()
+        {
+            var otherUnits = _context.Units
+                .Where(u => u.IngredAttributeId == 9)
+                .OrderBy(u => u.UnitId)
+                .Select(u => new
+                {
+                    UnitId = u.UnitId,
+                    UnitName = u.UnitName
+                }).ToList();
+
+            return Json(otherUnits);
+        }
+
+        [HttpGet]
         public IActionResult GetUnitsByIngredientName(string ingredientName)
         {
             var unitsList = (
