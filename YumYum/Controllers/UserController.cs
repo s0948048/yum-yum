@@ -161,11 +161,40 @@ namespace YumYum.Controllers
 			return _context.UserBios.Any(e => e.UserId == id);
 		}
 
+		//1120 Upload image		
+
+		// POST: User/Upload
+		[HttpPost]
+		public async Task<IActionResult> Upload(IFormFile file)
+		{
+			//int? userId = HttpContext.Session.GetInt32("userId");
+			int? userId = 3207;//for test		
+			if (file != null && file.Length > 0)
+			{
+				var fileNamefromlocal = System.IO.Path.GetFileName(file.FileName);
+				var sideFileName = fileNamefromlocal.Split('.').Last();
+				var fileName = "HeadShot" + userId.ToString() + "." + sideFileName;
+				var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Img", fileName);
+				using (var stream = new FileStream(filePath, FileMode.Create))
+				{
+					await file.CopyToAsync(stream);
+				}
+				UserBio? userBio = await _context.UserBios.Where(p => p.UserId == userId).FirstOrDefaultAsync();
+				userBio.HeadShot = "/Img/" + fileName;
+				_context.Update(userBio);
+				await _context.SaveChangesAsync();
+				return RedirectToAction(nameof(EditInfo));
+			}
+			return Json(new { success = false });
+
+
+		}
 
 
 
-        //芳慈
-        public IActionResult MyRecipeEdit()
+
+		//芳慈
+		public IActionResult MyRecipeEdit()
         {
             // 設定Breadcrumb 顯示頁面資訊
             ViewBag.Breadcrumbs = new List<BreadcrumbItem>
