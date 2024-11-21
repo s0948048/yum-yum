@@ -43,6 +43,7 @@ namespace YumYum.Controllers
 						select new CherishManageViewModel
 						{
 							// [訂單類]
+                            CherishId = o.CherishId,
 							GiverUserId = o.GiverUserId,
 							Quantity = o.Quantity,
 							EndDate = o.EndDate,
