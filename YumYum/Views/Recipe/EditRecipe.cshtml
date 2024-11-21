@@ -1,7 +1,7 @@
 ﻿@using System.Text.Json;
 @using YumYum.Models;
 @using Microsoft.EntityFrameworkCore;
-<div class="container custom-left m-0  mt-2" style="margin-left:36px!important">
+<div class="container custom-left m-0  mt-4" style="margin-left:36px!important">
 
     @await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
 
@@ -19,7 +19,7 @@
     <div class="row justify-content-around align-items-center">
         <!-- 左邊 -->
         <!-- 食譜圖片 -->
-        <div class="col-6 p-5  pt-4" style="height: 1000px;justify-content: center;">
+        <div class="col-6 p-5  pt-3" style="height: 1000px;justify-content: center;">
             <div class="d-flex justify-content-center mb-5">
                 <img id="recipe-photo" src="@recipePhoto" alt="食譜照片" class="m-0 br-black img-load" style="height: 400px;width: 600px;object-fit:cover;">
             </div>
@@ -78,7 +78,7 @@
 
         <!-- 右邊 -->
 
-        <div class="col-6 p-4 pt-3" style="height: 1000px;">
+        <div class="col-6 p-4 pt-2" style="height: 1000px;">
             <!-- 食譜名稱 -->
             <div class="d-inline-block mb-2 w-100">
                 <p class="m-2 text-big">食譜名稱：</p>
