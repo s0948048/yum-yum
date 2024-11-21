@@ -1,10 +1,4 @@
-﻿
-
-
-
-
-
-$(document).ready(
+﻿$(document).ready(
 	function () {
 		$("#btn-save").click(
 			function (event) {
@@ -16,6 +10,11 @@ $(document).ready(
 				if (facebookUrl !== "" && !facebookRegex.test(facebookUrl)) { alert("請輸入有效的Facebook網址"); isValid = false; }
 				if (youtubeUrl !== "" && !youtubeRegex.test(youtubeUrl)) { alert("請輸入有效的YouTube網址"); isValid = false; }
 				if (!isValid) { event.preventDefault(); }
+				var avatar = $("#avatar-upload").val();
+				if (avatar == null) {
+					$('#urlForm').submit();
+				}
+
 			});
 		function updateCount() {
 			var cs = $(this).val().length;
@@ -26,6 +25,14 @@ $(document).ready(
 				$('#text-nickname').text(`${cs}/16`);
 			}
 		}
+
+		$("#user-avatar").on('click', () => {
+			console.log("123");
+			document.getElementById("avatar-upload").click();
+		});
+		//$('button[form="urlForm"]').on('click', function () {  });
+
+
 
 		//函式綁定事件
 		$('textarea').keydown(updateCount);
@@ -47,6 +54,9 @@ $(document).ready(
 		$("#close-create").on('click', () => {
 			document.getElementById("create-edit").click();
 		})
+
+
+
 
 	});
 

@@ -1,8 +1,10 @@
 ﻿@model YumYum.Models.ViewModels.UserViewModel
-<script src="~/js/shared/jquery.js"></script>
-<script src="~/js/user/EditInfo.js"></script>
 
-<div style="text-align:center">
+<form action="Upload" method="post" enctype="multipart/form-data" hidden>
+	<input type="file" name="file" onchange="javascript:this.form.submit();" id="avatar-upload">
+</form>
+
+<div style="text-align:center" id="user-avatar">
 	@if (@Model?.HeadShot != null)
 	{
 		<img class="rounded-circle" alt="photo" src="@(@Model?.HeadShot)" height="150" width="150" />
@@ -20,7 +22,7 @@
 <div>
 	<div class="card" style="align-items:center;">
 		<br />
-		<form id="#urlForm" style="width:90%" asp-action="EditInfo" method="post">
+		<form id="urlForm" style="width:90%" asp-action="EditInfo" method="post">
 			<div class="form-group mb-3">
 				<label asp-for="UserNickname" class="form-label fw-600">暱稱</label>
 				<input asp-for="UserNickname" class="form-control" type="text" id="input-nickname" maxlength="16" />
@@ -228,13 +230,17 @@
 				<br />
 			</div>
 			<input type="hidden" asp-for="UserId" />
-			<button id="btn-save" class="btn btn-primary mb-3" type="submit">
+			<button id="btn-save" class="btn btn-primary mb-3" type="submit" for="urlForm">
 				儲存更新
 			</button>
 		</form>
 	</div>
 </div>
 
+
+
+<script src="~/js/shared/jquery.js"></script>
+<script src="~/js/user/EditInfo.js"></script>
 @section Scripts {
 	@{
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
