@@ -1,14 +1,14 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@using System.Text.Json;
-@using YumYum.Models;
 @* --麵包屑導覽-- *@
-<div class="container custom-left m-0 mt-4" style="margin-left:36px!important">
+<div class="container custom-left m-0 mt-2" style="margin-left:36px!important">
 
     @await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
 
 </div>
+@using System.Text.Json;
+@using YumYum.Models;
 @{
     string userPhoto = Model.recipeWatchBrief[0].userPhoto == null ? "~/img/icon/EmptyAvatar.svg" : Model.recipeWatchBrief[0].userPhoto;
     string collectColor = Model.collectStatus == 0 ? "transparent" : "#30533f";
@@ -24,14 +24,14 @@
     <div class="row justify-content-around align-items-center">
         <!-- 左邊 -->
         <!-- 食譜圖片 -->
-        <div class="col-6 p-5 flex-column pt-2" style="height: 500px;justify-content: center;">
+        <div class="col-6 p-5 flex-column pt-3" style="height: 500px;justify-content: center;">
             <div class="d-flex justify-content-center mb-5">
                 <img src="@Model.recipeRecordFields[0].FieldShot" alt="..." class="m-0 br-black" style="height: 400px;width: 600px;">
             </div>
         </div>
 
         <!-- 右邊 -->
-        <div class="col-6 p-4 pt-2" style="height: 500px;">
+        <div class="col-6 p-4 pt-3" style="height: 500px;">
             <div class="input-group mb-2 w-100">
                 <!-- 料理名稱 -->
                 <h1 class="m-2 d-inline-block d-flex ms-0">@Model.recipeWatchBrief[0].recipeName</h1>
@@ -42,7 +42,7 @@
             </div>
             <!--創建者資訊及照片和收藏-->
             <div class="d-flex justify-content-start" style="border-color: aliceblue;margin-top: 1rem;">
-                <div class="m-0" style="width: 50%;border-color: aliceblue;">
+                <div id="watch-user" class="m-0" style="width: 50%;border-color: aliceblue;">
                     <p style="font-size:22px"><img class="me-2" style="width:50px;height:50px;border-radius:100px" src=@($"{userPhoto}") />@Model.recipeWatchBrief[0].userNickName</p>
                 </div>
                 <div class="ms-auto">
@@ -234,16 +234,32 @@
             let data = {
                 UserID: @Model.userId,
                 RecipeID: @Model.recipeId,
-                VerifyColor: $('#svg-path').attr('fill'),
+                verifyColor: $('#svg-path').attr('fill'),
             };
+            console.log(data);
             $.ajax({
                 url: '/Recipe/WatchRecipe',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
-                success: function (result) {},
-                error: function (xhr, status, error) { console.error('錯誤', error) }
+                success: function (result) { alert(result["success"]); alert(result["message"]) },
+                error: function (xhr, status, error) { console.error('錯誤', xhr) }
             })
         });
+        $('#watch-user').on('click', function () {
+            let data = {
+                creatorId: @Model.recipeWatchBrief[0].creatorId,
+            }
+            $.ajax({
+                url: "/Recipe/UserNavigate",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (result) {
+                    window.location.href = result["userUrl"];
+                },
+                error: function (xhr, status, error) { console.error('錯誤', error) }
+            })
+        })
     });
 </script>

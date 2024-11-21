@@ -156,6 +156,7 @@ namespace YumYum.Controllers
 
 
         //毅祥
+        //毅祥
         public async Task<IActionResult> WatchRecipe()
         {
             //導引麵包屑
@@ -188,6 +189,8 @@ namespace YumYum.Controllers
                               on user.UserId equals userPhoto.UserId
                               select new RecipeWatch_Brief
                               {
+                                  //建立食譜的人的id
+                                  creatorId = user.UserId,
                                   //建立食譜人得名稱
                                   userNickName = user.UserNickname,
                                   //建立食譜的人的頭像
@@ -235,6 +238,7 @@ namespace YumYum.Controllers
             };
             return View(AllList);
         }
+
         //收藏食譜
         [HttpPost]
         public async Task<IActionResult> WatchRecipe([FromBody] ReipeWatch_Collect uc)
@@ -274,6 +278,20 @@ namespace YumYum.Controllers
                 return Json(new { success = uc.verifyColor, message = ex.InnerException != null ? ex.InnerException.Message : ex.Message });
             }
         }
+
+
+        //查看食譜導向個人頁面
+        [HttpPost]
+        public async Task<IActionResult> UserNavigate([FromBody] int creatorId)
+        {
+            HttpContext.Session.SetInt32("navigateId", creatorId);
+            return Json(new { userUrl = "/User/Index" });
+        }
+
+
+
+        //創建食譜
+
         public async Task<IActionResult> CreateRecipe()
         {
             //導引麵包屑
@@ -284,6 +302,7 @@ namespace YumYum.Controllers
              new BreadcrumbItem("會員專區", Url.Action("Index", "User") ?? "#"),
              new BreadcrumbItem("創建食譜", "#") // 目前的頁面
              };
+            //食材類別
             var ingredientList = await _context.Ingredients.ToListAsync();
             var classList = await _context.RecipeClasses.ToListAsync();
             var unitList = await _context.Units.ToListAsync();
@@ -786,6 +805,7 @@ namespace YumYum.Controllers
             //回傳新建食譜成功
             return Json(new { success = "編輯食譜成功" });
         }
+
 
 
         //健誠
