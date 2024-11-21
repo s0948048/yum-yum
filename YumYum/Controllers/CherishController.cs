@@ -365,14 +365,13 @@ namespace YumYum.Controllers
 		}
 
 		[HttpGet]
-		public JsonResult GetRegions(string CityKey)
+		public IActionResult GetRegions(string CityKey)
 		{
 			var regions = _context.Regions
 				.Where(r => r.CityKey == CityKey)
-				.Select(r => new { r.RegionId, r.RegionName })
 				.ToList();
 
-			return Json(regions);
+			return PartialView("_PartialRegion", regions);
 		}
 
 	}
