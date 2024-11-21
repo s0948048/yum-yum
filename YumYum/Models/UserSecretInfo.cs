@@ -32,4 +32,7 @@ public partial class UserSecretInfo
     public virtual UserBio? UserBio { get; set; }
 
     public virtual ICollection<RecipeBrief> Recipes { get; set; } = new List<RecipeBrief>();
+
+    public virtual ICollection<UserCollectRecipe> UserCollectRecipes { get; set; } = new List<UserCollectRecipe>();
+
 }

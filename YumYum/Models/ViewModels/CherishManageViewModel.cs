@@ -3,6 +3,12 @@
 	public class CherishManageViewModel
 	{
 		// [訂單類]
+		// 訂單編號
+		public int CherishId { get; set; }
+
+		// 訂單狀態碼
+		public byte TradeStateCode { get; set; }
+
 		// 使用者編號(食材提供者)
 		public int GiverUserId { get; set; }
 
@@ -43,7 +49,13 @@
 		public string? ContactLine { get; set; }
 		public string? ContactPhone { get; set; }
 		public string? ContactOther { get; set; }
-		// 面交時段
-		//public string? TradeTimeCode { get; set; }
+
+
+		// [審查狀態]
+		// 請修改的原因
+		public string? ReasonText { get; set; }
+
+		// 退回原因
+		public string? RejectText { get; set; }
 	}
 }

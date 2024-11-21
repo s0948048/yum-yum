@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using YumYum;
 
 namespace YumYum.Models;
 
@@ -65,9 +66,9 @@ public partial class YumYumDbContext : DbContext
 
     public virtual DbSet<UserSecretInfo> UserSecretInfos { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=.\\sqlexpress;Database=yumyumdb;Integrated Security=True;Encrypt=False;");
+    public virtual DbSet<UserCollectRecipe> UserCollectRecipes { get; set; }
+
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -372,6 +373,11 @@ public partial class YumYumDbContext : DbContext
                 .HasForeignKey(d => d.RecipeClassId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_RecipeBrief_RecipeClass");
+
+            entity.HasMany(e => e.UserCollectRecipes)
+                 .WithOne(uc => uc.Recipe)
+                 .HasForeignKey(uc => uc.RecipeID)
+                 .HasConstraintName("FK_UserCollectRecipe_RecipeBrief");
         });
 
         modelBuilder.Entity<RecipeClass>(entity =>
@@ -584,28 +590,67 @@ public partial class YumYumDbContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.UserNickname).HasMaxLength(20);
 
-            entity.HasMany(d => d.Recipes).WithMany(p => p.Users)
-                .UsingEntity<Dictionary<string, object>>(
-                    "UserCollectRecipe",
-                    r => r.HasOne<RecipeBrief>().WithMany()
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_UserCollectRecipe_RecipeBrief"),
-                    l => l.HasOne<UserSecretInfo>().WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_UserCollectRecipe_UserSecretInfo"),
-                    j =>
-                    {
-                        j.HasKey("UserId", "RecipeId");
-                        j.ToTable("UserCollectRecipe");
-                        j.IndexerProperty<int>("UserId").HasColumnName("UserID");
-                        j.IndexerProperty<short>("RecipeId").HasColumnName("RecipeID");
-                    });
+            // Many-to-many relationship configuration
+            //entity.HasMany(d => d.Recipes).WithMany(p => p.Users)
+            //    .UsingEntity<Dictionary<string, object>>(
+            //        "UserCollectRecipe",
+            //        r => r.HasOne<RecipeBrief>().WithMany()
+            //            .HasForeignKey("RecipeId")
+            //            .OnDelete(DeleteBehavior.ClientSetNull)
+            //            .HasConstraintName("FK_UserCollectRecipe_RecipeBrief"),
+            //        l => l.HasOne<UserSecretInfo>().WithMany()
+            //            .HasForeignKey("UserId")
+            //            .OnDelete(DeleteBehavior.ClientSetNull)
+            //            .HasConstraintName("FK_UserCollectRecipe_UserSecretInfo"),
+            //        j =>
+            //        {
+            //            j.HasKey("UserId", "RecipeId");
+            //            j.ToTable("UserCollectRecipe");
+            //            j.IndexerProperty<int>("UserId").HasColumnName("UserID");
+            //            j.IndexerProperty<short>("RecipeId").HasColumnName("RecipeID");
+            //        });
+
+
+            // 將 UserSecretInfo 與 UserCollectRecipe 關聯
+            entity.HasMany(e => e.UserCollectRecipes)
+                  .WithOne(uc => uc.User)
+                  .HasForeignKey(uc => uc.UserID)
+                  .HasConstraintName("FK_UserCollectRecipe_UserSecretInfo");
         });
+        modelBuilder.Entity<UserCollectRecipe>(entity =>
+        {
+            entity.ToTable("UserCollectRecipe");
+
+            // 設定複合主鍵
+            entity.HasKey(e => new { e.UserID, e.RecipeID });
+
+            // 屬性設定
+            entity.Property(e => e.UserID)
+                .HasColumnName("UserID")
+                .IsRequired();
+
+            entity.Property(e => e.RecipeID)
+                .HasColumnName("RecipeID")
+                .IsRequired();
+
+            // 外鍵設定
+            entity.HasOne(e => e.Recipe) // 明確指定導航屬性
+                  .WithMany(r => r.UserCollectRecipes)  // 如果 `RecipeBrief` 不需要反向關聯，保持 `WithMany()`。
+                  .HasForeignKey(e => e.RecipeID)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_UserCollectRecipe_RecipeBrief");
+
+            entity.HasOne(e => e.User) // 明確指定導航屬性
+                  .WithMany(u => u.UserCollectRecipes)          // 如果 `UserSecretInfo` 不需要反向關聯，保持 `WithMany()`。
+                  .HasForeignKey(e => e.UserID)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_UserCollectRecipe_UserSecretInfo");
+        });
+
 
         OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
 }

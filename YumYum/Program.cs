@@ -29,7 +29,10 @@ builder.Services.AddControllersWithViews()
                 UnicodeRanges.CjkUnifiedIdeographs
             );
         options.JsonSerializerOptions.WriteIndented = true;
-    }); 
+    });
+
+
+
 
 var connectionString = builder.Configuration.GetConnectionString("YumYumDB");
 builder.Services.AddDbContext<YumYumDbContext>(x => x.UseSqlServer(connectionString));

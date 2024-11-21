@@ -2,6 +2,10 @@
 {
     public class RecipeWatch_Brief
     {
+        //創建者姓名
+        public string? userNickName { get; set; }
+        //創建者照片
+        public string? userPhoto { get; set; }
         //食譜名稱
         public string? recipeName { get; set; }
         //完成時間

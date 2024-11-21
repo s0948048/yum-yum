@@ -33,4 +33,6 @@ public partial class RecipeBrief
     public virtual ICollection<RecipeRecord> RecipeRecords { get; set; } = new List<RecipeRecord>();
 
     public virtual ICollection<UserSecretInfo> Users { get; set; } = new List<UserSecretInfo>();
+
+    public virtual ICollection<UserCollectRecipe> UserCollectRecipes { get; set; } = new List<UserCollectRecipe>();
 }

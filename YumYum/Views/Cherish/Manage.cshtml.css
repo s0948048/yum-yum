@@ -5,10 +5,10 @@
 
 .ingredient-img {
     object-fit: cover;
-    max-width: 100%;
+    width: 100%;
 }
 
-.my-button {
+.my-button, .my-label {
     color: var(--yum-primary-2);
     background-color: var(--yum-primary-3);
 }
@@ -42,4 +42,8 @@ svg {
 
 .mask {
     background-color: rgba(0, 0, 0, 0.4);
+}
+
+.data-shadow {
+    box-shadow: 3px 3px 2px #30533fa6;
 }

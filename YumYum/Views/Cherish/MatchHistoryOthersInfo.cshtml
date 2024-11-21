@@ -120,9 +120,119 @@
 
                                     <label for="trade-time" class="form-label fw-bold d-inline-block">面交時段</label>
                                     <br />
-                                    
+                                        <div class="d-flex mt-2 ">
+                                            
 
-                                    <table >
+                                            <div class="ps-2">
+                                                @{
+                                                    if (((IEnumerable<CherishTradeTime>)ViewBag.Mon).Any())
+                                                    {
+                                                        <div>
+                                                            <span class="fw-600 me-2">
+                                                                星期一
+                                                            </span>
+                                                            @foreach (var d in ViewBag.Mon)
+                                                            {
+                                                                <span class="me-2">@TransText(d.TradeTimeCode)</span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    if (((IEnumerable<CherishTradeTime>)ViewBag.Tue).Any())
+                                                    {
+                                                        <div>
+                                                            <span class="fw-600 me-2">
+                                                                星期二
+                                                            </span>
+                                                            @foreach (var d in ViewBag.Tue)
+                                                            {
+                                                                <span class="me-2">@TransText(d.TradeTimeCode)</span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    if (((IEnumerable<CherishTradeTime>)ViewBag.Wes).Any())
+                                                    {
+                                                        <div>
+                                                            <span class="fw-600 me-2">
+                                                                星期三
+                                                            </span>
+                                                            @foreach (var d in ViewBag.Wes)
+                                                            {
+                                                                <span class="me-2">@TransText(d.TradeTimeCode)</span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    if (((IEnumerable<CherishTradeTime>)ViewBag.Thr).Any())
+                                                    {
+                                                        <div>
+                                                            <span class="fw-600 me-2">
+                                                                星期四
+                                                            </span>
+                                                            @foreach (var d in ViewBag.Thr)
+                                                            {
+                                                                <span class="me-2">@TransText(d.TradeTimeCode)</span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    if (((IEnumerable<CherishTradeTime>)ViewBag.Fri).Any())
+                                                    {
+                                                        <div>
+                                                            <span class="fw-600 me-2">
+                                                                星期五
+                                                            </span>
+                                                            @foreach (var d in ViewBag.Fri)
+                                                            {
+                                                                <span class="me-2">@TransText(d.TradeTimeCode)</span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    if (((IEnumerable<CherishTradeTime>)ViewBag.Sat).Any())
+                                                    {
+                                                        <div>
+                                                            <span class="fw-600 me-2">
+                                                                星期六
+                                                            </span>
+                                                            @foreach (var d in ViewBag.Sat)
+                                                            {
+                                                                <span class="me-2">@TransText(d.TradeTimeCode)</span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    if (((IEnumerable<CherishTradeTime>)ViewBag.Sun).Any())
+                                                    {
+                                                        <div>
+                                                            <span class="fw-600 me-2">
+                                                                星期日
+                                                            </span>
+                                                            @foreach (var d in ViewBag.Sun)
+                                                            {
+                                                                <span class="me-2">@TransText(d.TradeTimeCode)</span>
+                                                            }
+                                                        </div>
+                                                    }
+
+
+
+                                                    string TransText(string text)
+                                                    {
+                                                        switch (Convert.ToInt32(text.Split('-')[1]))
+                                                        {
+                                                            case 1:
+                                                                return "上午";
+
+                                                            case 2:
+                                                                return "下午";
+
+                                                            case 3:
+                                                                return "晚上";
+                                                            default:
+                                                                return "";
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+
+                                    @* <table >
                                         <tr>
                                             <th class="p-2">星期一</th>
                                             <td class="p-2">上午 下午</td>
@@ -147,7 +257,7 @@
                                             <th class="p-2">&nbsp;</th>
                                             <td class="p-2">&nbsp;</td>
                                         </tr>
-                                    </table>
+                                    </table> *@
 
                                 </div>
                             </div>

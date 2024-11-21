@@ -21,6 +21,13 @@ namespace YumYum.Controllers
 
 		public IActionResult Introduce()
 		{
+			// 設定 Breadcrumb
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+			 new BreadcrumbItem("介紹惜食", "#") // 當前的頁面
+             };
+
 			return View();
 		}
 
@@ -43,6 +50,7 @@ namespace YumYum.Controllers
 						select new CherishManageViewModel
 						{
 							// [訂單類]
+							CherishId = o.CherishId,
 							GiverUserId = o.GiverUserId,
 							Quantity = o.Quantity,
 							EndDate = o.EndDate,
@@ -151,178 +159,200 @@ namespace YumYum.Controllers
 
 
 
-        public async Task<IActionResult> MatchHistory()
-        {
-            // 設定 Breadcrumb
-            ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
-             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
-             new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
-             new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryMine", "Cherish") ?? "#"),
-             new BreadcrumbItem("我的食材", "#") // 當前的頁面
+		public async Task<IActionResult> MatchHistory()
+		{
+			// 設定 Breadcrumb
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+			 new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryMine", "Cherish") ?? "#"),
+			 new BreadcrumbItem("我的食材", "#") // 當前的頁面
              };
 
-            int userId = 3201;
-            var chrishOrders = from c in _context.CherishOrders
-                               where c.GiverUserId == userId
-                               select new MatchHistory
-                               {
-                                   CherishId = c.CherishId,
-                                   GiverUserId = c.GiverUserId,
-                                   EndDate = c.EndDate,
-                                   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
-                                   IngredientName = c.Ingredient.IngredientName,
-                                   Quantity = c.Quantity,
-                                   ObtainSource = c.ObtainSource,
-                                   ObtainDate = c.ObtainDate,
-                                   UserNickname = c.GiverUser.UserNickname!,
-                                   CityName = c.CherishOrderInfo!.TradeCityKey,
-                                   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
-                                   ContactLine = c.CherishOrderInfo.ContactLine,
-                                   ContactPhone = c.CherishOrderInfo.ContactPhone,
-                                   ContactOther = c.CherishOrderInfo.ContactOther,
-                                   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
-                                   CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
-                               };
+			int userId = 3201;
+			var chrishOrders = from c in _context.CherishOrders
+							   where c.GiverUserId == userId
+							   select new MatchHistory
+							   {
+								   CherishId = c.CherishId,
+								   GiverUserId = c.GiverUserId,
+								   EndDate = c.EndDate,
+								   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+								   IngredientName = c.Ingredient.IngredientName,
+								   Quantity = c.Quantity,
+								   ObtainSource = c.ObtainSource,
+								   ObtainDate = c.ObtainDate,
+								   UserNickname = c.GiverUser.UserNickname!,
+								   CityName = c.CherishOrderInfo!.TradeCityKey,
+								   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+								   ContactLine = c.CherishOrderInfo.ContactLine,
+								   ContactPhone = c.CherishOrderInfo.ContactPhone,
+								   ContactOther = c.CherishOrderInfo.ContactOther,
+								   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
+								   CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
+							   };
 
-            return View(await chrishOrders.ToListAsync());
-        }
-        public async Task<IActionResult> MatchHistoryOthers()
-        {
-            // 設定 Breadcrumb
-            ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
-             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
-             new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
-             new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryOthers", "Cherish") ?? "#"),
-             new BreadcrumbItem("別人的食材", "#") // 當前的頁面
+			return View(await chrishOrders.ToListAsync());
+		}
+		public async Task<IActionResult> MatchHistoryOthers()
+		{
+			// 設定 Breadcrumb
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+			 new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryOthers", "Cherish") ?? "#"),
+			 new BreadcrumbItem("別人的食材", "#") // 當前的頁面
              };
-            int userId = 3201;
-            var chrishOrders = from c in _context.CherishOrders
-                               join coa in _context.CherishOrderApplicants
-                               on c.CherishId equals coa.CherishId
-                               where coa.ApplicantId == userId
-                               select new MatchHistory
-                               {
+			int userId = 3201;
+			var chrishOrders = from c in _context.CherishOrders
+							   join coa in _context.CherishOrderApplicants
+							   on c.CherishId equals coa.CherishId
+							   where coa.ApplicantId == userId
+							   select new MatchHistory
+							   {
 
-                                   ApplicantId = coa.ApplicantId,
-                                   CherishId = c.CherishId,
-                                   GiverUserId = c.GiverUserId,
-                                   EndDate = c.EndDate,
-                                   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
-                                   IngredientName = c.Ingredient.IngredientName,
-                                   Quantity = c.Quantity,
-                                   ObtainSource = c.ObtainSource,
-                                   ObtainDate = c.ObtainDate,
-                                   UserNickname = c.GiverUser.UserNickname!,
-                                   CityName = c.CherishOrderInfo!.TradeCityKey,
-                                   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
-                                   ContactLine = c.CherishOrderInfo.ContactLine,
-                                   ContactPhone = c.CherishOrderInfo.ContactPhone,
-                                   ContactOther = c.CherishOrderInfo.ContactOther,
-                                   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
-                                   CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
-                               };
+								   ApplicantId = coa.ApplicantId,
+								   CherishId = c.CherishId,
+								   GiverUserId = c.GiverUserId,
+								   EndDate = c.EndDate,
+								   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+								   IngredientName = c.Ingredient.IngredientName,
+								   Quantity = c.Quantity,
+								   ObtainSource = c.ObtainSource,
+								   ObtainDate = c.ObtainDate,
+								   UserNickname = c.GiverUser.UserNickname!,
+								   CityName = c.CherishOrderInfo!.TradeCityKey,
+								   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+								   ContactLine = c.CherishOrderInfo.ContactLine,
+								   ContactPhone = c.CherishOrderInfo.ContactPhone,
+								   ContactOther = c.CherishOrderInfo.ContactOther,
+								   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
+								   CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
+							   };
 
-            return View(await chrishOrders.ToListAsync());
-        }
+			return View(await chrishOrders.ToListAsync());
+		}
 
-        [Route("Cherish/MatchHistoryMineInfo/{cherishId}")]
-        public async Task<IActionResult> MatchHistoryMineInfo(int cherishId)
-        {
-            // 設定 Breadcrumb
-            ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
-             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
-             new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
-             new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryMine", "Cherish") ?? "#"),
-             new BreadcrumbItem("我的食材", "#") // 當前的頁面
+		[Route("Cherish/MatchHistoryMineInfo/{cherishId}")]
+		public async Task<IActionResult> MatchHistoryMineInfo(int cherishId)
+		{
+			// 設定 Breadcrumb
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+			 new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryMine", "Cherish") ?? "#"),
+			 new BreadcrumbItem("我的食材", "#") // 當前的頁面
              };
 
-            int userId = 3201; // 假設目前登入的使用者 ID 是固定的
-            var chrishOrders = from c in _context.CherishOrders
-                               join coa in _context.CherishOrderApplicants
-                               on c.CherishId equals coa.CherishId
-                               where c.GiverUserId == userId && c.CherishId == cherishId
-                               select new MatchHistory
-                               {
-                                   UserNickname = coa.UserNickname,
-                                   ApplicantId = coa.ApplicantId,
-                                   ApplicantContactLine = coa.ApplicantContactLine,
-                                   ApplicantContactPhone = coa.ApplicantContactPhone,
-                                   ApplicantContactOther = coa.ApplicantContactOther,
-                                   CherishId = c.CherishId,
-                                   GiverUserId = c.GiverUserId,
-                                   EndDate = c.EndDate,
-                                   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
-                                   IngredientName = c.Ingredient.IngredientName,
-                                   Quantity = c.Quantity,
-                                   ObtainSource = c.ObtainSource,
-                                   ObtainDate = c.ObtainDate,
-                                   CityName = c.CherishOrderInfo!.TradeCityKey,
-                                   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
-                                   ContactLine = c.CherishOrderInfo.ContactLine,
-                                   ContactPhone = c.CherishOrderInfo.ContactPhone,
-                                   ContactOther = c.CherishOrderInfo.ContactOther,
-                                   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
-                                   CherishValidDate = c.CherishOrderCheck.CherishValidDate
-                               };
+			int userId = 3201; // 假設目前登入的使用者 ID 是固定的
+			var chrishOrders = from c in _context.CherishOrders
+							   join coa in _context.CherishOrderApplicants
+							   on c.CherishId equals coa.CherishId
+							   where c.GiverUserId == userId && c.CherishId == cherishId
+							   select new MatchHistory
+							   {
+								   UserNickname = coa.UserNickname,
+								   ApplicantId = coa.ApplicantId,
+								   ApplicantContactLine = coa.ApplicantContactLine,
+								   ApplicantContactPhone = coa.ApplicantContactPhone,
+								   ApplicantContactOther = coa.ApplicantContactOther,
+								   CherishId = c.CherishId,
+								   GiverUserId = c.GiverUserId,
+								   EndDate = c.EndDate,
+								   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+								   IngredientName = c.Ingredient.IngredientName,
+								   Quantity = c.Quantity,
+								   ObtainSource = c.ObtainSource,
+								   ObtainDate = c.ObtainDate,
+								   CityName = c.CherishOrderInfo!.TradeCityKey,
+								   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+								   ContactLine = c.CherishOrderInfo.ContactLine,
+								   ContactPhone = c.CherishOrderInfo.ContactPhone,
+								   ContactOther = c.CherishOrderInfo.ContactOther,
+								   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
+								   CherishValidDate = c.CherishOrderCheck.CherishValidDate
+							   };
 
-            var list = await chrishOrders.ToListAsync();
+			var list = await chrishOrders.ToListAsync();
 
-            // 偵錯: 檢查查詢結果是否有資料
-            if (!list.Any())
-            {
-                Console.WriteLine($"No data found for cherishId {cherishId} and userId {userId}");
-            }
+			// 偵錯: 檢查查詢結果是否有資料
+			if (!list.Any())
+			{
+				Console.WriteLine($"No data found for cherishId {cherishId} and userId {userId}");
+			}
 
-            return View(list);
-        }
+			return View(list);
+		}
 
-        [Route("Cherish/MatchHistoryOthersInfo/{cherishId}")]
-        public async Task<IActionResult> MatchHistoryOthersInfo(int cherishId)
-        {
+		[Route("Cherish/MatchHistoryOthersInfo/{cherishId}")]
+		public async Task<IActionResult> MatchHistoryOthersInfo(int cherishId)
+		{
 
-            // 設定 Breadcrumb
-            ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
-             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
-             new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
-             new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryOthers", "Cherish") ?? "#"),
-             new BreadcrumbItem("別人的食材", "#") // 當前的頁面
+			// 設定 Breadcrumb
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+			 new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryOthers", "Cherish") ?? "#"),
+			 new BreadcrumbItem("別人的食材", "#") // 當前的頁面
              };
-            var chrishOrders = from c in _context.CherishOrders
-                               join coa in _context.CherishOrderApplicants
-                               on c.CherishId equals coa.CherishId
-                               where c.CherishId == cherishId
-                               select new MatchHistory
-                               {
-                                   ApplicantId = coa.ApplicantId,
-                                   CherishId = c.CherishId,
-                                   GiverUserId = c.GiverUserId,
-                                   EndDate = c.EndDate,
-                                   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
-                                   IngredientName = c.Ingredient.IngredientName,
-                                   Quantity = c.Quantity,
-                                   ObtainSource = c.ObtainSource,
-                                   ObtainDate = c.ObtainDate,
-                                   UserNickname = c.GiverUser.UserNickname!,
-                                   CityName = c.CherishOrderInfo!.TradeCityKey,
-                                   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
-                                   ContactLine = c.CherishOrderInfo.ContactLine,
-                                   ContactPhone = c.CherishOrderInfo.ContactPhone,
-                                   ContactOther = c.CherishOrderInfo.ContactOther,
-                                   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
-                                   CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
-                               };
 
-            return View(await chrishOrders.ToListAsync());
-        }
+			//設定可面交時間
+
+			// 先抓到該筆訂單or該預設聯絡資訊的所有面交時段
+			var timeSpan = await (from d in _context.CherishTradeTimes
+								  where d.CherishId == cherishId
+								  select d).ToListAsync();
+
+			// 進行篩選，並傳遞給ViewBag
+			ViewBag.Mon = timeSpan.Where(d => d.TradeTimeCode.Contains("Mon"));
+			ViewBag.Tue = timeSpan.Where(d => d.TradeTimeCode.Contains("Tue"));
+			ViewBag.Wes = timeSpan.Where(d => d.TradeTimeCode.Contains("Wes"));
+			ViewBag.Thr = timeSpan.Where(d => d.TradeTimeCode.Contains("Thr"));
+			ViewBag.Fri = timeSpan.Where(d => d.TradeTimeCode.Contains("Fri"));
+			ViewBag.Sat = timeSpan.Where(d => d.TradeTimeCode.Contains("Sat"));
+			ViewBag.Sun = timeSpan.Where(d => d.TradeTimeCode.Contains("Sun"));
 
 
+			var chrishOrders = from c in _context.CherishOrders
+							   join coa in _context.CherishOrderApplicants
+							   on c.CherishId equals coa.CherishId
+							   where c.CherishId == cherishId
+							   select new MatchHistory
+							   {
+								   ApplicantId = coa.ApplicantId,
+								   CherishId = c.CherishId,
+								   GiverUserId = c.GiverUserId,
+								   EndDate = c.EndDate,
+								   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+								   IngredientName = c.Ingredient.IngredientName,
+								   Quantity = c.Quantity,
+								   ObtainSource = c.ObtainSource,
+								   ObtainDate = c.ObtainDate,
+								   UserNickname = c.GiverUser.UserNickname!,
+								   CityName = c.CherishOrderInfo!.TradeCityKey,
+								   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+								   ContactLine = c.CherishOrderInfo.ContactLine,
+								   ContactPhone = c.CherishOrderInfo.ContactPhone,
+								   ContactOther = c.CherishOrderInfo.ContactOther,
+								   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
+								   CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
+							   };
+
+
+
+
+
+			return View(await chrishOrders.ToListAsync());
+		}
 
 
 
 
 
 
-        public IActionResult ContactInformation()
+
+
+		public IActionResult ContactInformation()
 		{
 			// 設定 Breadcrumb
 			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
