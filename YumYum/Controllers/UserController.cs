@@ -5,7 +5,6 @@ using System.Net.Mail;
 using System.Net;
 using YumYum.Models;
 using YumYum.Models.ViewModels;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace YumYum.Controllers
 {
@@ -230,8 +229,7 @@ namespace YumYum.Controllers
                                  FieldShot = rf.FieldShot,
                                  FieldDescript = rf.FieldDescript,
                                  RecipeStatusCode = rr.RecipeStatusCode,
-                                 IngredientName = ig.IngredientName,
-                                 RecipeRecVersion = rf.RecipeRecVersion
+                                 IngredientName = ig.IngredientName
                              };
 
 
@@ -259,80 +257,21 @@ namespace YumYum.Controllers
             new BreadcrumbItem("收藏食譜", "#") // 目前的頁面
             };
 
-            //先設定的userId
-            int userId = 3201;
-
-            // 食譜基本資訊查詢
-            var recipeData = from rb in _context.RecipeBriefs
-                             join uc in _context.UserCollectRecipes on rb.RecipeId equals uc.RecipeID
-                             join us in _context.UserSecretInfos on rb.CreatorId equals us.UserId
-                             join rf in _context.RecipeRecordFields on rb.RecipeId equals rf.RecipeId
-                             join rr in _context.RecipeRecords on rb.RecipeId equals rr.RecipeId
-                             join ri in _context.RecipeIngredients on rb.RecipeId equals ri.RecipeId
-                             join ig in _context.Ingredients on ri.IngredientId equals ig.IngredientId
-                             where rf.RecipeRecVersion == (from r in _context.RecipeRecordFields
-                                                           where r.RecipeId == rb.RecipeId
-                                                           select r.RecipeRecVersion).Max()
-                             && rf.RecipeField == 0
-                             && uc.UserID == userId  // Filter by UserID = 3201
-                             select new MyRecipeViewModel.RecipeDetail
-                             {
-                                 RecipeID = (int)rb.RecipeId,
-                                 RecipeName = rb.RecipeName,
-                                 UserNickname = us.UserNickname,
-                                 FinishMinute = rb.FinishMinute,
-                                 FieldShot = rf.FieldShot,
-                                 FieldDescript = rf.FieldDescript,
-                                 RecipeStatusCode = rr.RecipeStatusCode,
-                                 IngredientName = ig.IngredientName
-
-                             };
+            //return View();
 
 
-            // 合併data
-            var viewModel = new MyRecipeViewModel
-            {
-                RecipeDetails = recipeData.ToList()
-            };
+            //sql db test2
+            var data = from xa in _context.RecipeBriefs
+                       where xa.RecipeId > 1399 && xa.RecipeId <= 1404
 
-            return View(viewModel);
+                       select new RecipeBrief
+                       {
+                           RecipeName = xa.RecipeName,
+                           //RecipeShot = xa.RecipeShot
+                       };
+
+            return View(data.ToList());
         }
-
-
-        [Route("User/Upload")]
-        [HttpPost]
-        public async Task<IActionResult> Upload(int recipeId, int recipeRecVersion)
-        {
-            Console.WriteLine($"Updating RecipeID: {recipeId}, RecipeRecVersion: {recipeRecVersion}");
-            try
-            {
-                var recipeUpload = await _context.RecipeRecords.FirstOrDefaultAsync(
-                    r => r.RecipeId == recipeId && r.RecipeRecVersion == recipeRecVersion);
-
-                if (recipeUpload == null)
-                {
-                    Console.WriteLine("Record not found.");
-                    return Json(new { success = false, message = "食譜記錄未找到。" });
-                }
-
-                recipeUpload.RecipeStatusCode = 1;
-                await _context.SaveChangesAsync();
-                Console.WriteLine("Update successful.");
-
-                return Json(new { success = true, message = "成功發布食譜！" });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                return Json(new { success = false, message = "發生錯誤，請稍後再試。" });
-            }
-        }
-
-
-
-
-
-
 
 
         //毅祥
