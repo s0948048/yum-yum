@@ -3,6 +3,12 @@
 *@
 @using System.Text.Json;
 @using YumYum.Models;
+@* --麵包屑導覽-- *@
+<div class="container custom-left m-0" style="margin-left:36px!important">
+
+    @await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
+
+</div>
 @{
     string userPhoto = Model.recipeWatchBrief[0].userPhoto == null ? "~/img/icon/EmptyAvatar.svg" : Model.recipeWatchBrief[0].userPhoto;
 }
@@ -17,14 +23,14 @@
     <div class="row justify-content-around align-items-center">
         <!-- 左邊 -->
         <!-- 食譜圖片 -->
-        <div class="col-6 p-5 flex-column" style="height: 500px;justify-content: center;">
+        <div class="col-6 p-5 flex-column pt-3" style="height: 500px;justify-content: center;">
             <div class="d-flex justify-content-center mb-5">
                 <img src="@Model.recipeRecordFields[0].FieldShot" alt="..." class="m-0 br-black" style="height: 400px;width: 600px;">
             </div>
         </div>
 
         <!-- 右邊 -->
-        <div class="col-6 p-4 " style="height: 500px;">
+        <div class="col-6 p-4 pt-3" style="height: 500px;">
             <div class="input-group mb-2 w-100">
                 <!-- 料理名稱 -->
                 <h1 class="m-2 d-inline-block d-flex ms-0">@Model.recipeWatchBrief[0].recipeName</h1>

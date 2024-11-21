@@ -157,6 +157,14 @@ namespace YumYum.Controllers
 
         public async Task<IActionResult> WatchRecipe()
         {
+            //導引麵包屑
+            // 設定Breadcrumb 顯示頁面資訊
+            ViewBag.Breadcrumbs = new List<BreadcrumbItem>
+             {
+             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+             new BreadcrumbItem("會員專區", Url.Action("Index", "User") ?? "#"),
+             new BreadcrumbItem("查看食譜", "#") // 目前的頁面
+             };
             //此區與此區的view更動中
             //接收食譜的id
             int? recipeId = HttpContext.Session.GetInt32("recipeId");
@@ -263,6 +271,14 @@ namespace YumYum.Controllers
         }
         public async Task<IActionResult> CreateRecipe()
         {
+            //導引麵包屑
+            // 設定Breadcrumb 顯示頁面資訊
+            ViewBag.Breadcrumbs = new List<BreadcrumbItem>
+             {
+             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+             new BreadcrumbItem("會員專區", Url.Action("Index", "User") ?? "#"),
+             new BreadcrumbItem("創建食譜", "#") // 目前的頁面
+             };
             var ingredientList = await _context.Ingredients.ToListAsync();
             var classList = await _context.RecipeClasses.ToListAsync();
             var unitList = await _context.Units.ToListAsync();
@@ -473,6 +489,13 @@ namespace YumYum.Controllers
         //編輯食譜
         public async Task<IActionResult> EditRecipe()
         {
+            //導引麵包屑
+            ViewBag.Breadcrumbs = new List<BreadcrumbItem>
+             {
+             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+             new BreadcrumbItem("會員專區", Url.Action("Index", "User") ?? "#"),
+             new BreadcrumbItem("編輯食譜", "#") // 目前的頁面
+             };
             //以下是拿食譜資訊
             //此區與此區的view更動中
             //接收食譜的id
