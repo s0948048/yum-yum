@@ -155,6 +155,7 @@ namespace YumYum.Controllers
         public class SearchRequest { public string SearchString { get; set; } }
 
 
+        //毅祥
         public async Task<IActionResult> WatchRecipe()
         {
             //導引麵包屑
@@ -165,6 +166,7 @@ namespace YumYum.Controllers
              new BreadcrumbItem("會員專區", Url.Action("Index", "User") ?? "#"),
              new BreadcrumbItem("查看食譜", "#") // 目前的頁面
              };
+
             //此區與此區的view更動中
             //接收食譜的id
             int? recipeId = HttpContext.Session.GetInt32("recipeId");
@@ -172,6 +174,9 @@ namespace YumYum.Controllers
             HttpContext.Session.SetInt32("userId", (int)userId!);
             //測試(之後會刪掉)->
             int recipeIdTest = 1412;
+            //收藏食譜的內容
+            var collect = await _context.UserCollectRecipes.FirstOrDefaultAsync(p => p.UserID == userId && p.RecipeID == recipeIdTest);
+            int collectStatus = collect == null ? 0 : 1;
             //得到資料
             //取得食譜內容
             var recipeBrief = from recipe in await _context.RecipeBriefs.Where(p => p.RecipeId == recipeIdTest).ToListAsync()
@@ -226,10 +231,10 @@ namespace YumYum.Controllers
                 recipeIngredient = recipeIngredient.ToList(),
                 userId = userId,
                 recipeId = recipeIdTest,
+                collectStatus = collectStatus,
             };
             return View(AllList);
         }
-
         //收藏食譜
         [HttpPost]
         public async Task<IActionResult> WatchRecipe([FromBody] ReipeWatch_Collect uc)

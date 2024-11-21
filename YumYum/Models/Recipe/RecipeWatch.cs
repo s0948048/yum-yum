@@ -8,5 +8,6 @@
 
         public int? userId { get; set; }
         public int? recipeId { get; set; }
+        public int? collectStatus { get; set; }
     }
 }

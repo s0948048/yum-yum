@@ -11,6 +11,7 @@
 </div>
 @{
     string userPhoto = Model.recipeWatchBrief[0].userPhoto == null ? "~/img/icon/EmptyAvatar.svg" : Model.recipeWatchBrief[0].userPhoto;
+    string collectColor = Model.collectStatus == 0 ? "transparent" : "#30533f";
 }
 
 @model RecipeWatch
@@ -50,7 +51,7 @@
                             <!-- 外框 -->
                             <path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z"></path>
                             <!-- 內部 -->
-                            <path id="svg-path" d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Z" fill="transparent" transform="scale(0.8, 0.8) translate(100,-140)"></path>
+                            <path id="svg-path" d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Z" fill=@collectColor transform="scale(0.8, 0.8) translate(100,-140)"></path>
                         </svg>
                         <span class="ms-2" style="color:var(--yum-primary-2);font-size:20px">收藏</span>
                     </button>
