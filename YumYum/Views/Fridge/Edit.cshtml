@@ -8,7 +8,7 @@
 <div class="container mt-5">
     <div class="row">
         <!-- Sidebar - Food Tag Section -->
-        <div class="col-md-5 col-lg-4 position-relative">
+        <div class="col-md-5 col-lg-4 position-relative" id="food-tag-sec">
             <h5 class="mb-4">請點選食材Tag</h5>
             <div class="input-group mb-3">
                 <button class="btn btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
@@ -30,7 +30,7 @@
                 </div>
             </div>
 
-            <button class="btn btn-secondary mt-3">+新增食材</button>
+            <button class="btn btn-secondary mt-3" id="add-new-ingred">+新增食材</button>
         </div>
 
         <!-- Right-hand Section - Edit Selected Item -->
@@ -80,6 +80,7 @@
             </div>
         </div>
     </div>
+
     @* offcanvas選單 *@
     <div class="offcanvas offcanvas-start" style="background-color:var(--yum-primary-1);max-width:270px;" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
         <div class="offcanvas-header mb-3">
@@ -97,6 +98,7 @@
             }
         </div>
     </div>
+
 </div>
 
 <link rel="stylesheet" href="~/css/bootstrap.css" />
