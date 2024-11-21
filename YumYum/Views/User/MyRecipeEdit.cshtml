@@ -36,7 +36,7 @@
                     {
                         case 1:
                             @: <!-- Case 1 HTML -->
-                            <div class="card mb-3 mx-auto" style="max-width: 95%;">
+                            <div class="card mb-3 mx-auto" style="max-width: 95%;width: 100%;">
                                 <!-- Your Case 1 content -->
                                 <div class="row">
                                     <div class="col-md-3 d-flex justify-content-center align-items-center">
@@ -97,7 +97,7 @@
                         case 2:
                             @: <!-- Case 2 HTML -->
                             <div class="PleaseEditCard">
-                                <div class="card mb-3 mx-auto" style="max-width: 95%;">
+                                <div class="card mb-3 mx-auto" style="max-width: 95%;width: 100%;">
                                     <!-- Your Case 2 content -->
                                     <div class="row">
                                         <div class="col-md-3 d-flex justify-content-center align-items-center">
@@ -165,7 +165,7 @@
 
                         case 3:
                             @: <!-- Case 3 HTML -->
-                            <div class="card mb-3 mx-auto" style="max-width: 95%;">
+                            <div class="card mb-3 mx-auto" style="max-width: 95%;width: 100%;">
                                 <!-- Your Case 3 content -->
                                 <div class="row">
                                     <div class="col-md-3 d-flex justify-content-center align-items-center">
@@ -222,7 +222,7 @@
 
                         case 4:
                             @: <!-- Case 4 HTML -->
-                            <div class="card mb-3 mx-auto" style="max-width: 95%;">
+                            <div class="card mb-3 mx-auto" style="max-width: 95%;width: 100%;">
                                 <!-- Your Case 4 content -->
                                 <div class="row">
                                     <div class="col-md-3 d-flex justify-content-center align-items-center">
@@ -282,7 +282,7 @@
                         case 0:
                             @: <!-- Case 0 HTML -->
                             <div class="PleaseEditCard">
-                                <div class="card mb-3 mx-auto" style="max-width: 95%;">
+                                <div class="card mb-3 mx-auto" style="max-width: 95%;width: 100%;">
                                     <!-- Your Case 0 content -->
                                     <div class="row">
                                         <div class="col-md-3 d-flex justify-content-center align-items-center">
@@ -333,10 +333,20 @@
                                             </div>
                                         </div>
                                         <div class="col-md-2 align-self-center md-4">
-                                            <button type="button" class="btn btn-secondary md-4" id="openModal">
-                                                <svg height="20px" viewBox="0 -960 960 960" width="24px" fill="#30533F"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Zm280 240q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-160 0q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm320 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-160 0q-17 0-28.5-11.5T280-280q0-17 11.5-28.5T320-320q17 0 28.5 11.5T360-280q0 17-11.5 28.5T320-240Zm320 0q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240Z" fill="#e2e3cf" /></svg>
-                                                發布日期
-                                            </button>
+                                                <form method="post" action="/User/Upload">
+                                                <!-- 傳遞每個食譜的 RecipeID -->
+                                                <input type="hidden" name="recipeId" value="@recipe.First().RecipeID" />
+                                                <input type="hidden" name="recipeRecVersion" value="@recipe.First().RecipeRecVersion" /><!-- 傳遞 UserID -->
+                                                <button type="submit" class="btn btn-secondary md-4" id="openModal">
+                                                    <svg height="20px" viewBox="0 -960 960 960" width="20px" fill="#30533F">
+                                                        <path d="M444-336v-342L339-573l-51-51 192-192 192 192-51 51-105-105v342h-72ZM263.72-192Q234-192 213-213.15T192-264v-72h72v72h432v-72h72v72q0 29.7-21.16 50.85Q725.68-192 695.96-192H263.72Z" fill="#e2e3cf" />
+                                                    </svg>
+                                                    立即發布
+                                                </button>
+                                            </form>
+                                            
+
+
                                             <button type="button" class="btn btn-secondary ">
                                                 <svg height="20px" viewBox="0 -960 960 960" width="20px" fill="#30533F"><path d="M240-144v-600q0-29.7 21.15-50.85Q282.3-816 312-816h336q29.7 0 50.85 21.15Q720-773.7 720-744v600l-240-96-240 96Zm72-107 168-67 168 67v-493H312v493Zm0-493h336-336Z" fill="#e2e3cf" /></svg>
                                                 編輯食譜
@@ -365,43 +375,30 @@
 
 
 
+
             @* --發佈日期彈跳視窗跟 顯示訊息-- *@
             @* -- Toast 提示訊息 -- *@
-            <div id="toastMessage" class="toast align-items-center text-bg-success border-0">
+            
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+              <div id="successToast" class="toast align-items-center text-white bg-success border-0" 
+                   role="alert" aria-live="assertive" aria-atomic="true" 
+                   data-bs-autohide="true" data-bs-delay="1500">
                 <div class="d-flex">
-                    <div class="toast-body" id="toastText">
-                        @* !-- 訊息內容 -- *@
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close"></button>
+                  <div class="toast-body">
+                    成功發布食譜！
+                  </div>
+                  <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
+              </div>
             </div>
+            
+
+
 
 
 
         </div>
 
-
-
-
-        @* !-- Modal彈跳視窗選擇日期 -- *@
-        <div class="modal fade" id="dateModal" tabindex="-1" aria-labelledby="dateModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="dateModalLabel">選擇發佈日期</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <label for="datePicker" class="form-label">選擇日期:</label>
-                        <input type="date" id="datePicker" class="form-control" value="2018-07-22" min="2018-01-01" max="2018-12-31">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
-                        <button type="button" class="btn btn-primary" id="publishDate">發佈</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
 
 
@@ -415,56 +412,49 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            // 設置日期範圍
-            const today = new Date();
-            const threeMonthsLater = new Date();
-            threeMonthsLater.setMonth(today.getMonth() + 3);
 
-            const minDate = today.toISOString().split('T')[0];
-            const maxDate = threeMonthsLater.toISOString().split('T')[0];
+        document.getElementById('openModal').addEventListener('click', function (event) {
+    event.preventDefault(); // 阻止表單的預設提交
+    const form = event.target.closest('form'); // 找到表單
 
-            $('#datePicker').attr('min', minDate).attr('max', maxDate);
+    // 使用 Fetch API 發送表單資料
+    fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+    })
+    .then(response => response.json())
+    .then(data => {
+        const toastEl = document.getElementById('successToast');
+        const toastBody = toastEl.querySelector('.toast-body');
+        
+        if (data.success) {
+            // 設置成功消息
+            toastBody.textContent = data.message;
+            toastEl.classList.remove('bg-danger');
+            toastEl.classList.add('bg-success');
+        } else {
+            // 設置錯誤消息
+            toastBody.textContent = data.message;
+            toastEl.classList.remove('bg-success');
+            toastEl.classList.add('bg-danger');
+        }
 
-            // 開啟模態視窗
-            $('#openModal').on('click', function () {
-                $('#dateModal').modal('show');
-            });
+        // 顯示 Toast
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
 
-            // 顯示提示訊息在畫面可見範圍
-            const showToastMessage = (message) => {
-                const scrollTop = $(window).scrollTop();
-                const windowHeight = $(window).height();
-
-                // 設定提示訊息的位置：畫面中間偏下
-                const toastTop = scrollTop + windowHeight - 100; // 距離畫面底部 100px
-
-                $('#toastMessage')
-                    .text(message)
-                    .css({
-                        top: `${toastTop}px`,
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                    })
-                    .fadeIn()
-                    .delay(2000)
-                    .fadeOut();
-            };
-
-            // 發佈日期
-            $('#publishDate').on('click', function () {
-                const selectedDate = $('#datePicker').val();
-                if (selectedDate) {
-                    console.log('選擇的日期:', selectedDate);
-
-                    // 顯示提示訊息
-                    showToastMessage(`已選擇發佈時間為：${selectedDate}`);
-                    $('#dateModal').modal('hide'); // 關閉視窗
-                } else {
-                    alert('請選擇一個日期！');
-                }
-            });
+        // 在 Toast 隱藏後重新加載頁面
+        toastEl.addEventListener('hidden.bs.toast', () => {
+            window.location.reload();
         });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("發生錯誤，請稍後再試！");
+    });
+});
+
+
     </script>
 
 
