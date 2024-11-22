@@ -1,7 +1,7 @@
 ﻿@using System.Text.Json;
 @using YumYum.Models;
 @using Microsoft.EntityFrameworkCore;
-<div class="container custom-left m-0 mt-4" style="margin-left:36px!important">
+<div class="container custom-left mt-2" style="margin-left:36px!important">
 
     @await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
 
@@ -19,7 +19,7 @@
     <div class="row justify-content-around align-items-center">
         <!-- 左邊 -->
         <!-- 食譜圖片 -->
-        <div class="col-6 p-5 pt-4" style="height: 1000px;justify-content: center;">
+        <div class="col-6 p-5 pt-3" style="height: 1000px;justify-content: center;">
             <div class="d-flex justify-content-center mb-5">
                 <img id="recipe-photo" src="~/img/icon/AddPhoto.png" alt="食譜照片" class="m-0 br-black img-load" style="height: 400px;width: 600px;object-fit:cover;">
             </div>
@@ -56,11 +56,11 @@
                            style="border-right: 0px;border-radius:4px 0 0 4px" id="input-searchingre">
                     <button class="p-0 btn" style="border:0px solid transparent;background-color:transparent;width:37.8px;height:37.8px" id="btn-searchingre">
                         <img class="input-group-text" src="~/img/icon/search.svg" id="search-icon"
-                             style="background-color: white;width:38px;height:38px;border-radius:0 4px 4px 0;">
+                             style="background-color: white;width:37.8px;height:37.8px;border-radius:0 4px 4px 0;">
                     </button>
                 </div>
                 <!--挑選食材區-->
-                <div id="search-ingredients" class="d-flex br-black flex-wrap ps-4 bg-gray" style="height: 264px;width:100%;overflow-y:scroll;position:relative;border-radius:6px">
+                <div id="search-ingredients" class="d-flex br-black flex-wrap ps-4 bg-gray" style="height: 256px;width:100%;overflow-y:scroll;position:relative;border-radius:6px">
                     @foreach (var ingredient in Model.Ingredients!)
                     {
                         var unitJson = JsonSerializer.Serialize(Model.units!.Where(p => p.IngredAttributeId == ingredient.AttributionId));
@@ -78,7 +78,7 @@
 
         <!-- 右邊 -->
 
-        <div class="col-6 p-4 pt-2" style="height: 1000px;">
+        <div class="col-6 p-4  pt-3" style="height: 1000px;">
             <!-- 食譜名稱 -->
             <div class="d-inline-block mb-2 w-100">
                 <p class="m-2 text-big">食譜名稱：</p>
@@ -126,7 +126,7 @@
         <!-- 步驟1 -->
         <!--空的樣式-->
         <!--class-step是用來搜索總步驟數的-->
-        <div style="position: absolute;margin-top: 15.2rem;margin-left: 24.7rem;color:var(--yum-secondary-4)"> ─────────────<img class="remove-steps" style="width:50px;height:50px" src="~/img/icon/close.svg"/></div>
+        <div style="position: absolute;margin-top: 15.2rem;margin-left: 24.7rem;color:var(--yum-secondary-4)"> ─────────────<img class="remove-steps" style="width:50px;height:50px" src="~/img/icon/close.svg" /></div>
         <div class="card mt-5 step" style="width: 18rem; margin-left: 7rem;" id="step01">
             <img src="~/img/icon/AddPhoto.png" class="card-img-top img-load" alt="加上圖片" style="height: 13rem;">
             <div class="text-center m-0 step-bk">
@@ -206,25 +206,31 @@
         var elementUnit = $('<div>', {
             class: 'col-3 d-flex justify-content-center align-items-center',
             name: 'div-unit',
-            html: '<select name="" id="" style="width: 80px;" class="mx-4 br-black d-flex">@foreach (var unit in Model.units!){if (unit.IngredAttributeId == 9){<option id="@unit.UnitId">@unit.UnitName</option>}}</select>'
-                }).attr('b-mc3u0u1te1', '');
-    //垃圾桶
-    var elementDelete = $('<button>', {
-        style: 'border:0px solid transparent;',
-        class: 'col-2 d-flex justify-content-center align-items-center bg-gray delete-myingredient',
-        html: '<img src="/img/icon/delete.svg" alt="垃圾桶">'
-    }).attr('b-mc3u0u1te1', '');
-    //加入子元素
-    element.append(elementLabel);
-    element.append(elementCount);
-    element.append(elementUnit);
-    element.append(elementDelete);
+            html: '<select name="" id="" style="width: 80px;" class="mx-4 br-black d-flex">@foreach (var unit in Model.units!)
+    {
+        if (unit.IngredAttributeId == 9)
+        {
+            <option id="@unit.UnitId">@unit.UnitName</option>
+        }
+    }</select>'
+        }).attr('b-mc3u0u1te1', '');
+        //垃圾桶
+        var elementDelete = $('<button>', {
+            style: 'border:0px solid transparent;',
+            class: 'col-2 d-flex justify-content-center align-items-center bg-gray delete-myingredient',
+            html: '<img src="/img/icon/delete.svg" alt="垃圾桶">'
+        }).attr('b-mc3u0u1te1', '');
+        //加入子元素
+        element.append(elementLabel);
+        element.append(elementCount);
+        element.append(elementUnit);
+        element.append(elementDelete);
 
-    //新增element
-    $('#ingredient-need').append(element);
+        //新增element
+        $('#ingredient-need').append(element);
 
-    $('div, p, img, select,span,button,input').attr('b-mc3u0u1te1', '')
-            })
+        $('div, p, img, select,span,button,input').attr('b-mc3u0u1te1', '')
+    })
     //更改標籤文字
     $(document).on('click', '.new-btn', function () {
         var myInput = $('<input>', {
@@ -259,7 +265,7 @@
         var elementLabel = $('<div>', {
             class: 'col-4 d-flex justify-content-center align-center',
             html: $(this).removeClass('d-inline-flex database-ingredient').addClass('d-flex').attr('b-mc3u0u1te1', ''),
-            name:'div-label',
+            name: 'div-label',
         }).attr('b-mc3u0u1te1', '');
         //數量
         var elementCount = $('<div>', {
@@ -272,7 +278,7 @@
 
         var selectElement = $('<select>', { class: 'mx-4 br-black d-flex', style: 'width: 80px' })
         var option = units.forEach(function (unit) {
-            $('<option>', { text: unit.UnitName,id:unit.UnitId }).appendTo(selectElement)
+            $('<option>', { text: unit.UnitName, id: unit.UnitId }).appendTo(selectElement)
         })
         var elementUnit = $('<div>', {
             class: 'col-3 d-flex justify-content-center align-items-center',
@@ -323,11 +329,11 @@
         $(this).parent().remove();
     })
     //根據食材類別塞選標籤
-    $(document).on('click', '.attr-search', function () { 
-    //取得標籤的id並擷取類別id
-       var attrid =  $(this).attr('id').slice(-1)
-    //去挑選食材區搜尋裡面得標籤哪些類別id跟選取的id一樣
-        $('#search-ingredients').find('button').each(function (index,element) { 
+    $(document).on('click', '.attr-search', function () {
+        //取得標籤的id並擷取類別id
+        var attrid = $(this).attr('id').slice(-1)
+        //去挑選食材區搜尋裡面得標籤哪些類別id跟選取的id一樣
+        $('#search-ingredients').find('button').each(function (index, element) {
             $(element).removeClass('d-none');
             if (attrid != 0) {
                 var elementid = $(element).attr('id').slice(-1)
@@ -349,7 +355,7 @@
             let unitId = $(this).find('div[name="div-unit"]').find('select option:selected').attr('id');
 
             return {
-                IngredientId:parseInt(ingredientId),
+                IngredientId: parseInt(ingredientId),
                 Quantity: quantity,
                 UnitId: parseInt(unitId)
             }
@@ -364,7 +370,7 @@
         let recipeRecordFields = [];
         //簡介及圖片
         let recipeImgAndIntro = {
-            RecipeRecVersion:1,
+            RecipeRecVersion: 1,
             RecipeField: 0,
             FieldShot: $('#recipe-photo').attr('src'),
             FieldDescript: $('#recipe-introduction').val(),
@@ -377,14 +383,14 @@
             let recipeField = parseInt($(this).attr('id').match(/step0(\d+)/)[1]);
             let fieldShot = $(this).find('img').attr('src');
             let fieldDescript = $(this).find('textarea').val()
-            
-            let leftstep =  {
+
+            let leftstep = {
                 RecipeRecVersion: 1,
                 RecipeField: recipeField,
                 FieldShot: fieldShot,
                 FieldDescript: fieldDescript,
-                FieldCheck:false,
-                FieldComment:"",
+                FieldCheck: false,
+                FieldComment: "",
             }
             recipeRecordFields.push(leftstep)
         })
@@ -404,21 +410,21 @@
             }
             recipeRecordFields.push(rightstep)
         })
-        
-        
+
+
         //-----------------------------------------------------------------
         //取得時間(給RecipeRecords和RecipeBrief使用)
         let clickDate = new Date();
-        let formaterTime = new Intl.DateTimeFormat('zh-TW', 
-        {
-            year:"numeric",
-            month:"2-digit",
-            day:"2-digit"
-        })
+        let formaterTime = new Intl.DateTimeFormat('zh-TW',
+            {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
+            })
         //食譜版本RecipeRecords
         let recipeRecord = {
-            RecipeRecVersion:1,
-            RecipeStatusCode:1,
+            RecipeRecVersion: 1,
+            RecipeStatusCode: 1,
             RecipeRecDate: clickDate.toISOString()
         };
         //-----------------------------------------------------------------
@@ -448,8 +454,11 @@
             success: function (result) {
                 alert(result["success"])
                 if (result["message"] != null) { alert(result["message"]) }
-                else if (result["error"]!=null) { alert(result["error"]) }
-                
+                else if (result["error"] != null) { alert(result["error"]) }
+                //導向查看食譜
+                if (result["redirectUrl"] != null) {
+                    window.location.href = result["redirectUrl"]
+                }
             },
             error: function (xhr, status, error) {
                 console.error('錯誤', error)
@@ -571,6 +580,10 @@
                 alert(result["success"])
                 if (result["message"] != null) { alert(result["message"]) }
                 else if (result["error"] != null) { alert(result["error"]) }
+                //導向查看食譜
+                if (result["redirectUrl"] != null) {
+                    window.location.href = result["redirectUrl"]
+                }
             },
             error: function (xhr, status, error) {
                 console.error('錯誤', error)

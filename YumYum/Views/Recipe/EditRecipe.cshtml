@@ -318,7 +318,13 @@
         var elementUnit = $('<div>', {
             class: 'col-3 d-flex justify-content-center align-items-center',
             name: 'div-unit',
-            html: '<select name="" id="" style="width: 80px;" class="mx-4 br-black d-flex">@foreach(var unit in Model.units!){if (unit.IngredAttributeId == 9){<option id="@unit.UnitId">@unit.UnitName</option>}}</select>'
+            html: '<select name="" id="" style="width: 80px;" class="mx-4 br-black d-flex">@foreach (var unit in Model.units!)
+    {
+        if (unit.IngredAttributeId == 9)
+        {
+            <option id="@unit.UnitId">@unit.UnitName</option>
+        }
+    }</select>'
         }).attr('b-wbveynjuki', '');
         //垃圾桶
         var elementDelete = $('<button>', {
@@ -584,7 +590,10 @@
                 alert(result["success"])
                 if (result["message"] != null) { alert(result["message"]) }
                 else if (result["error"] != null) { alert(result["error"]) }
-
+                //導向查看食譜
+                if (result["redirectUrl"] != null) {
+                    window.location.href = result["redirectUrl"]
+                }
             },
             error: function (xhr, status, error) {
                 console.error('錯誤', error)
@@ -707,6 +716,11 @@
                 alert(result["success"])
                 if (result["message"] != null) { alert(result["message"]) }
                 else if (result["error"] != null) { alert(result["error"]) }
+                //導向查看食譜
+                if (result["redirectUrl"] != null) {
+                    window.location.href = result["redirectUrl"]
+                }
+
             },
             error: function (xhr, status, error) {
                 console.error('錯誤', error)
@@ -726,7 +740,7 @@
     })
     //刪除視窗點選是
     $('#delete-true').on('click', function () {
-        var data = { RecipeId: @Model.recipeWatchBrief[0].RecipeId, };
+        var data = { RecipeId: @Model.recipeWatchBrief[0].RecipeId};
         alert(JSON.stringify(data))
         $.ajax({
             url: "/Recipe/DeleteRecipe",

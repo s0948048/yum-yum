@@ -156,8 +156,7 @@ namespace YumYum.Controllers
 
 
         //毅祥
-        //毅祥
-        public async Task<IActionResult> WatchRecipe()
+        public async Task<IActionResult> WatchRecipe(int? recipeId)
         {
             //導引麵包屑
             // 設定Breadcrumb 顯示頁面資訊
@@ -170,11 +169,11 @@ namespace YumYum.Controllers
 
             //此區與此區的view更動中
             //接收食譜的id
-            int? recipeId = HttpContext.Session.GetInt32("recipeId");
+
             int? userId = HttpContext.Session.GetInt32("userId") == null ? 0 : HttpContext.Session.GetInt32("userId");
             HttpContext.Session.SetInt32("userId", (int)userId!);
-            //測試(之後會刪掉)->
-            int recipeIdTest = 1412;
+            //食譜id
+            int? recipeIdTest = recipeId != null ? recipeId : 1412;
             //收藏食譜的內容
             var collect = await _context.UserCollectRecipes.FirstOrDefaultAsync(p => p.UserID == userId && p.RecipeID == recipeIdTest);
             int collectStatus = collect == null ? 0 : 1;
@@ -342,7 +341,7 @@ namespace YumYum.Controllers
                 return Json(new { success = false, message = "我是null" });
             }
 
-            saveData.recipeBrief.Creator = await _context.UserSecretInfos.FindAsync(saveData.recipeBrief.CreatorId);
+            saveData.recipeBrief!.Creator = await _context.UserSecretInfos.FindAsync(saveData.recipeBrief.CreatorId);
             saveData.recipeBrief.RecipeClass = await _context.RecipeClasses.FindAsync(saveData.recipeBrief.RecipeClassId);
 
             if (saveData.recipeBrief.Creator == null || saveData.recipeBrief.RecipeClass == null)
@@ -367,23 +366,25 @@ namespace YumYum.Controllers
 
             var recipe = _context.RecipeBriefs.FirstOrDefault(p => p.RecipeName == saveData.recipeBrief.RecipeName && saveData.recipeBrief.CreateDate.Date == p.CreateDate.Date);
             string recipeID = recipe!.RecipeId.ToString();
+            //設定session recipeid
+            HttpContext.Session.SetInt32("recipeId", recipe.RecipeId);
             short recipeIDshort = recipe!.RecipeId;
             //如果是自建食材，就新增食材進入資料庫
-            for (int i = 0; i < saveData.recipeIngredients.Count; i++)
+            for (int i = 0; i < saveData.recipeIngredients!.Count; i++)
             {
                 saveData.recipeIngredients[i].RecipeId = recipeIDshort;
                 if (saveData.recipeIngredients[i].IngredientId == 0)
                 {
                     Ingredient ingredient = new Ingredient()
                     {
-                        IngredientName = saveData.ingredientNames[i],
+                        IngredientName = saveData.ingredientNames![i],
                         AttributionId = 9,
                         IngredientIcon = "/img/icon/EmptyTag.svg"
                     };
                     _context.Ingredients.Add(ingredient);
                     await _context.SaveChangesAsync();
                     Ingredient data = await _context.Ingredients.FirstOrDefaultAsync(p => p.IngredientName == saveData.ingredientNames[i] && p.AttributionId == 9);
-                    saveData.recipeIngredients[i].IngredientId = data.IngredientId;
+                    saveData.recipeIngredients[i].IngredientId = data!.IngredientId;
                 }
             }
             //存取紀錄資料與食材資料
@@ -506,12 +507,12 @@ namespace YumYum.Controllers
             }
 
             //回傳新建食譜成功
-            return Json(new { success = "新建食譜成功" });
+            return Json(new { success = "新建食譜成功", redirectUrl = Url.Action("WatchRecipe", "Recipe", new { recipe.RecipeId }) });
         }
 
 
         //編輯食譜
-        public async Task<IActionResult> EditRecipe()
+        public async Task<IActionResult> EditRecipe(int recipeId)
         {
             //導引麵包屑
             ViewBag.Breadcrumbs = new List<BreadcrumbItem>
@@ -523,9 +524,9 @@ namespace YumYum.Controllers
             //以下是拿食譜資訊
             //此區與此區的view更動中
             //接收食譜的id
-            int? recipeId = HttpContext.Session.GetInt32("recipeId");
+
             //測試(之後會刪掉)->
-            int recipeIdTest = 1577;
+            int recipeIdTest = recipeId != null ? recipeId : 1584;
             //得到資料
             //取得食譜內容
             var recipeBrief = from recipe in await _context.RecipeBriefs.Where(p => p.RecipeId == recipeIdTest).ToListAsync()
@@ -586,7 +587,7 @@ namespace YumYum.Controllers
             //userId刷新
             int? userId = HttpContext.Session.GetInt32("userId") == null ? 0 : HttpContext.Session.GetInt32("userId");
             if (userId != 0) { HttpContext.Session.SetInt32("userId", (int)userId!); }
-           
+
             var allList = new RecipeEdit_Get()
             {
                 //資料庫所有關於食材、食譜類型、單位、食材屬性的資料
@@ -806,7 +807,7 @@ namespace YumYum.Controllers
 
 
             //回傳新建食譜成功
-            return Json(new { success = "編輯食譜成功" });
+            return Json(new { success = "編輯食譜成功", redirectUrl = Url.Action("WatchRecipe", "Recipe", new { recipe.RecipeId }) });
         }
 
         //刪除食譜
