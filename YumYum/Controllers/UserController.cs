@@ -193,8 +193,8 @@ namespace YumYum.Controllers
 
 
 
-		//芳慈
-		public IActionResult MyRecipeEdit()
+        //芳慈
+        public IActionResult MyRecipeEdit()
         {
             // 設定Breadcrumb 顯示頁面資訊
             ViewBag.Breadcrumbs = new List<BreadcrumbItem>
@@ -229,7 +229,8 @@ namespace YumYum.Controllers
                                  FieldShot = rf.FieldShot,
                                  FieldDescript = rf.FieldDescript,
                                  RecipeStatusCode = rr.RecipeStatusCode,
-                                 IngredientName = ig.IngredientName
+                                 IngredientName = ig.IngredientName,
+                                 RecipeRecVersion = rf.RecipeRecVersion
                              };
 
 
@@ -257,20 +258,74 @@ namespace YumYum.Controllers
             new BreadcrumbItem("收藏食譜", "#") // 目前的頁面
             };
 
-            //return View();
+            //先設定的userId
+            int userId = 3201;
+
+            // 食譜基本資訊查詢
+            var recipeData = from rb in _context.RecipeBriefs
+                             join uc in _context.UserCollectRecipes on rb.RecipeId equals uc.RecipeID
+                             join us in _context.UserSecretInfos on rb.CreatorId equals us.UserId
+                             join rf in _context.RecipeRecordFields on rb.RecipeId equals rf.RecipeId
+                             join rr in _context.RecipeRecords on rb.RecipeId equals rr.RecipeId
+                             join ri in _context.RecipeIngredients on rb.RecipeId equals ri.RecipeId
+                             join ig in _context.Ingredients on ri.IngredientId equals ig.IngredientId
+                             where rf.RecipeRecVersion == (from r in _context.RecipeRecordFields
+                                                           where r.RecipeId == rb.RecipeId
+                                                           select r.RecipeRecVersion).Max()
+                             && rf.RecipeField == 0
+                             && uc.UserID == userId  // Filter by UserID = 3201
+                             select new MyRecipeViewModel.RecipeDetail
+                             {
+                                 RecipeID = (int)rb.RecipeId,
+                                 RecipeName = rb.RecipeName,
+                                 UserNickname = us.UserNickname,
+                                 FinishMinute = rb.FinishMinute,
+                                 FieldShot = rf.FieldShot,
+                                 FieldDescript = rf.FieldDescript,
+                                 RecipeStatusCode = rr.RecipeStatusCode,
+                                 IngredientName = ig.IngredientName
+
+                             };
 
 
-            //sql db test2
-            var data = from xa in _context.RecipeBriefs
-                       where xa.RecipeId > 1399 && xa.RecipeId <= 1404
+            // 合併data
+            var viewModel = new MyRecipeViewModel
+            {
+                RecipeDetails = recipeData.ToList()
+            };
 
-                       select new RecipeBrief
-                       {
-                           RecipeName = xa.RecipeName,
-                           //RecipeShot = xa.RecipeShot
-                       };
+            return View(viewModel);
+        }
 
-            return View(data.ToList());
+
+
+        [Route("RecipeBriefs/Approved")]
+        [HttpPost]
+        public async Task<IActionResult> Approved(int recipeId, int recipeRecVersion)
+        {
+            Console.WriteLine($"Updating RecipeID: {recipeId}, RecipeRecVersion: {recipeRecVersion}");
+            try
+            {
+                var recipeUpload = await _context.RecipeRecords.FirstOrDefaultAsync(
+                    r => r.RecipeId == recipeId && r.RecipeRecVersion == recipeRecVersion);
+
+                if (recipeUpload == null)
+                {
+                    Console.WriteLine("Record not found.");
+                    return RedirectToAction("MyRecipeEdit", new { toastMessage = "食譜記錄未找到。", success = false });
+                }
+
+                recipeUpload.RecipeStatusCode = 4;
+                await _context.SaveChangesAsync();
+                Console.WriteLine("Update successful.");
+
+                return RedirectToAction("MyRecipeEdit", new { toastMessage = "食譜已通過審核！", success = true });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return RedirectToAction("MyRecipeEdit", new { toastMessage = "發生錯誤，請稍後再試。", success = false });
+            }
         }
 
 
