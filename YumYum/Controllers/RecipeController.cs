@@ -525,7 +525,7 @@ namespace YumYum.Controllers
             //接收食譜的id
             int? recipeId = HttpContext.Session.GetInt32("recipeId");
             //測試(之後會刪掉)->
-            int recipeIdTest = 1569;
+            int recipeIdTest = 1577;
             //得到資料
             //取得食譜內容
             var recipeBrief = from recipe in await _context.RecipeBriefs.Where(p => p.RecipeId == recipeIdTest).ToListAsync()
@@ -585,7 +585,8 @@ namespace YumYum.Controllers
                             };
             //userId刷新
             int? userId = HttpContext.Session.GetInt32("userId") == null ? 0 : HttpContext.Session.GetInt32("userId");
-            HttpContext.Session.SetInt32("userId", (int)userId!);
+            if (userId != 0) { HttpContext.Session.SetInt32("userId", (int)userId!); }
+           
             var allList = new RecipeEdit_Get()
             {
                 //資料庫所有關於食材、食譜類型、單位、食材屬性的資料
