@@ -124,7 +124,7 @@ namespace YumYum.Controllers
 
 
         [HttpPost]
-        public IActionResult MatchSort([FromForm] CherishMatchSearch search)
+        public async Task<IActionResult> Match([FromForm] CherishMatchSearch search)
         {
             ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
              new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
@@ -177,39 +177,6 @@ namespace YumYum.Controllers
                                      };
 
             return View(chrishSearchOrders.ToList());
-        }
-
-        public async Task<IActionResult> Match()
-        {
-            ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
-             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
-             new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
-             new BreadcrumbItem("良食配對", "#") // 當前的頁面
-             };
-
-            ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName");
-
-            var chrishOrders = from c in _context.CherishOrders
-                               select new CherishMatch
-                               {
-                                   CherishId = c.CherishId,
-                                   EndDate = c.EndDate,
-                                   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
-                                   IngredientName = c.Ingredient.IngredientName,
-                                   Quantity = c.Quantity,
-                                   ObtainSource = c.ObtainSource,
-                                   ObtainDate = c.ObtainDate,
-                                   UserNickname = c.GiverUser.UserNickname!,
-                                   CityName = c.CherishOrderInfo!.TradeCityKey,
-                                   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
-                                   ContactLine = c.CherishOrderInfo.ContactLine,
-                                   ContactPhone = c.CherishOrderInfo.ContactPhone,
-                                   ContactOther = c.CherishOrderInfo.ContactOther,
-                                   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
-                                   CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
-                               };
-
-            return View(await chrishOrders.ToListAsync());
         }
 
         [HttpPost]
@@ -653,6 +620,66 @@ namespace YumYum.Controllers
 
             return PartialView("_PartialRegion", regions);
         }
+
+
+
+
+        //[HttpPost]
+        //public IActionResult MatchSort([FromForm] CherishMatchSearch search)
+        //{
+        //    ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
+        //     new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+        //     new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+        //     new BreadcrumbItem("良食配對", "#") // 當前的頁面
+        //     };
+
+        //    ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName");
+
+        //    if (search == null)
+        //    {
+        //        return RedirectToAction("match");
+        //    }
+
+        //    ViewBag.selectCity = search.CityKey;
+        //    ViewBag.selectRegion = search.RegionId;
+        //    ViewBag.selectName = search.IngredientName;
+
+        //    IQueryable<CherishOrder> query = _context.CherishOrders;
+
+        //    if (search.CityKey != null)
+        //        query = query.Where(c => c.CherishOrderInfo!.TradeCityKey == search.CityKey);
+
+        //    if (search.RegionId > 0)
+        //        query = query.Where(c => c.CherishOrderInfo!.TradeRegionId == search.RegionId);
+
+        //    if (!string.IsNullOrEmpty(search.IngredientName))
+        //        query = query.Where(c => c.Ingredient.IngredientName.Contains(search.IngredientName));
+
+        //    var ccx = query.Include(c => c.CherishOrderInfo);
+
+        //    var chrishSearchOrders = from c in ccx
+        //                             select new CherishMatch
+        //                             {
+        //                                 CherishId = c.CherishId,
+        //                                 EndDate = c.EndDate,
+        //                                 IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+        //                                 IngredientName = c.Ingredient.IngredientName,
+        //                                 Quantity = c.Quantity,
+        //                                 ObtainSource = c.ObtainSource,
+        //                                 ObtainDate = c.ObtainDate,
+        //                                 UserNickname = c.GiverUser.UserNickname!,
+        //                                 CityName = c.CherishOrderInfo!.TradeCityKey,
+        //                                 RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+        //                                 ContactLine = c.CherishOrderInfo.ContactLine,
+        //                                 ContactPhone = c.CherishOrderInfo.ContactPhone,
+        //                                 ContactOther = c.CherishOrderInfo.ContactOther,
+        //                                 CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
+        //                                 CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
+        //                             };
+
+        //    return View(chrishSearchOrders.ToList());
+        //}
+
 
     }
 }
