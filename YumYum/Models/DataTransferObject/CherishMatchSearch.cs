@@ -11,6 +11,6 @@ namespace YumYum.Models.DataTransferObject
         public string? CityKey { get; set; }
 
         [FromForm(Name = "IngredientSelect")]
-        public short IngredientId { get; set; }
+        public string? IngredientName { get; set; }
     }
 }
