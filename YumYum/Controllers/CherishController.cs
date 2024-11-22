@@ -352,6 +352,7 @@ namespace YumYum.Controllers
 
 
 
+		[HttpGet]
 		public IActionResult ContactInformation()
 		{
 			// 設定 Breadcrumb
@@ -361,7 +362,76 @@ namespace YumYum.Controllers
 			 new BreadcrumbItem("聯絡資料", "#") // 當前的頁面
              };
 
-			return View();
+			int? userId = HttpContext.Session.GetInt32("userId");
+			userId = 3238; // 登入者Id（測試用）
+						   //int userId = 3208; // 登入者Id（測試用）
+
+			var city = from o in _context.Cities
+					   select o;
+			ViewBag.CityList = city;
+
+			var region = from o in _context.Regions
+						 select o;
+			ViewBag.RegionList = region;
+
+			// 先抓到該筆訂單or該預設聯絡資訊的所有面交時段
+			//var timeSpan = await (from o in _context.CherishDefaultTimeSets
+			//					  where o.GiverUserId == userId
+			//					  select o).ToListAsync();
+
+			// 進行篩選，並傳遞給ViewBag
+			//ViewBag.Mon = timeSpan.Where(o => o.TradeTimeCode.Contains("Mon"));
+			//ViewBag.Tue = timeSpan.Where(o => o.TradeTimeCode.Contains("Tue"));
+			//ViewBag.Wes = timeSpan.Where(o => o.TradeTimeCode.Contains("Wes"));
+			//ViewBag.Thr = timeSpan.Where(o => o.TradeTimeCode.Contains("Thr"));
+			//ViewBag.Fri = timeSpan.Where(o => o.TradeTimeCode.Contains("Fri"));
+			//ViewBag.Sat = timeSpan.Where(o => o.TradeTimeCode.Contains("Sat"));
+			//ViewBag.Sun = timeSpan.Where(o => o.TradeTimeCode.Contains("Sun"));
+
+			// =========================================================
+
+			if (userId == null)
+			{
+				return NotFound();
+			}
+
+			var contact = from o in _context.CherishDefaultInfos
+						  where o.GiverUserId == userId
+						  select new CherishContactViewModel
+						  {
+							  GiverUserId = o.GiverUserId,
+							  UserNickname = o.UserNickname,
+							  TradeCityKey = o.TradeCityKey,
+							  CityName = o.TradeCityKeyNavigation.CityName,
+							  TradeRegionId = o.TradeRegionId,
+							  RegionName = o.TradeRegion.RegionName,
+							  ContactLine = o.ContactLine,
+							  ContactPhone = o.ContactPhone,
+							  ContactOther = o.ContactOther,
+						  };
+
+			if (contact == null)
+			{
+				return NotFound();
+			}
+			return View(contact.Single());
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> ContactInformation(int id, [FromForm] CherishDefaultInfo user)
+		{
+			//var x = _context.CherishDefaultInfos.Where(o => o.GiverUserId == user.GiverUserId).First();
+			//x.
+			//x.ContactLine = user.ContactLine;
+
+			if (id != user.GiverUserId)
+			{
+				return NotFound();
+			}
+			_context.Update(user);
+
+			await _context.SaveChangesAsync();
+			return RedirectToAction("ContactInformation");
 		}
 
 		[HttpGet]

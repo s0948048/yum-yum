@@ -1,7 +1,24 @@
-﻿@{
+﻿@using YumYum.Models.ViewModels
+@model CherishContactViewModel
+@{
+	@* CherishContactViewModel info = ViewBag.Info; *@
+	IQueryable<City> citylist = ViewBag.CityList;
+	IQueryable<Region> regionlist = ViewBag.RegionList;
 }
-<!-- 指引當前頁面 -->
+
+<!-- 標示目前所在頁面路徑位置 -->
 @await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
+
+@* 測試中 *@
+@* <h6>@Model.GiverUserId</h6> *@
+<h6 style="color: var(--yum-secondary-2);">※ 登入者ID為：@Model.GiverUserId</h6>
+@*<h6 hidden>@ViewBag.Mon</h6>
+<h6>@ViewBag.Tue</h6>
+<h6>@ViewBag.Wes</h6>
+<h6>@ViewBag.Thr</h6>
+<h6>@ViewBag.Fri</h6>
+<h6>@ViewBag.Sat</h6>
+<h6>@ViewBag.Sun</h6>*@
 
 <!-- 表單標題 -->
 <div class="row article-title rounded-top mt-4">
@@ -13,15 +30,16 @@
 <!-- 表單內容 -->
 <div class="row background-white mb-4 rounded-bottom">
 	<p class="text-center pt-3 pb-2 fw-500 reminder-text">建立聯絡資料後，即可使用［帶入填寫］功能</p>
-	<form method="" action="">
+	<form method="post" action="@Url.Action("ContactInformation")">
 		<div class="row">
+			<input type="text" name="GiverUserId" value="@Model.GiverUserId" hidden />
 			<div class="col-6">
-				<!-- 暱稱欄位 -->
+				<!-- 暱稱 -->
 				<div class="col">
-					<label for="nick-name" class="form-label">暱稱</label>
-					<input type="text" class="form-control my-input" id="nick-name" placeholder="如何稱呼您">
+					<label for="UserNickname" class="form-label">暱稱</label>
+					<input type="text" class="form-control my-input" id="nickname" placeholder="如何稱呼您" value="@Model.UserNickname!.Trim()" name="UserNickname">
 					<div class="invalid-feedback">
-						<!-- 查怎麼實作 -->
+						@* 查怎麼實作 *@
 						此為必填欄位
 					</div>
 				</div>
@@ -30,27 +48,41 @@
 				<label for="city" class="form-label mt-3">面交地區</label>
 				<div class="row">
 					<div class="col-6">
-						<select class="form-select" id="city">
-							<option>-- 縣市 --</option>
-							<option value="">臺中市</option>
+						<select class="form-select" id="city" name="TradeCityKey">
+							<option disabled>-- 選擇縣市 --</option>
+							@{
+								foreach (City city in citylist)
+								{
+									<option value="@city.CityKey" selected="@(Model.CityName == city.CityName)">@city.CityName</option>
+								}
+							}
 						</select>
-						<div class="invalid-feedback">
-							此為必填欄位
-						</div>
+						@* <div class="invalid-feedback">
+						此為必填欄位
+						</div> *@
 					</div>
 					<div class="col-6">
-						<select class="form-select" id="region">
-							<option>-- 鄉鎮市區 --</option>
-							<option value="">南屯區</option>
+						<select class="form-select" id="region" name="TradeRegionId">
+							<option disabled>-- 選擇鄉鎮市區 --</option>
+							@* @await Html.PartialAsync("_PartialRegion") *@
+							@{
+								foreach (Region region in regionlist)
+								{
+									if (Model.TradeCityKey == region.CityKey)
+									{
+										<option value="@region.RegionId" selected="@(Model.TradeRegionId == region.RegionId)">@region.RegionName</option>
+									}
+								}
+							}
 						</select>
-						<!-- <div class="invalid-feedback">
-								此為必填欄位
-							</div> -->
+						@* <div class="invalid-feedback">
+						此為必填欄位
+						</div> *@
 					</div>
 				</div>
 
 				<!-- 聯絡方式 -->
-				<label for="ContactLine" class="form-label mt-3">聯絡方式</label>
+				<label for="line" class="form-label mt-3">聯絡方式</label>
 				<span class="fs-6" style="color: var(--yum-secondary-1);">（請至少提供一種）</span>
 				<!-- LINE -->
 				<div div class="col">
@@ -60,7 +92,7 @@
 						</svg>
 						LINE
 					</label>
-					<input type="text" class="form-control my-input" id="ContactLine" placeholder="輸入 LINE ID">
+					<input type="text" class="form-control my-input" id="line" placeholder="輸入 LINE ID" value="@Model.ContactLine" name="ContactLine">
 				</div>
 				<!-- 電話號碼 -->
 				<div div class="col mt-3">
@@ -71,13 +103,13 @@
 						</svg>
 						電話號碼
 					</label>
-					<input type="text" class="form-control my-input" id="ContactPhone" placeholder="輸入 手機號碼 或 室內電話">
+					<input type="text" class="form-control my-input" id="phone" placeholder="輸入 手機號碼 或 室內電話" value="@Model.ContactPhone" name="ContactPhone">
 				</div>
 			</div>
 
 			<!-- 面交時段 -->
 			<div class="col-6">
-				<label for="trade-time" class="form-label">面交時段</label>
+				<label for="tradetime" class="form-label">面交時段</label>
 				<div class="d-flex justify-content-around pb-3">
 					<button type="button" class="btn my-button set-fs">平日</button>
 					<button type="button" class="btn my-button set-fs">假日</button>
@@ -168,8 +200,17 @@
 					<div>
 						<input type="checkbox"> 晚上
 					</div>
+
 				</div>
 			</div>
+			@*<div id="sun">
+			@{
+			foreach (var item in ViewBag.Sun)
+			{
+			@(item.TradeTimeCode)
+			}
+			}
+			</div>*@
 		</div>
 
 		<!-- 其他聯絡方式 -->
@@ -181,14 +222,15 @@
 					</svg>
 					其他聯絡方式
 				</label>
-				<input type="text" class="form-control my-input" id="ContactOther" placeholder="輸入 其他聯絡方式">
+				<input type="text" class="form-control my-input" id="other" placeholder="輸入 其他聯絡方式" value="@Model.ContactOther" name="ContactOther">
 			</div>
 		</div>
+		<input type="text" name="id" value="@Model.GiverUserId" hidden />
 
 		<!-- 儲存、返回按鈕 -->
 		<div class="row justify-content-center my-4">
 			<div class="col-2 text-center">
-				<button type="button" class="btn my-button set-fs">返回</button>
+				<a href="@Url.Action("Introduce", "Cherish")" class="btn my-button set-fs">返回</a>
 			</div>
 			<div class="col-2 text-center">
 				<button type="submit" class="btn my-button set-fs">儲存</button>
@@ -196,3 +238,38 @@
 		</div>
 	</form>
 </div>
+
+@section Scripts {
+	<script>
+		var selectedCity = $("#city").val();
+		// console.log(selectedCity);
+		setRegion(selectedCity);
+
+		$("#city").on("change", function () {
+			selectedCity = $(this).val();
+			// console.log(selectedCity);
+			setRegion(selectedCity);
+		});
+
+		function setRegion(cityId) {
+			$("#region").empty();
+			$.ajax({
+				url: '/Cherish/GetRegions',
+				method: 'GET',
+				data: { CityKey: cityId },
+				success: function (data) {
+					console.log(data);
+					$("#region").append(data)
+				}
+			});
+		}
+	</script>
+	<script>
+		// console.log($("#sun").text());
+		// console.log($('#sun').text().split('|'))
+		// Array.from($('#sun').text().split('|')).array.forEach(element => {
+		// 	console.log(element);
+		// $(`#${element}`).prop('check',true)
+		// });
+	</script>
+}
