@@ -525,7 +525,7 @@ namespace YumYum.Controllers
             //接收食譜的id
             int? recipeId = HttpContext.Session.GetInt32("recipeId");
             //測試(之後會刪掉)->
-            int recipeIdTest = 1565;
+            int recipeIdTest = 1577;
             //得到資料
             //取得食譜內容
             var recipeBrief = from recipe in await _context.RecipeBriefs.Where(p => p.RecipeId == recipeIdTest).ToListAsync()
@@ -533,6 +533,8 @@ namespace YumYum.Controllers
                               on recipe.RecipeClassId equals className.RecipeClassId
                               select new RecipeWatch_Brief
                               {
+                                  //食譜ID
+                                  RecipeId = recipeIdTest,
                                   //食譜名稱
                                   recipeName = recipe.RecipeName,
                                   //完成時間
@@ -555,7 +557,7 @@ namespace YumYum.Controllers
                                    select new RecipeEdit_Ingredient
                                    {
                                        //食材id
-                                       ingredientId = data.Ingredient.IngredientId,
+                                       ingredientId = data.Ingredient!.IngredientId,
                                        //食材類型
                                        ingredientAttribute = data.Ingredient.AttributionId,
                                        //食材名稱
@@ -565,7 +567,7 @@ namespace YumYum.Controllers
                                        //食材數量
                                        ingredientCount = data.Quantity,
                                        //食材單位Id
-                                       unitId = data.Unit.UnitId,
+                                       unitId = data.Unit!.UnitId,
                                        //食材單位
                                        ingredientunit = data.Unit.UnitName,
                                    };
@@ -583,7 +585,8 @@ namespace YumYum.Controllers
                             };
             //userId刷新
             int? userId = HttpContext.Session.GetInt32("userId") == null ? 0 : HttpContext.Session.GetInt32("userId");
-            HttpContext.Session.SetInt32("userId", (int)userId!);
+            if (userId != 0) { HttpContext.Session.SetInt32("userId", (int)userId!); }
+           
             var allList = new RecipeEdit_Get()
             {
                 //資料庫所有關於食材、食譜類型、單位、食材屬性的資料
@@ -645,14 +648,14 @@ namespace YumYum.Controllers
             string recipeID = recipe!.RecipeId.ToString();
             short recipeIDshort = recipe!.RecipeId;
             //如果是自建食材，就新增食材進入資料庫
-            for (int i = 0; i < saveData.recipeIngredients.Count; i++)
+            for (int i = 0; i < saveData.recipeIngredients!.Count; i++)
             {
                 saveData.recipeIngredients[i].RecipeId = recipeIDshort;
                 if (saveData.recipeIngredients[i].IngredientId == 0)
                 {
                     Ingredient ingredient = new Ingredient()
                     {
-                        IngredientName = saveData.ingredientNames[i],
+                        IngredientName = saveData.ingredientNames![i],
                         AttributionId = 9,
                         IngredientIcon = "/img/icon/EmptyTag.svg"
                     };
@@ -701,7 +704,7 @@ namespace YumYum.Controllers
                         RecipeRecordFieldsList[i].FieldShot = "/img/icon/AddPhoto.png";
                         _context.RecipeRecordFields.Add(RecipeRecordFieldsList[i]);
                     }
-                    else if (RecipeRecordFieldsList[i].FieldShot.StartsWith("/img"))
+                    else if (RecipeRecordFieldsList[i].FieldShot!.StartsWith("/img"))
                     {
                         RecipeRecordFieldsList[i].FieldShot = RecipeRecordFieldsList[i].FieldShot;
                         _context.RecipeRecordFields.Add(RecipeRecordFieldsList[i]);
@@ -806,7 +809,46 @@ namespace YumYum.Controllers
             return Json(new { success = "編輯食譜成功" });
         }
 
+        //刪除食譜
+        [HttpPost]
+        public async Task<IActionResult> DeleteRecipe([FromBody] RecipeEdit_Delete RecipeId)
+        {
+            if (RecipeId == null)
+            {
+                return Json(new { success = "錯誤" });
+            }
 
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                var recipeId = RecipeId.RecipeId;
+                try
+                {
+                    //移除紀錄
+                    var recipeRecordField = _context.RecipeRecordFields.Where(p => p.RecipeId == recipeId);
+                    _context.RecipeRecordFields.RemoveRange(recipeRecordField);
+                    //移除版本
+                    var recipeRecord = _context.RecipeRecords.Where(p => p.RecipeId == recipeId);
+                    _context.RecipeRecords.RemoveRange(recipeRecord);
+                    //移除食譜食材
+                    var recipeIngredient = _context.RecipeIngredients.Where(p => p.RecipeId == recipeId);
+                    _context.RecipeIngredients.RemoveRange(recipeIngredient);
+                    //移除食譜brief
+                    var recipeBrief = _context.RecipeBriefs.FirstOrDefault(p => p.RecipeId == recipeId);
+                    _context.RecipeBriefs.Remove(recipeBrief!);
+                    await _context.SaveChangesAsync();
+
+                    transaction.Commit();
+                    //傳回跳轉首頁的頁面
+                    return Json(new { success = "成功", redirectUrl = "/Recipe/Index" });
+                }
+                catch (Exception ex)
+                {
+                    // 回滾交易
+                    transaction.Rollback();
+                    return Json(new { success = false, message = ex.Message });
+                }
+            }
+        }
 
         //健誠
     }

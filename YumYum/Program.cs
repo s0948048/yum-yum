@@ -46,6 +46,9 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddControllersWithViews();
+
 var app = builder.Build();
 
 // ±Ò¥Î CORS
@@ -67,6 +70,12 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.UseSession();
+
+if (!app.Environment.IsDevelopment())
+{
+	app.UseExceptionHandler("/Home/Error");
+	app.UseHsts();
+}
 
 app.MapControllerRoute(
     name: "default",

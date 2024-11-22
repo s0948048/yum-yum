@@ -2,8 +2,10 @@
 {
     public class RecipeWatch_Brief
     {
+        //食譜id
+        public int RecipeId { get; set; }
         //創建者id
-        public int creatorId { get; set; }
+        public int? creatorId { get; set; }
         //創建者姓名
         public string? userNickName { get; set; }
         //創建者照片

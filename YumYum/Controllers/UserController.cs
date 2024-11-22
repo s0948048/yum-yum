@@ -26,66 +26,69 @@ namespace YumYum.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Index()
 		{
-			int? userId = HttpContext.Session.GetInt32("userId");
-			//int? userId = 3207;
+            int? userId = HttpContext.Session.GetInt32("userId");
+            int? foreignUserId = 3205;
 
-			var userQuery = from user in _context.UserBios
-							join userNickname in _context.UserSecretInfos
-							on user.UserId equals userNickname.UserId
-							where user.UserId == userId
-							select new UserQueryViewModel
-							{
-								UserId = user.UserId,
-								UserIntro = user.UserIntro,
-								HeadShot = user.HeadShot,
-								Igaccount = user.Igaccount,
-								Fbnickname = user.Fbnickname,
-								YoutuNickname = user.YoutuNickname,
-								WebNickName = user.WebNickName,
-								YoutuLink = user.YoutuLink,
-								Fblink = user.Fblink,
-								WebLink = user.WebLink,
-								UserNickname = userNickname.UserNickname
-							};
+            ViewBag.foreignUserId = foreignUserId;
+            //int? userId = 3205;
 
-			var recipeQuery = from user in userQuery
-							  join recipe in _context.RecipeBriefs
-							  on user.UserId equals recipe.CreatorId
-							  join recipeInfo in _context.RecipeRecords
-							  on recipe.RecipeId equals recipeInfo.RecipeId
-							  join recipeImage in _context.RecipeRecordFields
-							  on recipe.RecipeId equals recipeImage.RecipeId
-							  where recipeInfo.RecipeStatusCode == 1 || recipeInfo.RecipeStatusCode == 4
-							  where recipeImage.RecipeField == 0
-							  select new RecipeQueryViewModel
-							  {
-								  RecipeId = recipe.RecipeId,
-								  RecipeName = recipe.RecipeName,
-								  RecipeStatusCode = recipeInfo.RecipeStatusCode,
-								  FieldShot = recipeImage.FieldShot,
-							  };
+            var userQuery = from user in _context.UserBios
+                            join userNickname in _context.UserSecretInfos
+                            on user.UserId equals userNickname.UserId
+                            where user.UserId == userId
+                            select new UserQueryViewModel
+                            {
+                                UserId = user.UserId,
+                                UserIntro = user.UserIntro,
+                                HeadShot = user.HeadShot,
+                                Igaccount = user.Igaccount,
+                                Fbnickname = user.Fbnickname,
+                                YoutuNickname = user.YoutuNickname,
+                                WebNickName = user.WebNickName,
+                                YoutuLink = user.YoutuLink,
+                                Fblink = user.Fblink,
+                                WebLink = user.WebLink,
+                                UserNickname = userNickname.UserNickname
+                            };
 
-			var recipeDetailQuery = from recipe in recipeQuery
-									join recipeIngredient in _context.RecipeIngredients on recipe.RecipeId equals recipeIngredient.RecipeId
-									join recipeIngredientName in _context.Ingredients on recipeIngredient.IngredientId equals recipeIngredientName.IngredientId
-									select new RecipeDetailQuery
-									{
-										RecipeId = recipeIngredient.RecipeId,
-										IngredientId = recipeIngredient.IngredientId,
-										IngredientName = recipeIngredientName.IngredientName
-									};
-			var AllList = new RecipeAllUser()
-			{
-				userQueryViewModel = userQuery.ToList(),
-				recipeQueryViewModel = recipeQuery.ToList(),
-				recipeDetailQuery = recipeDetailQuery.ToList(),
-			};
+            var recipeQuery = (from user in userQuery
+                               join recipe in _context.RecipeBriefs
+                               on user.UserId equals recipe.CreatorId
+                               join recipeInfo in _context.RecipeRecords
+                               on recipe.RecipeId equals recipeInfo.RecipeId
+                               //where recipeInfo.RecipeStatusCode == 1 || recipeInfo.RecipeStatusCode == 4
+                               join recipeImage in _context.RecipeRecordFields
+                               on recipe.RecipeId equals recipeImage.RecipeId
+                               where recipeImage.RecipeField == 0
+                               select new RecipeQueryViewModel
+                               {
+                                   RecipeId = recipe.RecipeId,
+                                   RecipeName = recipe.RecipeName,
+                                   RecipeStatusCode = recipeInfo.RecipeStatusCode,
+                                   FieldShot = recipeImage.FieldShot
+                               }).GroupBy(r => r.RecipeId).Select(g => g.OrderByDescending(r => r.RecipeStatusCode).FirstOrDefault()).ToList();
 
-			HttpContext.Session.SetInt32("userId", (int)userId);
-			return View(AllList);
+            var recipeDetailQuery = from recipe in recipeQuery
+                                    join recipeIngredient in _context.RecipeIngredients on recipe.RecipeId equals recipeIngredient.RecipeId
+                                    join recipeIngredientName in _context.Ingredients on recipeIngredient.IngredientId equals recipeIngredientName.IngredientId
+                                    select new RecipeDetailQuery
+                                    {
+                                        RecipeId = recipeIngredient.RecipeId,
+                                        IngredientId = recipeIngredient.IngredientId,
+                                        IngredientName = recipeIngredientName.IngredientName
+                                    };
+            var AllList = new RecipeAllUser()
+            {
+                userQueryViewModel = userQuery.ToList(),
+                recipeQueryViewModel = recipeQuery.ToList(),
+                recipeDetailQuery = recipeDetailQuery.ToList(),
+            };
+
+            HttpContext.Session.SetInt32("userId", (int)userId);
+            return View(AllList);
 
 
-		}
+        }
 
 
 		[HttpGet]
@@ -136,7 +139,7 @@ namespace YumYum.Controllers
 				}
 
 				userBio.UserIntro = viewModel.UserIntro;
-				userBio.HeadShot = viewModel.HeadShot;
+				//userBio.HeadShot = viewModel.HeadShot;
 				userBio.Igaccount = viewModel.Igaccount;
 				userBio.Fbnickname = viewModel.Fbnickname;
 				userBio.YoutuNickname = viewModel.YoutuNickname;
@@ -149,7 +152,8 @@ namespace YumYum.Controllers
 				_context.Update(userBio);
 				_context.Update(userSecretInfo);
 				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index));
+                TempData["userNickName"] = userSecretInfo.UserNickname;
+                return RedirectToAction(nameof(Index));
 			}
 
 			HttpContext.Session.SetInt32("userId", (int)userId);
@@ -167,20 +171,20 @@ namespace YumYum.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Upload(IFormFile file)
 		{
-			//int? userId = HttpContext.Session.GetInt32("userId");
-			int? userId = 3207;//for test		
+			int? userId = HttpContext.Session.GetInt32("userId");
+			//int? userId = 3207;//for test		
 			if (file != null && file.Length > 0)
 			{
 				var fileNamefromlocal = System.IO.Path.GetFileName(file.FileName);
 				var sideFileName = fileNamefromlocal.Split('.').Last();
 				var fileName = "HeadShot" + userId.ToString() + "." + sideFileName;
-				var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Img", fileName);
+				var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/user", fileName);
 				using (var stream = new FileStream(filePath, FileMode.Create))
 				{
 					await file.CopyToAsync(stream);
 				}
 				UserBio? userBio = await _context.UserBios.Where(p => p.UserId == userId).FirstOrDefaultAsync();
-				userBio.HeadShot = "/Img/" + fileName;
+				userBio.HeadShot = "/img/user" + fileName;
 				_context.Update(userBio);
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(EditInfo));
@@ -193,8 +197,8 @@ namespace YumYum.Controllers
 
 
 
-		//芳慈
-		public IActionResult MyRecipeEdit()
+        //芳慈
+        public IActionResult MyRecipeEdit()
         {
             // 設定Breadcrumb 顯示頁面資訊
             ViewBag.Breadcrumbs = new List<BreadcrumbItem>
@@ -229,7 +233,8 @@ namespace YumYum.Controllers
                                  FieldShot = rf.FieldShot,
                                  FieldDescript = rf.FieldDescript,
                                  RecipeStatusCode = rr.RecipeStatusCode,
-                                 IngredientName = ig.IngredientName
+                                 IngredientName = ig.IngredientName,
+                                 RecipeRecVersion = rf.RecipeRecVersion
                              };
 
 
@@ -257,20 +262,74 @@ namespace YumYum.Controllers
             new BreadcrumbItem("收藏食譜", "#") // 目前的頁面
             };
 
-            //return View();
+            //先設定的userId
+            int userId = 3201;
+
+            // 食譜基本資訊查詢
+            var recipeData = from rb in _context.RecipeBriefs
+                             join uc in _context.UserCollectRecipes on rb.RecipeId equals uc.RecipeID
+                             join us in _context.UserSecretInfos on rb.CreatorId equals us.UserId
+                             join rf in _context.RecipeRecordFields on rb.RecipeId equals rf.RecipeId
+                             join rr in _context.RecipeRecords on rb.RecipeId equals rr.RecipeId
+                             join ri in _context.RecipeIngredients on rb.RecipeId equals ri.RecipeId
+                             join ig in _context.Ingredients on ri.IngredientId equals ig.IngredientId
+                             where rf.RecipeRecVersion == (from r in _context.RecipeRecordFields
+                                                           where r.RecipeId == rb.RecipeId
+                                                           select r.RecipeRecVersion).Max()
+                             && rf.RecipeField == 0
+                             && uc.UserID == userId  // Filter by UserID = 3201
+                             select new MyRecipeViewModel.RecipeDetail
+                             {
+                                 RecipeID = (int)rb.RecipeId,
+                                 RecipeName = rb.RecipeName,
+                                 UserNickname = us.UserNickname,
+                                 FinishMinute = rb.FinishMinute,
+                                 FieldShot = rf.FieldShot,
+                                 FieldDescript = rf.FieldDescript,
+                                 RecipeStatusCode = rr.RecipeStatusCode,
+                                 IngredientName = ig.IngredientName
+
+                             };
 
 
-            //sql db test2
-            var data = from xa in _context.RecipeBriefs
-                       where xa.RecipeId > 1399 && xa.RecipeId <= 1404
+            // 合併data
+            var viewModel = new MyRecipeViewModel
+            {
+                RecipeDetails = recipeData.ToList()
+            };
 
-                       select new RecipeBrief
-                       {
-                           RecipeName = xa.RecipeName,
-                           //RecipeShot = xa.RecipeShot
-                       };
+            return View(viewModel);
+        }
 
-            return View(data.ToList());
+
+
+        [Route("RecipeBriefs/Approved")]
+        [HttpPost]
+        public async Task<IActionResult> Approved(int recipeId, int recipeRecVersion)
+        {
+            Console.WriteLine($"Updating RecipeID: {recipeId}, RecipeRecVersion: {recipeRecVersion}");
+            try
+            {
+                var recipeUpload = await _context.RecipeRecords.FirstOrDefaultAsync(
+                    r => r.RecipeId == recipeId && r.RecipeRecVersion == recipeRecVersion);
+
+                if (recipeUpload == null)
+                {
+                    Console.WriteLine("Record not found.");
+                    return RedirectToAction("MyRecipeEdit", new { toastMessage = "食譜記錄未找到。", success = false });
+                }
+
+                recipeUpload.RecipeStatusCode = 4;
+                await _context.SaveChangesAsync();
+                Console.WriteLine("Update successful.");
+
+                return RedirectToAction("MyRecipeEdit", new { toastMessage = "食譜已通過審核！", success = true });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return RedirectToAction("MyRecipeEdit", new { toastMessage = "發生錯誤，請稍後再試。", success = false });
+            }
         }
 
 
@@ -287,6 +346,12 @@ namespace YumYum.Controllers
 
             if (users != null)
             {
+                //show user info	on nav bar by 健誠
+                UserBio? userBio = await _context.UserBios.Where(p => p.UserId == users.UserId).FirstOrDefaultAsync();
+                UserSecretInfo? userSecretInfo = await _context.UserSecretInfos.Where(p => p.UserId == users.UserId).FirstOrDefaultAsync();
+                TempData["userHeadShot"] = userBio.HeadShot;
+                TempData["userNickName"] = userSecretInfo.UserNickname;
+                // set session
                 HttpContext.Session.SetInt32("userId", users.UserId);
                 return Json(new { redirectUrl = Url.Action("Index", "Recipe") });
             }
