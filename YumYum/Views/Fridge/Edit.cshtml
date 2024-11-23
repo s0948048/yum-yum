@@ -39,45 +39,48 @@
             <p>此區記錄份量，有效日期</p>
 
             <!-- Item List -->
-            <div class="item-list mb-4">
-                @foreach (var item in Model.RefrigeratorData!)
-                {
-                    <div class="row align-items-center mb-1">
-                        <div class="col-md-3 col-4">
-                            <button class="tag-button d-inline-flex align-items-center btn btn-tags">
-                                <img src="@Url.Content($"~{item.IngredientIcon}")" alt="" />
-                                <span>@item.IngredientName</span>
-                            </button>
-                        </div>
-                        <div class="col-md-2 col-4 text-center">
-                            <input type="number" class="form-control" value="@item.Quantity" min="1">
-                        </div>
-                        <div class="col-md-2 col-4">
-                            <select class="form-select">
-                                <option selected>@item.UnitName</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-8 text-center">
-                            <input type="date" class="form-control" value="@item.ValidDate.ToString("yyyy-MM-dd")">
-                        </div>
-                        <div class="col-md-1 col-4 d-flex justify-content-end">
-                            <button class="btn d-flex justify-content-center align-items-center ps-1 pe-1 btn-delete">
-                                <img src="~/img/icon/delete.svg" alt="" />
-                            </button>
-                        </div>
-                    </div>
-                }
-                <!-- Repeat above block for each item -->
-            </div>
+            <form asp-action="UpdateRefrigeratorStore" method="post">
+                <div class="item-list mb-4">
+                    @foreach (var item in Model.RefrigeratorData!)
+                    {
+                        <div class="row align-items-center mb-1">
+                            <input type="hidden" name="RefrigeratorItems.Index" value="@item.StoreID" />
+                            <input type="hidden" name="RefrigeratorItems[@item.StoreID].StoreID" value="@item.StoreID" />
+                            <input type="hidden" name="RefrigeratorItems[@item.StoreID].UserID" value="@item.UserID" />
 
-            <div class="d-flex justify-content-end align-items-center mt-2">
-                <div class="mt-auto d-flex justify-content-end" id="btn-return">
-                    <button class="btn btn-secondary mb-2 me-3">返回</button>
+                            <div class="col-md-3 col-4">
+                                <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                                    <img src="@Url.Content($"~{item.IngredientIcon}")" alt="" />
+                                    <span>@item.IngredientName</span>
+                                </button>
+                            </div>
+                            <div class="col-md-2 col-4 text-center">
+                                <input type="text" name="RefrigeratorItems[@item.StoreID].Quantity" class="form-control" value="@item.Quantity" min="1">
+                            </div>
+                            <div class="col-md-2 col-4 text-center">
+                                <span class="badge rounded-pill bg-body text-dark border">@item.UnitName</span>
+                            </div>
+                            <div class="col-md-3 col-8 text-center">
+                                <input type="date" name="RefrigeratorItems[@item.StoreID].ValidDate" class="form-control" value="@item.ValidDate.ToString("yyyy-MM-dd")">
+                            </div>
+                            <div class="col-md-1 col-4 d-flex justify-content-end">
+                                <button class="btn d-flex justify-content-center align-items-center ps-1 pe-1 btn-delete">
+                                    <img src="~/img/icon/delete.svg" alt="" />
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    <!-- Repeat above block for each item -->
                 </div>
-                <div class="mt-auto d-flex justify-content-end">
-                    <button class="btn btn-primary mb-2 me-5">儲存</button>
+                <div class="d-flex justify-content-end align-items-center mt-2">
+                    <div class="mt-auto d-flex justify-content-end" id="btn-return">
+                        <button class="btn btn-secondary mb-2 me-3">返回</button>
+                    </div>
+                    <div class="mt-auto d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary mb-2 me-5">儲存</button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
