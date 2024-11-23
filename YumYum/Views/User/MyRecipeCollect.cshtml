@@ -29,65 +29,60 @@
                 </ul>
             </div>
 
+
             @if (Model.RecipeDetails != null && Model.RecipeDetails.Any())
             {
-
-                @foreach (var recipe in Model.RecipeDetails.GroupBy(r => r.RecipeID))
+                @foreach (var recipeGroup in Model.RecipeDetails.GroupBy(r => r.RecipeID))
                 {
+                    var recipe = recipeGroup.FirstOrDefault();
 
                     <div class="card mb-3 mx-auto" style="max-width: 95%;width: 100%;">
                         <div class="row">
+                            <!-- 左側圖片區域 -->
                             <div class="col-md-3 d-flex justify-content-center align-items-center">
-                                <div class="card-img">
-                                    @if (!string.IsNullOrEmpty(recipe.First().FieldShot))
-                                    {
-                                        <img src="@recipe.First().FieldShot"
-                                             class="rounded"
-                                             style="max-width: 100%;"
-                                             alt="recipe_intro"
-                                             onerror="this.src='/img/icon/EmptyPhoto.png';">
-                                    }
-                                    else
-                                    {
-                                        <img src="/img/icon/EmptyPhoto.png"
-                                             class="rounded"
-                                             style="max-width: 100%;"
-                                             alt="recipe_intro">
-                                    }
-
-
+                                <div class="card-img position-relative">
+                                    <img src="@recipe.FieldShot" ?? "/img/icon/EmptyPhoto.png"
+                                         class="rounded"
+                                         style="max-width: 100%;@(recipe.RecipeStatusCode == 0 || recipe.RecipeStatusCode == 2 ? "opacity:20%;" : "") z-index: 1; position: relative;"
+                                         alt="recipe_intro"
+                                         onerror="this.src='/img/icon/EmptyPhoto.png';">
                                 </div>
                             </div>
+
+                            <!-- 中間文字區域 -->
                             <div class="col-md-7">
                                 <div class="card-body2">
-                                    <h4 class="card-title text-start">@recipe.First().RecipeName</h4>
-                                    <p class="card-title text-start" id="UserID">@recipe.First().UserNickname</p>
-                                    <p class="card-text text-start" id="RecipeDescript">@recipe.First().FieldDescript</p>
-                                    <p class="card-title text-start" id="RecipeIngredients">
+                                    <h4 class="card-title text-start">@recipe.RecipeName</h4>
+                                    <p class="card-title text-start">@recipe.UserNickname</p>
+                                    <p class="card-text text-start">@recipe.FieldDescript</p>
+                                    <p class="card-title text-start">
                                         食材:
-                                        @foreach (var ingredient in recipe)
-                                        {
-                                            @ingredient.IngredientName
-                                            <span>,</span>
+                                        @{
+                                            var ingredients = string.Join(", ", recipeGroup.Select(ingredient => ingredient.IngredientName));
                                         }
-
+                                        @ingredients
                                     </p>
                                     <div class="d-flex align-items-center">
                                         <img src="/img/icon/timer.svg" alt="timer">
                                         <div class="card-text text-start mb-0">
-                                            <small class="text-muted">@recipe.First().FinishMinute min</small>
+                                            <small class="text-muted">@recipe.FinishMinute min</small>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2 d-flex justify-content-center align-items-center">
-                                <button type="button" class="btn btn-secondary ">
-                                    <svg height="24px" viewBox="0 -960 960 960" width="24px">
+
+                            <!-- 右側按鈕區域 -->
+                            <div class="col-md-2 d-flex justify-content-center align-items-center flex-column">
+
+                                <button type="button" class="yum-btn btn align-content-center fw-600" onclick="window.location.href='@Url.Action("WatchRecipe", "Recipe", new { recipeId = @recipe.RecipeID })';">
+                                    
+                                    <svg height="20px" viewBox="0 -960 960 960" width="20px" fill="#30533f">
                                         <path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z" fill="#e2e3cf" />
                                     </svg>
-
-                                    收藏食譜
+                                    <span>收藏食譜</span>
                                 </button>
+
+
                             </div>
                         </div>
                     </div>
@@ -98,9 +93,6 @@
             {
                 <p>No recipes available.</p>
             }
-
-
-
 
 
 
