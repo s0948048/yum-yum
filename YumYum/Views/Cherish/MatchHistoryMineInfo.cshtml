@@ -2,11 +2,10 @@
 @model List<MatchHistory>
 
 @* --麵包屑導覽-- *@
-<div class="container custom-left mt-4 mb-4">
 
 	@await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
 
-</div>
+
 
 <div class="container d-flex justify-content-center align-items-center mt-3" style="max-width: 960px; margin: 0 auto;">
 
@@ -30,7 +29,8 @@
 				<div class="row background-white area-padding p-4">
 					<div class="food-card d-flex flex-wrap mt-2 md-2">
 						<div class="col-4">
-							<img src="/img/cherish/1.jpg" class="p-3 img-fluid" alt="Food">
+						<img src="@Model[0].CherishPhoto" class="p-3 img-fluid" alt="Food">
+							@* <img src="/img/cherish/1.jpg" class="p-3 img-fluid" alt="Food"> *@
 						</div>
 						<div class="col-8 p-3">
 							<div class="d-flex justify-content-between mt-3 mb-3">
@@ -93,8 +93,23 @@
 
 				<div class="col-md-6 col-lg-4 item">
 					<div class="box text-center">
-						<img class="rounded-circle mb-3" src="/img/user/3204.jpg"
-							 alt="avatar">
+						
+
+										@if (!string.IsNullOrEmpty(order.HeadShot))
+										{
+											<img src="@order.HeadShot"
+												 class="rounded-circle mb-3"
+												 style="max-width: 100%;"
+												 alt="recipe_intro"
+												 onerror="this.src='/img/icon/EmptyAvatar.svg';">
+										}
+										else
+										{
+											<img src="/img/icon/EmptyAvatar.svg"
+												 class="rounded-circle mb-3"
+												 style="max-width: 100%;"
+												 alt="recipe_intro">
+										}
 									<p class="name fs-4">@order.UserNickname</p>
 										<p class="title">聯絡方式</p>
 						<!-- Line -->
@@ -102,6 +117,10 @@
 							<div class="contact mb-2">
 								<img src="/img/icon/line.svg" style="width: 20px; height: 20px;"
 									 alt="line-icon">
+
+
+												
+
 								<label for="ContactLine" class="form-label ms-1">LINE</label>
 											<input class="form-control" 
 											type="text"
@@ -115,10 +134,10 @@
 							<div class="contact mb-2">
 								<img src="/img/icon/phone.svg" style="width: 20px; height: 20px;"
 									 alt="phone-icon">
-								<label for="ContactPhone" class="form-label ms-1">電話號碼</label>
+								<label for="ContactPhone" class="form-label ms-1">電話</label>
 											<input class="form-control"
 													   type="text" 
-													   @* value="@order.ApplicantContactPhone" *@
+
 												   value="@(order.ApplicantContactPhone == null ? "無" : order.ApplicantContactPhone)"
 												   readonly>
 							</div>
@@ -131,7 +150,7 @@
 								<label for="ContactOther" class="form-label ms-1">其他聯絡方式</label>
 											<input class="form-control" 
 											type="text"
-											@* value="@order.ApplicantContactOther" *@
+
 											value="@(order.ApplicantContactOther == null ? "無" : order.ApplicantContactOther)"
 										    readonly>
 							</div>
@@ -142,13 +161,14 @@
 							
 
 							<!-- 返回按鈕 -->
-								<div class="row justify-content-center my-4">
-									<div class="col-2 text-center">
-										<a class="btn my-button text-white" href="@Url.Action("MatchHistory", "Cherish")">
-											返回
-										</a>
-									</div>
+							
+								<!-- 返回按鈕 -->
+							<div class="max-width:50% d-flex align-content-center">
+									<a class="btn back-btn mt-3 mb-3" href="@Url.Action("MatchHistory", "Cherish")">
+										返回
+									</a>
 								</div>
+
 
 
 
@@ -161,16 +181,24 @@
 		}
 		else
 		{
-			<!-- 無資料時顯示 -->
-			<h5 class="fw-bold d-inline-block">還沒有人認領~請耐心等候~</h5>
+
+			<div>
+
 			<!-- 返回按鈕 -->
-			<div class="row justify-content-center my-4">
-				<div class="col-2 text-center">
-					<a class="btn my-button text-white" href="@Url.Action("MatchHistory", "Cherish")">
-						返回
-					</a>
+				<div>
+					<!-- 無資料時顯示 -->
+					<h2 class="fw-bold d-inline-block">還沒有人認領~請耐心等候~</h2>
+					<!-- 返回按鈕 -->
+					<div class="max-width:50% d-flex align-content-center">
+						<a class="btn back-btn" href="@Url.Action("MatchHistory", "Cherish")">
+							返回
+						</a>
+					</div>
 				</div>
 			</div>
 		}
 			</main>
 		</div>
+
+
+

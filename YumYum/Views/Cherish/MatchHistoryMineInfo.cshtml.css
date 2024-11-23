@@ -9,10 +9,10 @@ a {
     background-color: var(--yum-primary-3);
 }
 
-    .my-button:hover {
-        color: var(--yum-primary-3);
-        background-color: var(--yum-primary-2);
-    }
+.my-button:hover {
+    color: var(--yum-primary-3);
+    background-color: var(--yum-primary-2);
+}
 
 .article-title {
     color: var(--yum-primary-3);
@@ -203,3 +203,54 @@ a {
 .table th, td {
     padding:
 }
+
+
+/* 退回按鈕的樣式 */
+.back-btn {
+    font-size: 1rem;
+    color: var(--yum-primary-2);
+    background-color: var(--yum-secondary-3);
+    box-shadow: 2px 2px 2px #30533fa6;
+    /*display: inline-block;*/
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--yum-primary-2);
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    display: block;
+    margin: 0 auto; /* Centers the button horizontally */
+}
+
+/* 一般的按鈕樣式 */
+.yum-btn {
+    font-size: 1rem;
+    color: var(--yum-primary-2);
+    background-color: var(--yum-primary-3);
+    box-shadow: 2px 2px 2px #30533fa6;
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--yum-primary-2);
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+/* hover 按鈕時的樣式變化 */
+.back-btn:hover{
+    color: var(--yum-primary-3);
+    background-color: var(--yum-primary-2);
+    transition-duration: 0.5s;
+}
+

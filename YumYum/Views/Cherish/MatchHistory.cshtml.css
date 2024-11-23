@@ -35,7 +35,7 @@
 /* 左側面板 */
 #left-pannel {
     height: max-content;
-    width: 26%;
+
     background-color: var(--yum-secondary-3);
 }
 
