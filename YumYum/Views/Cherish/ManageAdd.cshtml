@@ -83,11 +83,11 @@
 					<input type="date" id="valid-date" class="form-control w-100">
 				</div>
 				<!-- 預定上架日期 -->
-				<div class="col-3">
-					<label for="reserve-date" class="form-label">選擇預定上架日期</label>
-					<br>
-					<input type="date" id="reserve-date" class="form-control w-100">
-				</div>
+				@*<div class="col-3">
+				<label for="reserve-date" class="form-label">選擇預定上架日期</label>
+				<br>
+				<input type="date" id="reserve-date" class="form-control w-100">
+				</div>*@
 			</div>
 		</div>
 	</div>
@@ -327,7 +327,7 @@
 		<!-- 提交、返回按鈕 -->
 		<div class="row justify-content-center py-4">
 			<div class="col-2 text-center">
-				<button type="button" class="btn my-button set-fs">返回</button>
+				<a href="@Url.Action("Manage", "Cherish")" class="btn my-button set-fs">返回</a>
 			</div>
 			<div class="col-2 text-center">
 				<button type="submit" class="btn my-button set-fs">提交</button>
