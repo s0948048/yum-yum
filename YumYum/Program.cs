@@ -34,7 +34,7 @@ builder.Services.AddControllersWithViews()
 
 
 
-var connectionString = builder.Configuration.GetConnectionString("YumYumDB");
+var connectionString = builder.Configuration.GetConnectionString("connectionString"); // YumYumDB
 builder.Services.AddDbContext<YumYumDbContext>(x => x.UseSqlServer(connectionString));
 
 builder.Services.AddDistributedMemoryCache();
