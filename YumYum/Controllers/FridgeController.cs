@@ -43,6 +43,29 @@ namespace YumYum.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        public IActionResult UpdateRefrigeratorStore(List<FridgeItemViewModel> RefrigeratorItems)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var item in RefrigeratorItems)
+                {
+                    var record = _context.RefrigeratorStores.FirstOrDefault(r => r.StoreId == item.StoreID && r.UserId == 3204);
+                    if (record != null)
+                    {
+                        record.Quantity = item.Quantity!;
+                        record.ValidDate = item.ValidDate;
+                    }
+                }
+
+                _context.SaveChanges();
+
+                return RedirectToAction("Index"); // Redirect back to the main view after saving changes
+            }
+            return View();
+        }
+
+
         [HttpGet]
         public IActionResult GetOtherUnits()
         {
@@ -118,6 +141,7 @@ namespace YumYum.Controllers
                     orderby fridge.ValidDate
                     select new FridgeItemViewModel
                     {
+                        StoreID = fridge.StoreId,
                         UserID = fridge.UserId,
                         IngredientName = igd.IngredientName,
                         IngredientIcon = igd.IngredientIcon,
