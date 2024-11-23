@@ -9,6 +9,7 @@
 
     public class FridgeItemViewModel
     {
+        public int StoreID { get; set; }
         public int UserID { get; set; }
         public string? IngredientName { get; set; }
         public string? IngredientIcon { get; set; }
