@@ -131,16 +131,24 @@ namespace YumYum.Controllers
              new BreadcrumbItem("良食配對", "#") // 當前的頁面
              };
 
-            ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName");
-
             if (search == null)
             {
                 return RedirectToAction("match");
             }
 
-            ViewBag.selectCity = search.CityKey;
-            ViewBag.selectRegion = search.RegionId;
-            ViewBag.selectName = search.IngredientName;
+
+            ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName", search.CityKey);
+
+            ViewBag.region = _context.Regions
+                    .Where(r => r.CityKey == search.CityKey)
+                    .Select(r => new SelectListItem {
+                        Value = r.RegionId.ToString(),
+                        Text = r.RegionName,
+                        Selected = search.RegionId == r.RegionId
+                    })
+                    .ToList();
+
+            ViewBag.name = search.IngredientName;
 
             IQueryable<CherishOrder> query = _context.CherishOrders;
 
@@ -179,21 +187,21 @@ namespace YumYum.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ApplyCherish([FromForm] CherishOrderApplicant applicant)
+        public async Task<IActionResult> ApplyCherish([FromForm] CherishOrderApplicant SumitUser)
         {
-            Console.WriteLine($"{applicant.CherishId}'{applicant.ApplicantContactLine}'{applicant.ApplicantContactOther}'{applicant.ApplicantContactPhone}'{applicant.ApplicantId}");
+            Console.WriteLine($"{SumitUser.CherishId}'{SumitUser.ApplicantContactLine}'{SumitUser.ApplicantContactOther}'{SumitUser.ApplicantContactPhone}'{SumitUser.ApplicantId}");
 
-            if(applicant.ApplicantContactLine is null 
-                && applicant.ApplicantContactPhone is null 
-                && applicant.ApplicantContactOther is null)
+            if (SumitUser.ApplicantContactLine is null
+                && SumitUser.ApplicantContactPhone is null
+                && SumitUser.ApplicantContactOther is null)
             {
                 return new BadRequestObjectResult(new { success = false, message = "必須傳入最少一種聯絡方式！" });
             }
 
             var aId = 3238;
 
-             var check = _context.CherishOrderApplicants.Any(o => o.CherishId == applicant.CherishId && o.ApplicantId == aId);
-            if(check)
+            var check = _context.CherishOrderApplicants.Any(o => o.CherishId == SumitUser.CherishId && o.ApplicantId == aId);
+            if (check)
             {
                 return new BadRequestObjectResult(new { success = false, message = "已申請過！！" });
             }
@@ -201,18 +209,18 @@ namespace YumYum.Controllers
 
             var od = new CherishOrderApplicant
             {
-                CherishId = applicant.CherishId,
+                CherishId = SumitUser.CherishId,
                 ApplicantId = aId,
-                UserNickname = applicant.UserNickname,
-                ApplicantContactLine = applicant.ApplicantContactLine,
-                ApplicantContactPhone = applicant.ApplicantContactPhone,
-                ApplicantContactOther = applicant.ApplicantContactOther
+                UserNickname = SumitUser.UserNickname,
+                ApplicantContactLine = SumitUser.ApplicantContactLine,
+                ApplicantContactPhone = SumitUser.ApplicantContactPhone,
+                ApplicantContactOther = SumitUser.ApplicantContactOther
             };
 
             await _context.CherishOrderApplicants.AddAsync(od);
             await _context.SaveChangesAsync();
 
-            return Json(new {success=true,message="申請成功!" });
+            return Json(new { success = true, message = "申請成功!" });
         }
 
         [HttpPost]
@@ -576,7 +584,7 @@ namespace YumYum.Controllers
         }
 
 
-       
+
 
 
 
