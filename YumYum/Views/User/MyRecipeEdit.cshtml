@@ -1,9 +1,9 @@
 ﻿@* --麵包屑導覽-- *@
-<div class="container custom-left mt-4 mb-4">
 
-    @await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
 
-</div>
+@await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
+
+
 @model YumYum.Models.ViewModels.MyRecipeViewModel
 
 
@@ -87,11 +87,11 @@
             <form method="post" action="/RecipeBriefs/Approved">
             <input type="hidden" name="recipeId" value="@recipe.RecipeID" />
             <input type="hidden" name="recipeRecVersion" value="@recipe.RecipeRecVersion" />
-            <button type="submit" class="btn btn-secondary md-4">
-            <svg height="20px" viewBox="0 -960 960 960" width="20px" fill="#e2e3cf">
+             <button type="submit" class="btn yum-btn align-content-center fw-600 md-4">
+             <svg height="20px" viewBox="0 -960 960 960" width="20px" fill="#30533f">
             <path d="M444-336v-342L339-573l-51-51 192-192 192 192-51 51-105-105v342h-72ZM263.72-192Q234-192 213-213.15T192-264v-72h72v72h432v-72h72v72q0 29.7-21.16 50.85Q725.68-192 695.96-192H263.72Z" fill="#e2e3cf" />
             </svg>
-            立即發布
+            立即發布 
             </button>
             </form>
             }
@@ -100,7 +100,7 @@
                 <svg height="20px" viewBox="0 -960 960 960" width="20px" fill="#30533f">
                     <path d="M216-216h51l375-375-51-51-375 375v51Zm-72 72v-153l498-498q11-11 23.84-16 12.83-5 27-5 14.16 0 27.16 5t24 16l51 51q11 11 16 24t5 26.54q0 14.45-5.02 27.54T795-642L297-144H144Zm600-549-51-51 51 51Zm-127.95 76.95L591-642l51 51-25.95-25.05Z" />
                 </svg>
-                <span>編輯食譜</span>
+                <span>編輯食譜 </span>
             </button>
 
 
@@ -120,9 +120,9 @@
             @* --發佈日期彈跳視窗跟 顯示訊息-- *@
             @* -- Toast 提示訊息 -- *@
            
-            <div id="toast" style="display:none; position:fixed; bottom:20px; right:20px; background:#333; color:#fff; padding:15px; border-radius:5px; z-index:9999;">
+           @*  <div id="toast" style="display:none; position:fixed; bottom:20px; right:20px; background:#333; color:#fff; padding:15px; border-radius:5px; z-index:9999;">
                 <span id="toast-message"></span>
-            </div>
+            </div> *@
 
 
         </div>
@@ -139,25 +139,40 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
     <script>
-        // 檢查 URL 的 Query String
+        // Toast提示
+        // const urlParams = new URLSearchParams(window.location.search);
+        // const toastMessage = urlParams.get("toastMessage");
+        // const success = urlParams.get("success");
+
+        // if (toastMessage) {
+        //     showToast(toastMessage, 15000); // 顯示 Toast
+        // }
+
+        // function showToast(message, duration = 15000) {
+        //     const toast = document.getElementById("toast");
+        //     const toastMessage = document.getElementById("toast-message");
+        //     toastMessage.textContent = message;
+        //     toast.style.display = "block";
+
+        //     setTimeout(() => {
+        //         toast.style.display = "none";
+        //     }, duration);
+        // }
+
+
+        //alert提示
         const urlParams = new URLSearchParams(window.location.search);
         const toastMessage = urlParams.get("toastMessage");
         const success = urlParams.get("success");
 
         if (toastMessage) {
-            showToast(toastMessage, 15000); // 顯示 Toast
+            showAlert(toastMessage); // 顯示 Alert
         }
 
-        function showToast(message, duration = 15000) {
-            const toast = document.getElementById("toast");
-            const toastMessage = document.getElementById("toast-message");
-            toastMessage.textContent = message;
-            toast.style.display = "block";
-
-            setTimeout(() => {
-                toast.style.display = "none";
-            }, duration);
+        function showAlert(message) {
+            alert(message); // 使用 alert 顯示訊息
         }
+
 
     </script>
 
