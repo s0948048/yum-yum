@@ -120,6 +120,7 @@ namespace YumYum.Controllers
 			ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName");
 
 			var chrishOrders = from c in _context.CherishOrders
+							   where c.TradeStateCode == 0
 							   select new CherishMatch
 							   {
 								   CherishId = c.CherishId,
@@ -196,7 +197,8 @@ namespace YumYum.Controllers
 
 
 			var chrishSearchOrders = from c in ccx
-									 select new CherishMatch
+                                     where c.TradeStateCode == 0
+                                     select new CherishMatch
 									 {
 										 CherishId = c.CherishId,
 										 EndDate = c.EndDate,
@@ -278,7 +280,8 @@ namespace YumYum.Controllers
 
 			var orderDetail = await (from c in _context.CherishOrders
 									 where c.CherishId == cherishID
-									 select new CherishMatch
+                                     where c.TradeStateCode == 0
+                                     select new CherishMatch
 									 {
 										 CherishId = c.CherishId,
 										 EndDate = c.EndDate,
@@ -322,7 +325,8 @@ namespace YumYum.Controllers
 
 			var orderDetail = await (from c in _context.CherishOrders
 									 where c.CherishId == cherishID
-									 select new CherishMatch
+                                     where c.TradeStateCode == 0
+                                     select new CherishMatch
 									 {
 										 CherishId = c.CherishId,
 										 EndDate = c.EndDate,
