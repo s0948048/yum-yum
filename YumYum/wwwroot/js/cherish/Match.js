@@ -8,6 +8,7 @@ $('#reset-left').click(function () {
 $(
     '#Ifilter input[type="checkbox"],#Cfilter input[type="checkbox"],#Dfilter input[type="checkbox"]'
 ).change(function () {
+    $(this).prev().toggleClass('selected')
     var sortAttr = [];
     var sortCont = [];
     var sortDay = [];
@@ -20,22 +21,23 @@ $(
     $('#Dfilter input[type="checkbox"]:checked').each(function (idx, ele) {
         sortDay.push(Number($(ele).val()))
     })
-    
-    var sortList = { sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay };
 
-    console.log(sortList);
-
-    $(this).prev().toggleClass('selected')
+    //console.log({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay ,search:$('#search-form').serialize()})
+    var Search = { CitySelect: $('#CitySelect').val(), RegionSelect: Number($('#RegionSelect').val()), IngredientSelect: $('#IngredientSelect').val()};
 
     $.ajax({
-        url:''
+        url: '/cherish/sortcherish',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay, Search:  Search }),
+        success: function (data) {
+            console.log(data);
+            $('#insert-result').html(data);
+        },
+        error: function (xhr) {
+            alert(xhr);
+        }
     })
-
-
-
-
-
-
 });
 
 $('#Ifilter-active,#Cfilter-active,#Dfilter-active').change(function () {
@@ -44,11 +46,12 @@ $('#Ifilter-active,#Cfilter-active,#Dfilter-active').change(function () {
 
 
 // 查看更多 【 -> (1)彈出所有資訊的視窗】
-$('.card-body').find('button').click(function () {
+$('#insert-result').on('click','.match-btn',  function () {
+    $('#popup-order-info').html('')
     $('#mask').show()
     disableScroll()
 
-    var cherishID = Number($(this)[0].attributes[4].nodeValue);
+    var cherishID = Number($(this)[0].attributes.cherishid.nodeValue);
     $.ajax({
         url: '/cherish/DetailOrder',
         method: 'GET',

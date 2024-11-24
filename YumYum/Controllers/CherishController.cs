@@ -7,6 +7,7 @@ using YumYum.Models;
 using YumYum.Models.DataTransferObject;
 using YumYum.Models.ViewModels;
 using static Azure.Core.HttpHeader;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace YumYum.Controllers
 {
@@ -87,6 +88,10 @@ namespace YumYum.Controllers
         {
             return View();
         }
+
+
+        //--------------------------   彥廷  首   -------------------------
+
         [HttpGet]
         public async Task<IActionResult> Match()
         {
@@ -98,30 +103,10 @@ namespace YumYum.Controllers
 
             ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName");
 
-            var chrishOrders = from c in _context.CherishOrders
-                               where c.TradeStateCode == 0
-                               select new CherishMatch
-                               {
-                                   CherishId = c.CherishId,
-                                   EndDate = c.EndDate,
-                                   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
-                                   IngredientName = c.Ingredient.IngredientName,
-                                   Quantity = c.Quantity,
-                                   ObtainSource = c.ObtainSource,
-                                   ObtainDate = c.ObtainDate,
-                                   UserNickname = c.GiverUser.UserNickname!,
-                                   CityName = c.CherishOrderInfo!.TradeCityKey,
-                                   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
-                                   ContactLine = c.CherishOrderInfo.ContactLine,
-                                   ContactPhone = c.CherishOrderInfo.ContactPhone,
-                                   ContactOther = c.CherishOrderInfo.ContactOther,
-                                   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
-                                   CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
-                               };
+            var chrishOrders = await QResult(_context.CherishOrders);
 
-            return View(await chrishOrders.ToListAsync());
+            return View(chrishOrders);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Match([FromForm] CherishMatchSearch search)
@@ -138,54 +123,35 @@ namespace YumYum.Controllers
             }
 
 
-            ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName", search.CityKey);
+            ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName", search.CitySelect);
 
             ViewBag.region = _context.Regions
-                    .Where(r => r.CityKey == search.CityKey)
+                    .Where(r => r.CityKey == search.CitySelect)
                     .Select(r => new SelectListItem {
                         Value = r.RegionId.ToString(),
                         Text = r.RegionName,
-                        Selected = search.RegionId == r.RegionId
+                        Selected = search.RegionSelect == r.RegionId
                     })
                     .ToList();
 
-            ViewBag.name = search.IngredientName;
+            ViewBag.name = search.IngredientSelect;
 
             IQueryable<CherishOrder> query = _context.CherishOrders;
 
-            if (search.CityKey != null)
-                query = query.Where(c => c.CherishOrderInfo!.TradeCityKey == search.CityKey);
+            if (search.CitySelect != null)
+                query = query.Where(c => c.CherishOrderInfo!.TradeCityKey == search.CitySelect);
 
-            if (search.RegionId > 0)
-                query = query.Where(c => c.CherishOrderInfo!.TradeRegionId == search.RegionId);
+            if (search.RegionSelect > 0)
+                query = query.Where(c => c.CherishOrderInfo!.TradeRegionId == search.RegionSelect);
 
-            if (!string.IsNullOrEmpty(search.IngredientName))
-                query = query.Where(c => c.Ingredient.IngredientName.Contains(search.IngredientName));
+            if (!string.IsNullOrEmpty(search.IngredientSelect))
+                query = query.Where(c => c.Ingredient.IngredientName.Contains(search.IngredientSelect));
 
             var ccx = query.Include(c => c.CherishOrderInfo);
 
-            var chrishSearchOrders = from c in ccx
-                                     where c.TradeStateCode == 0
-                                     select new CherishMatch
-                                     {
-                                         CherishId = c.CherishId,
-                                         EndDate = c.EndDate,
-                                         IngredAttributeName = c.IngredAttribute.IngredAttributeName,
-                                         IngredientName = c.Ingredient.IngredientName,
-                                         Quantity = c.Quantity,
-                                         ObtainSource = c.ObtainSource,
-                                         ObtainDate = c.ObtainDate,
-                                         UserNickname = c.GiverUser.UserNickname!,
-                                         CityName = c.CherishOrderInfo!.TradeCityKey,
-                                         RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
-                                         ContactLine = c.CherishOrderInfo.ContactLine,
-                                         ContactPhone = c.CherishOrderInfo.ContactPhone,
-                                         ContactOther = c.CherishOrderInfo.ContactOther,
-                                         CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
-                                         CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
-                                     };
+            var chrishSearchOrders = await QResult(ccx);
 
-            return View(chrishSearchOrders.ToList());
+            return View(chrishSearchOrders);
         }
 
         [HttpPost]
@@ -266,7 +232,6 @@ namespace YumYum.Controllers
             return PartialView("_Partial_GiverInfo", orderDetail);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> DetailOrder(int cherishID)
         {
@@ -310,7 +275,79 @@ namespace YumYum.Controllers
             return PartialView("_Partial_DetailMatch", orderDetail);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SortCherish([FromBody]CherishFilter f)
+        {
+            IQueryable<CherishOrder> query = _context.CherishOrders;
 
+            if (f.SortAttr != null && f.SortAttr.Any())
+            {
+                query = query.Where(o => f.SortAttr.Contains(o.IngredAttributeId));
+            }
+
+            if (f.SortCont != null && f.SortCont.Any())
+            {
+                query = query.Where(o =>
+                    (f.SortCont.Contains(1) && o.CherishOrderInfo!.ContactLine != null) ||
+                    (f.SortCont.Contains(2) && o.CherishOrderInfo!.ContactPhone != null) ||
+                    (f.SortCont.Contains(3) && o.CherishOrderInfo!.ContactOther != null));
+            }
+
+            if (f.SortDay != null && f.SortDay.Any())
+            {
+                var today = DateOnly.FromDateTime(DateTime.Now);
+                query = query.Where(o =>
+                    (f.SortDay.Contains(1) && o.EndDate < today.AddDays(1)) ||
+                    (f.SortDay.Contains(2) && o.EndDate >= today.AddDays(1) && o.EndDate < today.AddDays(3)) ||
+                    (f.SortDay.Contains(3) && o.EndDate >= today.AddDays(3) && o.EndDate < today.AddDays(7)) ||
+                    (f.SortDay.Contains(4) && o.EndDate >= today.AddDays(7)));
+            }
+
+
+            if (!string.IsNullOrEmpty(f.Search.CitySelect))
+                query = query.Where(c => c.CherishOrderInfo!.TradeCityKey == f.Search.CitySelect);
+
+            if (f.Search.RegionSelect > 0)
+                query = query.Where(c => c.CherishOrderInfo!.TradeRegionId == f.Search.RegionSelect);
+
+            if (!string.IsNullOrEmpty(f.Search.IngredientSelect))
+                query = query.Where(c => c.Ingredient.IngredientName.Contains(f.Search.IngredientSelect));
+
+            query = query.Include(c => c.CherishOrderInfo);
+
+            var chrishSearchOrders = await QResult(query);
+
+            return PartialView("_Partial_Sorting", chrishSearchOrders);
+        }
+
+
+        public async Task<List<CherishMatch>> QResult(IQueryable<CherishOrder> query)
+        {
+            var _query = from c in query
+                    where c.TradeStateCode == 0
+                    orderby c.EndDate
+                    select new CherishMatch
+                    {
+                        CherishId = c.CherishId,
+                        EndDate = c.EndDate,
+                        IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+                        IngredientName = c.Ingredient.IngredientName,
+                        Quantity = c.Quantity,
+                        ObtainSource = c.ObtainSource,
+                        ObtainDate = c.ObtainDate,
+                        UserNickname = c.GiverUser.UserNickname!,
+                        CityName = c.CherishOrderInfo!.TradeCityKey,
+                        RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+                        ContactLine = c.CherishOrderInfo.ContactLine,
+                        ContactPhone = c.CherishOrderInfo.ContactPhone,
+                        ContactOther = c.CherishOrderInfo.ContactOther,
+                        CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
+                        CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
+                    };
+            return await _query.ToListAsync();
+        } 
+
+        //--------------------------   彥廷  尾   -------------------------
 
 
 
@@ -584,12 +621,6 @@ namespace YumYum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("ContactInformation");
         }
-
-
-
-
-
-
 
 
 
