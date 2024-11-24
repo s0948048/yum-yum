@@ -283,8 +283,8 @@ namespace YumYum.Controllers
         [HttpPost]
         public async Task<IActionResult> UserNavigate([FromBody] int creatorId)
         {
-            HttpContext.Session.SetInt32("navigateId", creatorId);
-            return Json(new { userUrl = "/User/Index" });
+            HttpContext.Session.SetInt32("foreignId", creatorId);
+            return Json(new { userUrl = Url.Action("Index","User") });
         }
 
 
@@ -623,7 +623,7 @@ namespace YumYum.Controllers
                 return Json(new { success = false, message = "我是null" });
             }
 
-            saveData.recipeBrief.Creator = await _context.UserSecretInfos.FindAsync(saveData.recipeBrief.CreatorId);
+            saveData.recipeBrief!.Creator = await _context.UserSecretInfos.FindAsync(saveData.recipeBrief.CreatorId);
             saveData.recipeBrief.RecipeClass = await _context.RecipeClasses.FindAsync(saveData.recipeBrief.RecipeClassId);
 
             if (saveData.recipeBrief.Creator == null || saveData.recipeBrief.RecipeClass == null)
@@ -663,7 +663,7 @@ namespace YumYum.Controllers
                     _context.Ingredients.Add(ingredient);
                     await _context.SaveChangesAsync();
                     Ingredient data = await _context.Ingredients.FirstOrDefaultAsync(p => p.IngredientName == saveData.ingredientNames[i] && p.AttributionId == 9);
-                    saveData.recipeIngredients[i].IngredientId = data.IngredientId;
+                    saveData.recipeIngredients[i].IngredientId = data!.IngredientId;
                 }
             }
             //存取紀錄資料與食材資料

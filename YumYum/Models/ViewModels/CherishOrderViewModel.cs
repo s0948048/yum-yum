@@ -1,32 +1,24 @@
 ﻿namespace YumYum.Models.ViewModels
 {
-	public class CherishManageViewModel
+	public class CherishOrderViewModel
 	{
 		// [訂單類]
-		// 訂單編號
+		// 惜食訂單序號
 		public int CherishId { get; set; }
-
-		// 訂單狀態碼
-		public byte TradeStateCode { get; set; }
-
 		// 使用者編號(食材提供者)
 		public int GiverUserId { get; set; }
-
+		// 上架申請日期
+		public DateOnly SubmitDate { get; set; }
 		// 數量
 		public short Quantity { get; set; }
-
 		// 截止日期
 		public DateOnly EndDate { get; set; }
-
 		// 食材來源
 		public string? ObtainSource { get; set; }
-
 		// 購買日期
 		public DateOnly ObtainDate { get; set; }
-
 		// 有效期限
 		public DateOnly? CherishValidDate { get; set; }
-
 		// 圖片路徑
 		public string? CherishPhoto { get; set; }
 
@@ -38,8 +30,10 @@
 
 		// [地區類]
 		// 縣市
+		public string? TradeCityKey { get; set; }
 		public string? CityName { get; set; }
 		// 鄉鎮市區
+		public short TradeRegionId { get; set; }
 		public string? RegionName { get; set; }
 
 		// [聯絡類]
@@ -50,12 +44,11 @@
 		public string? ContactPhone { get; set; }
 		public string? ContactOther { get; set; }
 
+		// [面交時段]
+		//public string? TradeTimeCode { get; set; }
 
-		// [審查狀態]
-		// 請修改的原因
-		public string? ReasonText { get; set; }
-
-		// 退回原因
-		public string? RejectText { get; set; }
+		// [訂單狀態類]
+		public byte TradeStateCode { get; set; }
+		public byte? ReasonId { get; set; }
 	}
 }
