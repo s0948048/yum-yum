@@ -7,6 +7,7 @@ using YumYum.Models;
 using YumYum.Models.DataTransferObject;
 using YumYum.Models.ViewModels;
 using static Azure.Core.HttpHeader;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace YumYum.Controllers
 {
@@ -102,13 +103,18 @@ namespace YumYum.Controllers
 		{
 			return View();
 		}
-		[HttpGet]
-		public async Task<IActionResult> Match()
-		{
-			ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
-			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
-			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
-			 new BreadcrumbItem("良食配對", "#") // 當前的頁面
+
+
+
+        //--------------------------   彥廷  首   -------------------------
+
+        [HttpGet]
+        public async Task<IActionResult> Match()
+        {
+            ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
+             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+             new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+             new BreadcrumbItem("良食配對", "#") // 當前的頁面
              };
 
 			ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName");
@@ -137,38 +143,57 @@ namespace YumYum.Controllers
 		}
 
 
-		[HttpPost]
-		public async Task<IActionResult> Match([FromForm] CherishMatchSearch search)
-		{
-			ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
-			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
-			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
-			 new BreadcrumbItem("良食配對", "#") // 當前的頁面
+        [HttpPost]
+        public async Task<IActionResult> Match([FromForm] CherishMatchSearch search)
+        {
+            ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
+             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+             new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+             new BreadcrumbItem("良食配對", "#") // 當前的頁面
              };
 
-			ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName");
+            if (search == null)
+            {
+                return RedirectToAction("match");
+            }
 
-			if (search == null)
-			{
-				return RedirectToAction("match");
-			}
 
-			ViewBag.selectCity = search.CityKey;
-			ViewBag.selectRegion = search.RegionId;
-			ViewBag.selectName = search.IngredientName;
+            ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName", search.CitySelect);
+
+            ViewBag.region = _context.Regions
+                    .Where(r => r.CityKey == search.CitySelect)
+                    .Select(r => new SelectListItem {
+                        Value = r.RegionId.ToString(),
+                        Text = r.RegionName,
+                        Selected = search.RegionSelect == r.RegionId
+                    })
+                    .ToList();
+
+            ViewBag.name = search.IngredientSelect;
 
 			IQueryable<CherishOrder> query = _context.CherishOrders;
 
-			if (search.CityKey != null)
-				query = query.Where(c => c.CherishOrderInfo!.TradeCityKey == search.CityKey);
+			if (search.CitySelect != null)
+				query = query.Where(c => c.CherishOrderInfo!.TradeCityKey == search.CitySelect);
 
-			if (search.RegionId > 0)
-				query = query.Where(c => c.CherishOrderInfo!.TradeRegionId == search.RegionId);
+			if (search.RegionSelect > 0)
+				query = query.Where(c => c.CherishOrderInfo!.TradeRegionId == search.RegionSelect);
 
-			if (!string.IsNullOrEmpty(search.IngredientName))
-				query = query.Where(c => c.Ingredient.IngredientName.Contains(search.IngredientName));
+			if (!string.IsNullOrEmpty(search.IngredientSelect))
+				query = query.Where(c => c.Ingredient.IngredientName.Contains(search.IngredientSelect));
+
+            if (search.CitySelect != null)
+                query = query.Where(c => c.CherishOrderInfo!.TradeCityKey == search.CitySelect);
+
+            if (search.RegionSelect > 0)
+                query = query.Where(c => c.CherishOrderInfo!.TradeRegionId == search.RegionSelect);
+
+            if (!string.IsNullOrEmpty(search.IngredientSelect))
+                query = query.Where(c => c.Ingredient.IngredientName.Contains(search.IngredientSelect));
+
 
 			var ccx = query.Include(c => c.CherishOrderInfo);
+
 
 			var chrishSearchOrders = from c in ccx
 									 select new CherishMatch
@@ -193,36 +218,40 @@ namespace YumYum.Controllers
 			return View(chrishSearchOrders.ToList());
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> ApplyCherish([FromForm] CherishOrderApplicant applicant)
-		{
-			Console.WriteLine($"{applicant.CherishId}'{applicant.ApplicantContactLine}'{applicant.ApplicantContactOther}'{applicant.ApplicantContactPhone}'{applicant.ApplicantId}");
 
-			if (applicant.ApplicantContactLine is null
-				&& applicant.ApplicantContactPhone is null
-				&& applicant.ApplicantContactOther is null)
-			{
-				return new BadRequestObjectResult(new { success = false, message = "必須傳入最少一種聯絡方式！" });
-			}
+
+        [HttpPost]
+        public async Task<IActionResult> ApplyCherish([FromForm] CherishOrderApplicant SumitUser)
+        {
+            Console.WriteLine($"{SumitUser.CherishId}'{SumitUser.ApplicantContactLine}'{SumitUser.ApplicantContactOther}'{SumitUser.ApplicantContactPhone}'{SumitUser.ApplicantId}");
+
+            if (SumitUser.ApplicantContactLine is null
+                && SumitUser.ApplicantContactPhone is null
+                && SumitUser.ApplicantContactOther is null)
+            {
+                return new BadRequestObjectResult(new { success = false, message = "必須傳入最少一種聯絡方式！" });
+            }
 
 			var aId = 3238;
 
-			var check = _context.CherishOrderApplicants.Any(o => o.CherishId == applicant.CherishId && o.ApplicantId == aId);
-			if (check)
-			{
-				return new BadRequestObjectResult(new { success = false, message = "已申請過！！" });
-			}
 
 
-			var od = new CherishOrderApplicant
-			{
-				CherishId = applicant.CherishId,
-				ApplicantId = aId,
-				UserNickname = applicant.UserNickname,
-				ApplicantContactLine = applicant.ApplicantContactLine,
-				ApplicantContactPhone = applicant.ApplicantContactPhone,
-				ApplicantContactOther = applicant.ApplicantContactOther
-			};
+            var check = _context.CherishOrderApplicants.Any(o => o.CherishId == SumitUser.CherishId && o.ApplicantId == aId);
+            if (check)
+            {
+                return new BadRequestObjectResult(new { success = false, message = "已申請過！！" });
+            }
+
+
+            var od = new CherishOrderApplicant
+            {
+                CherishId = SumitUser.CherishId,
+                ApplicantId = aId,
+                UserNickname = SumitUser.UserNickname,
+                ApplicantContactLine = SumitUser.ApplicantContactLine,
+                ApplicantContactPhone = SumitUser.ApplicantContactPhone,
+                ApplicantContactOther = SumitUser.ApplicantContactOther
+            };
 
 			await _context.CherishOrderApplicants.AddAsync(od);
 			await _context.SaveChangesAsync();
@@ -315,7 +344,79 @@ namespace YumYum.Controllers
 			return PartialView("_Partial_DetailMatch", orderDetail);
 		}
 
+        [HttpPost]
+        public async Task<IActionResult> SortCherish([FromBody]CherishFilter f)
+        {
+            IQueryable<CherishOrder> query = _context.CherishOrders;
 
+            if (f.SortAttr != null && f.SortAttr.Any())
+            {
+                query = query.Where(o => f.SortAttr.Contains(o.IngredAttributeId));
+            }
+
+            if (f.SortCont != null && f.SortCont.Any())
+            {
+                query = query.Where(o =>
+                    (f.SortCont.Contains(1) && o.CherishOrderInfo!.ContactLine != null) ||
+                    (f.SortCont.Contains(2) && o.CherishOrderInfo!.ContactPhone != null) ||
+                    (f.SortCont.Contains(3) && o.CherishOrderInfo!.ContactOther != null));
+            }
+
+            if (f.SortDay != null && f.SortDay.Any())
+            {
+                var today = DateOnly.FromDateTime(DateTime.Now);
+                query = query.Where(o =>
+                    (f.SortDay.Contains(1) && o.EndDate < today.AddDays(1)) ||
+                    (f.SortDay.Contains(2) && o.EndDate >= today.AddDays(1) && o.EndDate < today.AddDays(3)) ||
+                    (f.SortDay.Contains(3) && o.EndDate >= today.AddDays(3) && o.EndDate < today.AddDays(7)) ||
+                    (f.SortDay.Contains(4) && o.EndDate >= today.AddDays(7)));
+            }
+
+
+            if (!string.IsNullOrEmpty(f.Search.CitySelect))
+                query = query.Where(c => c.CherishOrderInfo!.TradeCityKey == f.Search.CitySelect);
+
+            if (f.Search.RegionSelect > 0)
+                query = query.Where(c => c.CherishOrderInfo!.TradeRegionId == f.Search.RegionSelect);
+
+            if (!string.IsNullOrEmpty(f.Search.IngredientSelect))
+                query = query.Where(c => c.Ingredient.IngredientName.Contains(f.Search.IngredientSelect));
+
+            query = query.Include(c => c.CherishOrderInfo);
+
+            var chrishSearchOrders = await QResult(query);
+
+            return PartialView("_Partial_Sorting", chrishSearchOrders);
+        }
+
+
+        public async Task<List<CherishMatch>> QResult(IQueryable<CherishOrder> query)
+        {
+            var _query = from c in query
+                    where c.TradeStateCode == 0
+                    orderby c.EndDate
+                    select new CherishMatch
+                    {
+                        CherishId = c.CherishId,
+                        EndDate = c.EndDate,
+                        IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+                        IngredientName = c.Ingredient.IngredientName,
+                        Quantity = c.Quantity,
+                        ObtainSource = c.ObtainSource,
+                        ObtainDate = c.ObtainDate,
+                        UserNickname = c.GiverUser.UserNickname!,
+                        CityName = c.CherishOrderInfo!.TradeCityKey,
+                        RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+                        ContactLine = c.CherishOrderInfo.ContactLine,
+                        ContactPhone = c.CherishOrderInfo.ContactPhone,
+                        ContactOther = c.CherishOrderInfo.ContactOther,
+                        CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
+                        CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
+                    };
+            return await _query.ToListAsync();
+        } 
+
+        //--------------------------   彥廷  尾   -------------------------
 
 
 

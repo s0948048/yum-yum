@@ -5,12 +5,12 @@ namespace YumYum.Models.DataTransferObject
     public class CherishMatchSearch
     {
         [FromForm(Name = "RegionSelect")]
-        public short RegionId { get; set; }
+        public short RegionSelect { get; set; }
 
         [FromForm(Name = "CitySelect")]
-        public string? CityKey { get; set; }
+        public string? CitySelect { get; set; }
 
         [FromForm(Name = "IngredientSelect")]
-        public string? IngredientName { get; set; }
+        public string? IngredientSelect { get; set; }
     }
 }
