@@ -25,14 +25,14 @@
                 <option value="">--請選擇城市--</option>
             </select>
 
-            <select name="RegionSelect" class="d-inline-block p-1" id="RegionSelect">
+            <select name="RegionSelect" class="d-inline-block p-1" id="RegionSelect" asp-items="@ViewBag.region">
                 <option value="">--請選擇地區--</option>
             </select>
         </div>
 
         <!-- 輸入文字框 -->
         <div id="searchbar-text" class="ms-2 d-inline-flex align-items-center position-relative">
-            <input class="form-text" placeholder="今天想找甚麼食材？" type="text" name="IngredientSelect" id="">
+            <input class="form-text" placeholder="今天想找甚麼食材？" type="text" name="IngredientSelect" id="" value="@(ViewBag.name)">
             <button class="ms-2" type="submit"
                     style="border: 0;border-radius: 18px; right:-1%; width:5rem ;height: 2.4rem;">
                 <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
