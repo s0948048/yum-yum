@@ -20,6 +20,7 @@
 
     public class IngredientViewModel
     {
+        public int IngredientID { get; set; }
         public string? IngredientName { get; set; }
         public string? IngredientIcon { get; set; }
         public int? AttributionID { get; set; }
