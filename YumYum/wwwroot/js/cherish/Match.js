@@ -8,6 +8,7 @@ $('#reset-left').click(function () {
 $(
     '#Ifilter input[type="checkbox"],#Cfilter input[type="checkbox"],#Dfilter input[type="checkbox"]'
 ).change(function () {
+    $(this).prev().toggleClass('selected')
     var sortAttr = [];
     var sortCont = [];
     var sortDay = [];
@@ -20,22 +21,22 @@ $(
     $('#Dfilter input[type="checkbox"]:checked').each(function (idx, ele) {
         sortDay.push(Number($(ele).val()))
     })
-    
-    var sortList = { sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay };
 
-    console.log(sortList);
-
-    $(this).prev().toggleClass('selected')
+    //console.log({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay ,search:$('#search-form').serialize()})
+    var search = { CitySelect: $('#CitySelect').val(), RegionSelect: Number($('#RegionSelect').val()), IngredientSelect: $('#IngredientSelect').val()};
 
     $.ajax({
-        url:''
+        url: '/cherish/sortcherish',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay, search:  search }),
+        success: function () {
+
+        },
+        error: function (xhr) {
+            alert(xhr);
+        }
     })
-
-
-
-
-
-
 });
 
 $('#Ifilter-active,#Cfilter-active,#Dfilter-active').change(function () {

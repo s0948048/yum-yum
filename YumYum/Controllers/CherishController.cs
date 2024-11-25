@@ -122,7 +122,6 @@ namespace YumYum.Controllers
             return View(await chrishOrders.ToListAsync());
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Match([FromForm] CherishMatchSearch search)
         {
@@ -185,7 +184,7 @@ namespace YumYum.Controllers
                                          CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
                                      };
 
-            return View(chrishSearchOrders.ToList());
+            return View(await chrishSearchOrders.ToListAsync());
         }
 
         [HttpPost]
@@ -266,7 +265,6 @@ namespace YumYum.Controllers
             return PartialView("_Partial_GiverInfo", orderDetail);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> DetailOrder(int cherishID)
         {
@@ -308,6 +306,20 @@ namespace YumYum.Controllers
                                      }).FirstAsync();
 
             return PartialView("_Partial_DetailMatch", orderDetail);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SortCherish([FromBody]CherishFilter f)
+        {
+            
+
+
+
+
+
+
+
+            return PartialView("_Partial_DetailMatch");
         }
 
 

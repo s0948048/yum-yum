@@ -12,7 +12,7 @@
 
 <!-- 搜尋列 -->
 <div id="searchbar" class=" mt-2 mb-2">
-    <form method="post" class="d-flex justify-content-center align-items-center position-relative">
+    <form method="post" class="d-flex justify-content-center align-items-center position-relative" id="search-form">
         <!-- 地區 -->
         <div id="searchbar-addr" class="d-flex">
             <label>
@@ -32,7 +32,7 @@
 
         <!-- 輸入文字框 -->
         <div id="searchbar-text" class="ms-2 d-inline-flex align-items-center position-relative">
-            <input class="form-text" placeholder="今天想找甚麼食材？" type="text" name="IngredientSelect" id="" value="@(ViewBag.name)">
+            <input class="form-text" placeholder="今天想找甚麼食材？" type="text" name="IngredientSelect" id="IngredientSelect" value="@(ViewBag.name)">
             <button class="ms-2" type="submit"
                     style="border: 0;border-radius: 18px; right:-1%; width:5rem ;height: 2.4rem;">
                 <svg width="24" height="24" viewBox="0 0 28 28" fill="none">

@@ -111,15 +111,15 @@
         @{
             if (c.ContactLine is not null)
             {
-                <span class="ps-0 my-0 me-3"><span class="m-0 me-1 d-inline-block"><img src="~/img/icon/line.svg" width="20px" height="20px" /></span>Line</span>
+                <span class="ps-0 my-0 me-3"><span class="m-0 me-1 d-inline-block"><img src="~/img/icon/line.svg" width="20px" height="20px" /></span>@c.ContactLine</span>
             }
             if (c.ContactPhone is not null)
             {
-                <span class="ps-0 my-0 me-3"><span class="m-0 me-1 d-inline-block"><img src="~/img/icon/phone.svg" width="20px" height="20px" /></span>Phone</span>
+                <span class="ps-0 my-0 me-3"><span class="m-0 me-1 d-inline-block"><img src="~/img/icon/phone.svg" width="20px" height="20px" /></span>@c.ContactPhone</span>
             }
             if (c.ContactOther is not null)
             {
-                <span class="ps-0 my-0 me-3"><p class="m-0 me-1 d-inline-block"><img src="~/img/icon/contacts.svg" width="20px" height="20px" /></p>Other</span>
+                <span class="ps-0 my-0 me-3"><p class="m-0 me-1 d-inline-block"><img src="~/img/icon/contacts.svg" width="20px" height="20px" /></p>@c.ContactOther</span>
             }
         }
 
