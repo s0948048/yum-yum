@@ -53,7 +53,7 @@ namespace YumYum.Controllers
 		public IActionResult ShowOrder(int userId)
 		{
 			var query = from o in _context.CherishOrders
-						where o.GiverUserId == userId
+						where o.GiverUserId == userId && o.TradeStateCode != 5
 						orderby o.SubmitDate descending
 						select new CherishOrderViewModel
 						{
@@ -100,13 +100,14 @@ namespace YumYum.Controllers
 			var query = from o in _context.CherishOrders
 						where o.CherishId == orderId
 						select o;
+			var data = query.Single();
 
-			if (query.Single().TradeStateCode == 0)
+			if (data.TradeStateCode == 0)
 			{
-				query.Single().TradeStateCode = 5;
-				_context.Update(query.Single());
+				data.TradeStateCode = 5;
+				_context.Update(data);
 				await _context.SaveChangesAsync();
-				return RedirectToAction("Manage");
+				return RedirectToAction("Manage", "Cherish");// bug 頁面沒刷新
 			}
 			return NotFound();
 		}
@@ -200,8 +201,8 @@ namespace YumYum.Controllers
 			return Json(new { success = true, message = "申請成功!" });
 		}
 
-        // 2024-11-25 
-        [HttpPost]
+		// 2024-11-25 
+		[HttpPost]
 		public async Task<IActionResult> ContactOrder(int cherishID)
 		{
 			// 這裡是面交時間
@@ -244,8 +245,8 @@ namespace YumYum.Controllers
 		}
 
 
-        // 2024-11-25 
-        [HttpGet]
+		// 2024-11-25 
+		[HttpGet]
 		public async Task<IActionResult> DetailOrder(int cherishID)
 		{
 
@@ -289,8 +290,8 @@ namespace YumYum.Controllers
 			return PartialView("_Partial_DetailMatch", orderDetail);
 		}
 
-        // 2024-11-25 
-        [HttpPost]
+		// 2024-11-25 
+		[HttpPost]
 		public async Task<IActionResult> SortCherish([FromBody] CherishFilter f)
 		{
 			IQueryable<CherishOrder> query = _context.CherishOrders;
