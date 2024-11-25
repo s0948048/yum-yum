@@ -100,9 +100,11 @@
 				<div class="fw-500">已上架</div>
 				<label for="hid-3" class="col-9 btn my-button set-fs mt-3">上架中</label>
 				<input type="checkbox" id="hid-3" name="" value="" hidden>
+				@*
 				<br>
 				<label for="hid-4" class="col-9 btn my-button set-fs mt-3">待上架</label>
 				<input type="checkbox" id="hid-4" name="" value="" hidden>
+				*@
 			</div>
 		</div>
 	</div>
@@ -192,12 +194,16 @@
 			</div>
 		</div>
 
-		@await Html.PartialAsync("_PartialOrder")
+		@* 良食資料 *@
+		<div id="result-div">
+			@await Html.PartialAsync("_PartialOrder")
+		</div>
+
 	</div>
 
 </div>
 <!-- 頁次及分頁 -->
-<!--
+@*
 <div class="d-flex justify-content-center">
 	<nav class="mt-4">
 		<ul class="pagination">
@@ -209,26 +215,56 @@
 		</ul>
 	</nav>
 </div>
- -->
+*@
+
 @section Scripts {
 	<script>
-		console.log("frog");
+		// console.log("frog");
 
 		// 使用 jQuery 來接收觸發按鈕傳遞的資料，並更新 modal 內容
-		$('#sendout-modal').on('shown.bs.modal', function (event) {
-			var button = $(event.relatedTarget); // 觸發的按鈕
-			console.log("frog");
-			console.log(button.data('config'));
-			var orderId = button.data('order-id'); // 從 data-* 屬性中取得訂單序號
-			var orderItem = button.data('config'); // 從 data-* 屬性中取得食材名稱
-			var orderState = button.data('order-state'); // 從 data-* 屬性中取得訂單狀態
+		$('#result-div').on('click', '.sendout', function (event) {
+			var button = $(this); // 觸發的按鈕
+			var result = $(this).parent().parent();
+			var orderId = result.find('.order-id').text();
+			var orderItem = result.find('.order-item').text();
+			var orderState = result.find('.order-state').text();
 
-			var modal = $(this);
-			modal.find('.modal-header h5').text('orderItem');
-			modal.find('.modal-footer submit').on('click', function () {
+			console.log(orderId);
+			console.log(orderItem);
+			console.log(orderState);
+
+			var modal = $('#sendout-modal');
+			modal.find('.modal-header .id').text(orderId);
+			modal.find('.modal-header h5').text(orderItem);
+			modal.find('.modal-header .state').text(orderState);
+			modal.find('.modal-footer .submit').on('click', function () {
 				// 執行更新訂單資料的操作，例如發送 AJAX 請求
-				console.log("orderId" + "orderItem" + "orderState")
-				// updateOrder(orderId);  呼叫更新訂單的函數，這裡的 updateOrder 是示例函數
+				// console.log(orderId + orderItem + orderState)
+
+				// 取得表單資料
+
+				// 用 Ajax 發送請求更新資料庫
+				$.ajax({
+					url: '/Cherish/UpdateOrder', // 這裡是你的後端控制器 URL
+					method: 'POST',
+					data: {
+						CherishId: orderId,
+						TradeStateCode: 5
+					},
+					success: function (response) {
+						if (response.success) {
+							// 資料更新成功，關閉 modal 並顯示成功消息
+							$(modal).modal('hide');
+							alert('訂單已更新！');
+							// 可以重新加載或更新頁面顯示的訂單資料
+						} else {
+							alert('更新失敗，請稍後再試！');
+						}
+					},
+					error: function () {
+						alert('發生錯誤，請稍後再試！');
+					}
+				});
 			});
 		});
 	</script>

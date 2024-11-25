@@ -232,33 +232,6 @@
                                             </div>
                                         </div>
 
-                                    @* <table >
-                                        <tr>
-                                            <th class="p-2">星期一</th>
-                                            <td class="p-2">上午 下午</td>
-                                            <th class="p-2">星期五</th>
-                                            <td class="p-2">上午 晚上</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="p-2">星期二</th>
-                                            <td class="p-2">上午 下午</td>
-                                            <th class="p-2">星期六</th>
-                                            <td class="p-2">上午 晚上</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="p-2">星期三</th>
-                                            <td class="p-2">上午 下午</td>
-                                            <th class="p-2">星期日</th>
-                                            <td class="p-2">上午 晚上</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="p-2">星期四</th>
-                                            <td class="p-2">上午 下午</td>
-                                            <th class="p-2">&nbsp;</th>
-                                            <td class="p-2">&nbsp;</td>
-                                        </tr>
-                                    </table> *@
-
                                 </div>
                             </div>
 
@@ -284,7 +257,7 @@
                                         <img src="/img/icon/phone.svg" style="width: 20px; height: 20px;" alt="phone">
 
                                         <!-- Label -->
-                                        <label for="ContactPhone" class="form-label ms-1">電話號碼</label>
+                                        <label for="ContactPhone" class="form-label ms-1">電話</label>
                                     </div>
 
                                     <input class="form-control" 
@@ -311,15 +284,16 @@
 
                                 </div>
                             </div>
-
-                            <!-- 返回按鈕 -->
-                            <div class="row justify-content-center my-4">
-                            <div class="col-2 text-center">
-                            <a class="btn my-button text-white" href="@Url.Action("MatchHistoryOthers", "Cherish")">
-                            返回
-                            </a>
-                            </div>
-                            </div>
+                                <!-- 返回按鈕 -->
+                                <div>
+                                    
+                                    <!-- 返回按鈕 -->
+                                    <div class="max-width:50% d-flex align-content-center">
+                                        <a class="btn back-btn mt-3 mb-3" href="@Url.Action("MatchHistory", "Cherish")">
+                                            返回
+                                        </a>
+                                    </div>
+                                </div>
 
 
 
@@ -336,11 +310,11 @@
         <!-- 無資料時顯示 -->
         <h5 class="fw-bold d-inline-block">還沒有人認領~請耐心等候~</h5>
         <!-- 返回按鈕 -->
-        <div class="row justify-content-center my-4">
+            <div class="row justify-content-center my-4">
             <div class="col-2 text-center">
-                <a class="btn my-button text-white" href="@Url.Action("MatchHistory", "Cherish")">
-                    返回
-                </a>
+                    <a class="btn back-btn mb-3" href="@Url.Action("MatchHistory", "Cherish")">
+                        返回
+                    </a>
             </div>
         </div>
         }

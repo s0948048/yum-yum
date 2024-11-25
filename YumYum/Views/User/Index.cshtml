@@ -1,6 +1,8 @@
 ﻿@* @using YumYum.Models; *@
 @model YumYum.Models.ViewModels.RecipeAllUser
 
+@await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
+
 @section Scripts {
 	<script type="text/javascript">
 		$(document).ready(function () { $("#btn-edit").click(function () { window.location.href = '@Url.Action("EditInfo", "User")'; }); });</script>

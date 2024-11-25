@@ -43,5 +43,11 @@
         public string? CherishPhoto { get; set; }
 
         public DateOnly? CherishValidDate { get; set; }
-    }
+
+		public string? HeadShot { get; set; }
+
+
+		// 新增屬性
+		public bool IsMine { get; set; } // true 表示是 "我的食材"，false 表示是 "別人的食材"
+	}
 }
