@@ -114,11 +114,27 @@ namespace YumYum.Controllers
 
 		public IActionResult ManageAdd()
 		{
+			// 設定 Breadcrumb
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+			 new BreadcrumbItem("管理良食", Url.Action("Manage", "Cherish") ?? "#"),
+			 new BreadcrumbItem("新增良食", "#") // 當前的頁面
+             };
+
 			return View();
 		}
 
 		public IActionResult ManageEdit()
 		{
+			// 設定 Breadcrumb
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
+			 new BreadcrumbItem("管理良食", Url.Action("Manage", "Cherish") ?? "#"),
+			 new BreadcrumbItem("編輯良食", "#") // 當前的頁面
+             };
+
 			return View();
 		}
 
@@ -693,27 +709,15 @@ namespace YumYum.Controllers
 						 select o;
 			ViewBag.RegionList = region;
 
-			// 先抓到該筆訂單or該預設聯絡資訊的所有面交時段
-			//var timeSpan = await (from o in _context.CherishDefaultTimeSets
-			//					  where o.GiverUserId == userId
-			//					  select o).ToListAsync();
-
-			// 進行篩選，並傳遞給ViewBag
-			//ViewBag.Mon = timeSpan.Where(o => o.TradeTimeCode.Contains("Mon"));
-			//ViewBag.Tue = timeSpan.Where(o => o.TradeTimeCode.Contains("Tue"));
-			//ViewBag.Wes = timeSpan.Where(o => o.TradeTimeCode.Contains("Wes"));
-			//ViewBag.Thr = timeSpan.Where(o => o.TradeTimeCode.Contains("Thr"));
-			//ViewBag.Fri = timeSpan.Where(o => o.TradeTimeCode.Contains("Fri"));
-			//ViewBag.Sat = timeSpan.Where(o => o.TradeTimeCode.Contains("Sat"));
-			//ViewBag.Sun = timeSpan.Where(o => o.TradeTimeCode.Contains("Sun"));
-
-			// =========================================================
-
+			//var query = _context.UserSecretInfos.FindAsync(userId);
+			//if (query == null)
+			//{
+			//	return NotFound();
+			//}
 			if (userId == null)
 			{
 				return NotFound();
 			}
-
 			var contact = from o in _context.CherishDefaultInfos
 						  where o.GiverUserId == userId
 						  select new CherishContactViewModel
@@ -729,10 +733,6 @@ namespace YumYum.Controllers
 							  ContactOther = o.ContactOther,
 						  };
 
-			if (contact == null)
-			{
-				return NotFound();
-			}
 			return View(contact.Single());
 		}
 
@@ -772,7 +772,33 @@ namespace YumYum.Controllers
 			return PartialView("_PartialRegion", regions);
 		}
 
+		public Dictionary<string, string> GetDay()
+		{
+			// 星期幾 Key-Value Pair
+			Dictionary<string, string> day = new Dictionary<string, string>
+			{
+				{"Mon","星期一" },
+				{"Tue","星期二" },
+				{"Wes","星期三" },
+				{"Thr","星期四" },
+				{"Fri","星期五" },
+				{"Sat","星期六" },
+				{"Sun","星期日" }
+			};
+			return day;
+		}
 
+		public Dictionary<int, string> GetTime()
+		{
+			// 時段 Key-Value Pair
+			Dictionary<int, string> time = new Dictionary<int, string>
+			{
+				{ 1, "早上" },
+				{ 2, "下午" },
+				{ 3, "晚上" }
+			};
+			return time;
+		}
 
 
 		//[HttpPost]
