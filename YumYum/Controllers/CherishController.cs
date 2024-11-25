@@ -709,6 +709,10 @@ namespace YumYum.Controllers
 						 select o;
 			ViewBag.RegionList = region;
 
+			ViewBag.Days = GetDay();
+			ViewBag.Times = GetTime();
+			ViewBag.TradeTimes = GetTradeTime((int)userId);
+
 			//var query = _context.UserSecretInfos.FindAsync(userId);
 			//if (query == null)
 			//{
@@ -737,16 +741,8 @@ namespace YumYum.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> ContactInformation(int id, [FromForm] CherishDefaultInfo user)
+		public async Task<IActionResult> ContactInformation([FromForm] CherishDefaultInfo user)
 		{
-			//var x = _context.CherishDefaultInfos.Where(o => o.GiverUserId == user.GiverUserId).First();
-			//x.
-			//x.ContactLine = user.ContactLine;
-
-			if (id != user.GiverUserId)
-			{
-				return NotFound();
-			}
 			_context.Update(user);
 
 			await _context.SaveChangesAsync();
@@ -800,6 +796,15 @@ namespace YumYum.Controllers
 			return time;
 		}
 
+		public List<CherishDefaultTimeSet> GetTradeTime(int userId)
+		{
+			var query = from o in _context.CherishDefaultTimeSets
+						where o.GiverUserId == userId
+						select o;
+			var result = query.ToList();
+
+			return result;
+		}
 
 		//[HttpPost]
 		//public IActionResult MatchSort([FromForm] CherishMatchSearch search)

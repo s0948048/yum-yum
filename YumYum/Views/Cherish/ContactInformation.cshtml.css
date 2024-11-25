@@ -38,3 +38,9 @@ svg {
     border-color: var(--yum-primary-2);
     box-shadow: 0 0 0 0.2rem var(--yum-primary-3);
 }
+
+.validation {
+    font-size: 1rem;
+    color: var(--yum-secondary-1);
+    font-weight: 500;
+}
