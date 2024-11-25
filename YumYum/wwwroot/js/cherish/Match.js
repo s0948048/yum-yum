@@ -6,7 +6,7 @@ $('#reset-left').click(function () {
 
 
 $(
-    '#Ifilter input[type="checkbox"],#Cfilter input[type="checkbox"],#Dfilter input[type="checkbox"]'
+    '#Ifilter input[type="checkbox"],#Cfilter input[type="checkbox"],#Dfilter input[type="checkbox"],#CitySelect,#RegionSelect,#IngredientSelect'
 ).change(function () {
     $(this).prev().toggleClass('selected')
     var sortAttr = [];
@@ -23,26 +23,20 @@ $(
     })
 
     //console.log({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay ,search:$('#search-form').serialize()})
-<<<<<<< HEAD
+
     var Search = { CitySelect: $('#CitySelect').val(), RegionSelect: Number($('#RegionSelect').val()), IngredientSelect: $('#IngredientSelect').val()};
-=======
-    var search = { CitySelect: $('#CitySelect').val(), RegionSelect: Number($('#RegionSelect').val()), IngredientSelect: $('#IngredientSelect').val()};
->>>>>>> cherish
+
 
     $.ajax({
         url: '/cherish/sortcherish',
         method: 'POST',
         contentType: 'application/json',
-<<<<<<< HEAD
+
         data: JSON.stringify({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay, Search:  Search }),
         success: function (data) {
             console.log(data);
             $('#insert-result').html(data);
-=======
-        data: JSON.stringify({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay, search:  search }),
-        success: function () {
 
->>>>>>> cherish
         },
         error: function (xhr) {
             alert(xhr);

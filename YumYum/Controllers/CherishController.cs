@@ -273,7 +273,8 @@ namespace YumYum.Controllers
 			return Json(new { success = true, message = "申請成功!" });
 		}
 
-		[HttpPost]
+        // 2024-11-25 
+        [HttpPost]
 		public async Task<IActionResult> ContactOrder(int cherishID)
 		{
 			// 這裡是面交時間
@@ -316,7 +317,8 @@ namespace YumYum.Controllers
 		}
 
 
-		[HttpGet]
+        // 2024-11-25 
+        [HttpGet]
 		public async Task<IActionResult> DetailOrder(int cherishID)
 		{
 
@@ -360,7 +362,8 @@ namespace YumYum.Controllers
 			return PartialView("_Partial_DetailMatch", orderDetail);
 		}
 
-		[HttpPost]
+        // 2024-11-25 
+        [HttpPost]
 		public async Task<IActionResult> SortCherish([FromBody] CherishFilter f)
 		{
 			IQueryable<CherishOrder> query = _context.CherishOrders;
@@ -406,7 +409,7 @@ namespace YumYum.Controllers
 			return PartialView("_Partial_Sorting", chrishSearchOrders);
 		}
 
-
+		// 2024-11-25 
 		public async Task<List<CherishMatch>> QResult(IQueryable<CherishOrder> query)
 		{
 			var _query = from c in query
