@@ -30,7 +30,7 @@ namespace YumYum.Controllers
         public IActionResult Edit()
         {
             var fridgeItemData = GetFridgeItemData();
-            var ingredientData = GetIngredientData(userId: 3204);
+            var ingredientData = GetIngredientData(userId: null);
             var ingredAttributeData = GetIngredAttributeData();
 
             var viewModel = new FridgeViewModel
