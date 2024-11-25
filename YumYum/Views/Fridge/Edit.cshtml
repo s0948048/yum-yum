@@ -39,7 +39,7 @@
             <p>此區記錄份量，有效日期</p>
 
             <!-- Item List -->
-            <form asp-action="UpdateRefrigeratorStore" method="post">
+            <form id="updateForm" asp-action="UpdateRefrigeratorStore" method="post">
                 <div class="item-list mb-4">
                     @foreach (var item in Model.RefrigeratorData!)
                     {
@@ -47,9 +47,10 @@
                             <input type="hidden" name="RefrigeratorItems.Index" value="@item.StoreID" />
                             <input type="hidden" name="RefrigeratorItems[@item.StoreID].StoreID" value="@item.StoreID" />
                             <input type="hidden" name="RefrigeratorItems[@item.StoreID].UserID" value="@item.UserID" />
+                            <input type="hidden" name="RefrigeratorItems[@item.StoreID].IngredientID" value="@item.IngredientID" />
 
                             <div class="col-md-3 col-4">
-                                <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                                <button class="tag-button d-inline-flex align-items-center btn btn-tags" disabled>
                                     <img src="@Url.Content($"~{item.IngredientIcon}")" alt="" />
                                     <span>@item.IngredientName</span>
                                 </button>
