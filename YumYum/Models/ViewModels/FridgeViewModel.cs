@@ -11,6 +11,7 @@
     {
         public int StoreID { get; set; }
         public int UserID { get; set; }
+        public int IngredientID { get; set; }
         public string? IngredientName { get; set; }
         public string? IngredientIcon { get; set; }
         public string? Quantity { get; set; }
