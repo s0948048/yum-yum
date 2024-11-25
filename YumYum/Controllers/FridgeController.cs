@@ -151,6 +151,7 @@ namespace YumYum.Controllers
                     }).ToList();
         }
 
+        // Get left Ingredient/tag button list, filter if needed
         private List<IngredientViewModel> GetIngredientData(int? userId = null)
         {
             var ingredientsQuery = _context.Ingredients.AsQueryable();
@@ -170,6 +171,7 @@ namespace YumYum.Controllers
             }).ToList();
         }
 
+        // Get offcanvas IngredAttributes for filtering
         private List<IngredAttributeViewModel> GetIngredAttributeData()
         {
             return (from ia in _context.IngredAttributes
