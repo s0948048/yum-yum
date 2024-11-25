@@ -329,6 +329,9 @@ namespace YumYum.Controllers
 
 
 
+
+        [HttpGet]
+        [Route("Cherish/MatchHistory")]
         public async Task<IActionResult> MatchHistory()
         {
             // 設定 Breadcrumb
@@ -359,49 +362,116 @@ namespace YumYum.Controllers
                                    ContactPhone = c.CherishOrderInfo.ContactPhone,
                                    ContactOther = c.CherishOrderInfo.ContactOther,
                                    CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
-                                   CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
+                                   CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value,
+                                   IsMine = c.GiverUserId == userId // 判斷是否是 "我的食材"
                                };
 
             return View(await chrishOrders.ToListAsync());
         }
-        public async Task<IActionResult> MatchHistoryOthers()
+
+
+        [HttpGet]
+        [Route("Cherish/MatchHistorySearch")]
+        public async Task<IActionResult> MatchHistorySearch(string query)
         {
-            // 設定 Breadcrumb
-            ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
-             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
-             new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
-             new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryOthers", "Cherish") ?? "#"),
-             new BreadcrumbItem("別人的食材", "#") // 當前的頁面
-             };
-            int userId = 3201;
-            var chrishOrders = from c in _context.CherishOrders
-                               join coa in _context.CherishOrderApplicants
-                               on c.CherishId equals coa.CherishId
-                               where coa.ApplicantId == userId
-                               select new MatchHistory
-                               {
+            int userId = 3201; // 假設的使用者 ID
 
-                                   ApplicantId = coa.ApplicantId,
-                                   CherishId = c.CherishId,
-                                   GiverUserId = c.GiverUserId,
-                                   EndDate = c.EndDate,
-                                   IngredAttributeName = c.IngredAttribute.IngredAttributeName,
-                                   IngredientName = c.Ingredient.IngredientName,
-                                   Quantity = c.Quantity,
-                                   ObtainSource = c.ObtainSource,
-                                   ObtainDate = c.ObtainDate,
-                                   UserNickname = c.GiverUser.UserNickname!,
-                                   CityName = c.CherishOrderInfo!.TradeCityKey,
-                                   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
-                                   ContactLine = c.CherishOrderInfo.ContactLine,
-                                   ContactPhone = c.CherishOrderInfo.ContactPhone,
-                                   ContactOther = c.CherishOrderInfo.ContactOther,
-                                   CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
-                                   CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
-                               };
+            // 根據查詢條件篩選數據
+            var results = from c in _context.CherishOrders
+                          join ig in _context.Ingredients
+                          on c.IngredientId equals ig.IngredientId
+                          where c.GiverUserId == userId &&
+                                (string.IsNullOrEmpty(query) ||
+                                 ig.IngredientName.Contains(query)) // 查詢食材名稱中包含 query
+                          select new MatchHistory
+                          {
+                              CherishId = c.CherishId,
+                              GiverUserId = c.GiverUserId,
+                              EndDate = c.EndDate,
+                              IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+                              IngredientName = ig.IngredientName,
+                              Quantity = c.Quantity,
+                              ObtainSource = c.ObtainSource,
+                              ObtainDate = c.ObtainDate,
+                              UserNickname = c.GiverUser.UserNickname!,
+                              CityName = c.CherishOrderInfo!.TradeCityKey,
+                              RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+                              ContactLine = c.CherishOrderInfo.ContactLine,
+                              ContactPhone = c.CherishOrderInfo.ContactPhone,
+                              ContactOther = c.CherishOrderInfo.ContactOther,
+                              CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
+                              CherishValidDate = c.CherishOrderCheck.CherishValidDate,
+                              IsMine = c.GiverUserId == userId // 判斷是否是 "我的食材"
+                          };
 
-            return View(await chrishOrders.ToListAsync());
+            return PartialView("_MatchHistorySearchResults", await results.ToListAsync());
         }
+
+        public async Task<IActionResult> FilterMatchHistory(int filterType)
+        {
+            int userId = 3201; // 替換成當前登入的使用者 ID
+            IQueryable<MatchHistory> matchHistories;
+
+            if (filterType == 1) // 我的食材
+            {
+                matchHistories = from c in _context.CherishOrders
+                                 where c.GiverUserId == userId
+                                 select new MatchHistory
+                                 {
+                                     CherishId = c.CherishId,
+                                     GiverUserId = c.GiverUserId,
+                                     EndDate = c.EndDate,
+                                     IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+                                     IngredientName = c.Ingredient.IngredientName,
+                                     Quantity = c.Quantity,
+                                     ObtainSource = c.ObtainSource,
+                                     ObtainDate = c.ObtainDate,
+                                     UserNickname = c.GiverUser.UserNickname!,
+                                     CityName = c.CherishOrderInfo!.TradeCityKey,
+                                     RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+                                     ContactLine = c.CherishOrderInfo.ContactLine,
+                                     ContactPhone = c.CherishOrderInfo.ContactPhone,
+                                     ContactOther = c.CherishOrderInfo.ContactOther,
+                                     CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
+                                     CherishValidDate = c.CherishOrderCheck.CherishValidDate
+                                 };
+            }
+            else if (filterType == 2) // 別人的食材
+            {
+                matchHistories = from c in _context.CherishOrders
+                                 join coa in _context.CherishOrderApplicants
+                                 on c.CherishId equals coa.CherishId
+                                 where coa.ApplicantId == userId
+                                 select new MatchHistory
+                                 {
+                                     ApplicantId = coa.ApplicantId,
+                                     CherishId = c.CherishId,
+                                     GiverUserId = c.GiverUserId,
+                                     EndDate = c.EndDate,
+                                     IngredAttributeName = c.IngredAttribute.IngredAttributeName,
+                                     IngredientName = c.Ingredient.IngredientName,
+                                     Quantity = c.Quantity,
+                                     ObtainSource = c.ObtainSource,
+                                     ObtainDate = c.ObtainDate,
+                                     UserNickname = c.GiverUser.UserNickname!,
+                                     CityName = c.CherishOrderInfo!.TradeCityKey,
+                                     RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
+                                     ContactLine = c.CherishOrderInfo.ContactLine,
+                                     ContactPhone = c.CherishOrderInfo.ContactPhone,
+                                     ContactOther = c.CherishOrderInfo.ContactOther,
+                                     CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
+                                     CherishValidDate = c.CherishOrderCheck.CherishValidDate
+                                 };
+            }
+            else
+            {
+                return BadRequest("Invalid filter type.");
+            }
+
+            var results = await matchHistories.ToListAsync();
+            return PartialView("_MatchHistorySearchResults", results); // 返回部分視圖
+        }
+
 
         [Route("Cherish/MatchHistoryMineInfo/{cherishId}")]
         public async Task<IActionResult> MatchHistoryMineInfo(int cherishId)
@@ -410,7 +480,7 @@ namespace YumYum.Controllers
             ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
              new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
              new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
-             new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryMine", "Cherish") ?? "#"),
+             new BreadcrumbItem("配對紀錄", Url.Action("MatchHistory", "Cherish") ?? "#"),
              new BreadcrumbItem("我的食材", "#") // 當前的頁面
              };
 
@@ -418,6 +488,8 @@ namespace YumYum.Controllers
             var chrishOrders = from c in _context.CherishOrders
                                join coa in _context.CherishOrderApplicants
                                on c.CherishId equals coa.CherishId
+                               join ub in _context.UserBios
+                               on coa.ApplicantId equals ub.UserId
                                where c.GiverUserId == userId && c.CherishId == cherishId
                                select new MatchHistory
                                {
@@ -440,7 +512,8 @@ namespace YumYum.Controllers
                                    ContactPhone = c.CherishOrderInfo.ContactPhone,
                                    ContactOther = c.CherishOrderInfo.ContactOther,
                                    CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
-                                   CherishValidDate = c.CherishOrderCheck.CherishValidDate
+                                   CherishValidDate = c.CherishOrderCheck.CherishValidDate,
+                                   HeadShot = ub.HeadShot
                                };
 
             var list = await chrishOrders.ToListAsync();
@@ -454,6 +527,7 @@ namespace YumYum.Controllers
             return View(list);
         }
 
+
         [Route("Cherish/MatchHistoryOthersInfo/{cherishId}")]
         public async Task<IActionResult> MatchHistoryOthersInfo(int cherishId)
         {
@@ -462,7 +536,7 @@ namespace YumYum.Controllers
             ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
              new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
              new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
-             new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryOthers", "Cherish") ?? "#"),
+             new BreadcrumbItem("配對紀錄", Url.Action("MatchHistory", "Cherish") ?? "#"),
              new BreadcrumbItem("別人的食材", "#") // 當前的頁面
              };
 
@@ -508,12 +582,12 @@ namespace YumYum.Controllers
                                    CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
                                };
 
-
-
-
-
             return View(await chrishOrders.ToListAsync());
         }
+
+
+
+
 
         [HttpGet]
         public IActionResult ContactInformation()
