@@ -1,23 +1,25 @@
 ﻿@model YumYum.Models.ViewModels.UserViewModel
 
+@await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
+
 <form action="Upload" method="post" enctype="multipart/form-data" hidden>
 	<input type="file" name="file" onchange="javascript:this.form.submit();" id="avatar-upload">
 </form>
 
-<div style="text-align:center" id="user-avatar">
+<div style="text-align:center" id="user-avatar" class="mb-3">
 	@if (@Model?.HeadShot != null)
 	{
-		<img class="rounded-circle" alt="photo" src="@(@Model?.HeadShot)" height="150" width="150" />
+		<img class="rounded-circle" alt="photo" src="@(@Model?.HeadShot)" height="200" width="200" />
 	}
 	else
 	{
 		@* camera *@
-		<svg height="150" width="150" class="mb-3">
+		<svg height="200" width="200" class="mb-3">
 			@* <circle r="70" cx="75" cy="75" fill="var(--yum-primary-3)" /> *@
-			<image x="0" y="0" width="150" height="150" href="/img/icon/EmptyAvatar.svg" />
+			<image x="0" y="0" width="200" height="200" href="/img/icon/EmptyAvatar.svg" />
 		</svg>
 	}
-	<p class="fw-400">此處會顯示在個人頁面的簡介中，可與其他廚友分享你的相關資訊</p>
+	<p class="fw-400 mt-5">此處會顯示在個人頁面的簡介中，可與其他廚友分享你的相關資訊</p>
 </div>
 <div>
 	<div class="card" style="align-items:center;">

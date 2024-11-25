@@ -26,8 +26,8 @@ namespace YumYum.Controllers
         //健誠
         public async Task<IActionResult> Index()
         {
-            //int? userId = HttpContext.Session.GetInt32("userId");
-            int? userId = 3204;
+            int? userId = HttpContext.Session.GetInt32("userId");
+            //int? userId = 3204;
 
             // 查詢所有食材
             var ingredientQuery = from ingredient in await _context.Ingredients.ToListAsync()

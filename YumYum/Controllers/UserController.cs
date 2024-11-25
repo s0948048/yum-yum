@@ -30,9 +30,16 @@ namespace YumYum.Controllers
             int? foreignUserId = 3205;
 
             ViewBag.foreignUserId = foreignUserId;
-            //int? userId = 3205;
+			//int? userId = 3205;
 
-            var userQuery = from user in _context.UserBios
+			// 設定Breadcrumb 顯示頁面資訊
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>
+			 {
+			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+			 new BreadcrumbItem("會員專區", "#") // 目前的頁面
+             };
+
+			var userQuery = from user in _context.UserBios
                             join userNickname in _context.UserSecretInfos
                             on user.UserId equals userNickname.UserId
                             where user.UserId == userId
@@ -94,6 +101,13 @@ namespace YumYum.Controllers
 		[HttpGet]
 		public async Task<IActionResult> EditInfo()
 		{
+			// 設定Breadcrumb 顯示頁面資訊
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>
+			 {
+			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+			 new BreadcrumbItem("會員專區", Url.Action("Index", "User") ?? "#"),
+			 new BreadcrumbItem("編輯簡介", "#") // 目前的頁面
+             };
 			int? userId = HttpContext.Session.GetInt32("userId");
 			//int? userId = 3207;//for test
 			UserSecretInfo? userSecretInfo = await _context.UserSecretInfos.Where(p => p.UserId == userId).FirstOrDefaultAsync();
