@@ -23,16 +23,26 @@ $(
     })
 
     //console.log({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay ,search:$('#search-form').serialize()})
+<<<<<<< HEAD
     var Search = { CitySelect: $('#CitySelect').val(), RegionSelect: Number($('#RegionSelect').val()), IngredientSelect: $('#IngredientSelect').val()};
+=======
+    var search = { CitySelect: $('#CitySelect').val(), RegionSelect: Number($('#RegionSelect').val()), IngredientSelect: $('#IngredientSelect').val()};
+>>>>>>> cherish
 
     $.ajax({
         url: '/cherish/sortcherish',
         method: 'POST',
         contentType: 'application/json',
+<<<<<<< HEAD
         data: JSON.stringify({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay, Search:  Search }),
         success: function (data) {
             console.log(data);
             $('#insert-result').html(data);
+=======
+        data: JSON.stringify({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay, search:  search }),
+        success: function () {
+
+>>>>>>> cherish
         },
         error: function (xhr) {
             alert(xhr);
