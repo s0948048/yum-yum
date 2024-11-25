@@ -1,5 +1,4 @@
 ﻿@model YumYum.Models.ViewModels.RecipeAllUser
-@* @model IEnumerable<dynamic> *@
 
 @foreach (var card in Model.recipeQueryViewModel)
 {
@@ -11,11 +10,11 @@
 				@foreach (var item in Model.recipeDetailQuery)
 				{
 					if (card.RecipeId == item.RecipeId)
-					{	
+					{
 						<text> @(item.IngredientName)</text>
-					}					
+					}
 				}
-			</p>			
+			</p>
 			<p class="card-text fs-6">@(card.FinishMinute)分鐘</p>
 		</div>
 	</div>

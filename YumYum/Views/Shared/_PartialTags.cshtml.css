@@ -1,44 +1,14 @@
-﻿h1, p, h5 {
-    color: var(--yum-primary-2);
+﻿div > .btn-tags {
+    background-color: var( --yum-secondary-3) !important;
+    border-color: var(--yum-primary-3) !important;
+    border-radius: 30px !important;
+    color: var(--yum-primary-2) !important;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2) !important;
+    transition: 0.3s !important;
 }
 
-#btn-select {
-    background-color: var( --yum-secondary-1);
-    border-color: var( --yum-secondary-1);
-    border-radius: 25px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-}
-
-.btn-tags {
-    background-color: var( --yum-secondary-3);
-    border-color: var(--yum-primary-3);
-    border-radius: 30px;
-    color: var(--yum-primary-2);
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-}
-
-    .btn-tags:hover {
-        background-color: var(--yum-primary-3);
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-        transition: 0.3s;
+div > .btn-tags:hover {
+        background-color: var(--yum-primary-3) !important;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2) !important;
+        transition: 0.3s !important;
     }
-
-.contentcard {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-}
-
-    .contentcard:hover {
-        box-shadow: 0 16px 32px 0 rgba(0,0,0,0.2);
-    }
-
-.offcanvas-body {
-    background-color: var(--yum-primary-3);
-}
-
-.btn-menu, .btn-menu:hover, .btn-menu:active {
-    background-color: var(--yum-primary-3);
-    color: var(--yum-primary-2);
-}
