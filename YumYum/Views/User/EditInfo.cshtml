@@ -1,5 +1,7 @@
 ﻿@model YumYum.Models.ViewModels.UserViewModel
 
+@await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
+
 <form action="Upload" method="post" enctype="multipart/form-data" hidden>
 	<input type="file" name="file" onchange="javascript:this.form.submit();" id="avatar-upload">
 </form>
