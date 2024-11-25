@@ -44,9 +44,6 @@ body {
     margin-bottom: 60px;
 }
 
-button {
-    border: 0;
-}
 /* 遮罩 */
 .mask {
     display: none;
@@ -81,20 +78,18 @@ button {
     padding: 0 1rem;
     margin: 0;
     height: 2.3rem;
-    width: 70%;
+    width: 100%;
     background-color: var(--yum-secondary-3);
     border: 0;
     border-radius: 0.5rem;
 }
 
-#searchbar-text button:hover,
-#filter-head button:hover {
+#searchbar-text button:hover {
     background-color: var(--yum-secondary-4);
 }
 
     #searchbar-text button:hover svg,
-    #searchbar-text button:hover svg path,
-    #filter-head button:hover {
+    #searchbar-text button:hover svg path {
         stroke: var(--yum-secondary-3);
         color: var(--yum-secondary-3);
     }
@@ -118,24 +113,13 @@ button {
     padding-left: 3rem;
 }
 
-#filter-head button {
-    padding: 0.2rem 0.8rem;
-    line-height: 1rem;
-    font-size: 0.9rem;
-    margin-left: 0.5rem;
-    color: var(--yum-primary-2);
-    background-color: var(--yum-secondary-4);
-    border-radius: 2rem;
-    opacity: 80%;
-}
+
 
     #filter-head button:hover {
         opacity: 100%;
     }
 
-    #filter-head button:focus {
-        box-shadow: none;
-    }
+   
 
 #Ifilter-active:checked + label,
 #Cfilter-active:checked + label,
@@ -479,6 +463,8 @@ button {
     padding: 1% 0;
     width: 18%;
     border-radius: 0.5rem;
+    border: 0;
+    box-shadow: 3px 3px 0px #30533fa6;
     right: 4%;
     bottom: 19%;
 }
@@ -491,17 +477,15 @@ button {
     margin: 0;
     right: 4%;
     bottom: 7%;
-    background-color: var(--yum-secondary-4);
-    opacity: 70%;
     border-radius: 0.5rem;
+    box-shadow: 3px 3px 0px #30533fa6;
     color: var(--yum-primary-2);
 }
 
     .btn-back-style:hover,
     .btn-fill-info:hover {
-        background-color: var(--yum-secondary-4);
-        color: black;
-        opacity: 100%;
+        background-color: var(--yum-primary-2);
+        color: var(--yum-primary-3);
     }
 
 .btn {
@@ -529,7 +513,11 @@ button {
     .popup-order-match .btn-wanna-match-style {
         left: 54%;
         bottom: 7%;
+        color:black;
     }
+        .popup-order-match .btn-wanna-match-style:hover {
+            color: var(--yum-primary-3);
+        }
 
         .popup-order-match .btn-wanna-match-style + button {
             left: 30%;

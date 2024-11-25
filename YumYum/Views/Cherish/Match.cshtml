@@ -22,18 +22,18 @@
                 </svg>
             </label>
             <select name="CitySelect" id="CitySelect" class="d-inline-block p-1" asp-items="@ViewBag.city">
-                <option value="">--請選擇城市--</option>
+                <option value="">--全部城市--</option>
             </select>
 
             <select name="RegionSelect" class="d-inline-block p-1" id="RegionSelect" asp-items="@ViewBag.region">
-                <option value="">--請選擇地區--</option>
+                <option value="">--全部地區--</option>
             </select>
         </div>
 
         <!-- 輸入文字框 -->
         <div id="searchbar-text" class="ms-2 d-inline-flex align-items-center position-relative">
             <input class="form-text" placeholder="今天想找甚麼食材？" type="text" name="IngredientSelect" id="IngredientSelect" value="@(ViewBag.name)">
-            <button class="ms-2" type="submit"
+            @* <button class="ms-2" type="submit"
                     style="border: 0;border-radius: 18px; right:-1%; width:5rem ;height: 2.4rem;">
                 <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
                     <path d="M25.25 25.25L19.8125 19.8125M22.75
@@ -43,7 +43,7 @@
                                 2.75C18.2728 2.75 22.75 7.22715 22.75 12.75Z" stroke="#757575" stroke-width="4"
                           stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-            </button>
+            </button> *@
 
         </div>
 
@@ -61,7 +61,9 @@
 
         <div class="filter-head" id="filter-head">
             <span>篩選器</span>
-            <button id="reset-left">清除條件</button>
+            <button id="reset-left" class="btn btn-outline-success btn-back-style" style="width: 6rem;margin-left: 2rem;">
+                清除條件
+            </button>
         </div>
 
         <hr style="width: 90%;margin: 0; margin-left: 1rem;">
@@ -348,7 +350,7 @@
                             </div>
 
                             <!-- 配對按鈕 -->
-                            <button href="#" class="position-absolute text-center match-btn
+                            <button href="#" class=" position-absolute text-center match-btn
                                                 justify-content-center lh-5 btn-hover btn-wanna-match-style" style="bottom: 10%;"
                                     CherishId="@order.CherishId">
                                 查看更多
@@ -446,13 +448,13 @@
 
         <!-- 配對按鈕 -->
         <button type="submit" href="#" id="btn-match-info-post"
-                class="position-absolute text-center justify-content-center lh-5 btn-hover btn-wanna-match-style">
+                class="position-absolute text-center btn-hover justify-content-center lh-5 btn-wanna-match-style">
             提交
         </button>
 
         <!-- 返回 -->
         <button type="button" href="#" id="btn-match-off"
-                class=" position-absolute text-center lh-5 btn-back-style">
+                class="btn btn-outline-success position-absolute text-center lh-5 btn-back-style">
             返回
         </button>
 

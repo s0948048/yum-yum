@@ -1,18 +1,9 @@
-﻿
-$('#reset-left').click(function () {
-    $('#Ifilter,#Cfilter,#Dfilter').find('input[type="checkbox"]').prop('checked', false);
-    $('#Ifilter input[type="checkbox"]').prev().removeClass('selected')
-})
-
-
-$(
-    '#Ifilter input[type="checkbox"],#Cfilter input[type="checkbox"],#Dfilter input[type="checkbox"]'
-).change(function () {
-    $(this).prev().toggleClass('selected')
+//-----------------------------
+function Sorting() {
     var sortAttr = [];
     var sortCont = [];
     var sortDay = [];
-    $('#Ifilter input[type="checkbox"]:checked').each(function (idx,ele) {
+    $('#Ifilter input[type="checkbox"]:checked').each(function (idx, ele) {
         sortAttr.push(Number($(ele).val()))
     })
     $('#Cfilter input[type="checkbox"]:checked').each(function (idx, ele) {
@@ -23,33 +14,59 @@ $(
     })
 
     //console.log({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay ,search:$('#search-form').serialize()})
-<<<<<<< HEAD
-    var Search = { CitySelect: $('#CitySelect').val(), RegionSelect: Number($('#RegionSelect').val()), IngredientSelect: $('#IngredientSelect').val()};
-=======
-    var search = { CitySelect: $('#CitySelect').val(), RegionSelect: Number($('#RegionSelect').val()), IngredientSelect: $('#IngredientSelect').val()};
->>>>>>> cherish
+
+    var Search = { CitySelect: $('#CitySelect').val(), RegionSelect: Number($('#RegionSelect').val()), IngredientSelect: $('#IngredientSelect').val() };
+
 
     $.ajax({
         url: '/cherish/sortcherish',
         method: 'POST',
         contentType: 'application/json',
-<<<<<<< HEAD
-        data: JSON.stringify({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay, Search:  Search }),
+        data: JSON.stringify({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay, Search: Search }),
         success: function (data) {
             console.log(data);
             $('#insert-result').html(data);
-=======
-        data: JSON.stringify({ sortAttr: sortAttr, sortCont: sortCont, sortDay: sortDay, search:  search }),
-        success: function () {
-
->>>>>>> cherish
         },
         error: function (xhr) {
             alert(xhr);
         }
     })
+}
+
+
+//-----------------------------
+
+
+
+
+
+//----JQ------
+// 重置篩選面板
+$('#reset-left').click(function () {
+    $('#Ifilter input[type="checkbox"]').prev().removeClass('selected')
+    $('#Ifilter,#Cfilter,#Dfilter').find('input[type="checkbox"]').prop('checked', false);
+    Sorting();
+})
+
+// 左側篩選觸發
+$('#Ifilter input[type="checkbox"],#Cfilter input[type="checkbox"],#Dfilter input[type="checkbox"]')
+    .on('change', function () {
+    if ($(this).prev().length) {
+    $(this).prev().toggleClass('selected')
+    }
+    Sorting();
+    });
+
+// 上側篩選觸發
+$('#CitySelect,#RegionSelect,#IngredientSelect')
+    .on('change input', function () {
+    Sorting();
 });
 
+
+
+
+// 摺疊篩選面板。
 $('#Ifilter-active,#Cfilter-active,#Dfilter-active').change(function () {
     $(this).parent().next().toggleClass('filter-hide')
 })
@@ -116,6 +133,8 @@ $('#btn-match-info-post').click(function (e) {
         },
     });
 })
+
+
 $('#btn-match-off').click(function () {
     $(this).parent().parent().addClass('visible-hide');
     $('#mask').hide()
