@@ -158,83 +158,6 @@ namespace YumYum.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Match([FromForm] CherishMatchSearch search)
-		{
-			ViewBag.BreadcrumbsMatch = new List<BreadcrumbItem>{
-			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
-			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
-			 new BreadcrumbItem("良食配對", "#") // 當前的頁面
-             };
-
-			if (search == null)
-			{
-				return RedirectToAction("match");
-			}
-
-
-			ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName", search.CitySelect);
-
-			ViewBag.region = _context.Regions
-					.Where(r => r.CityKey == search.CitySelect)
-					.Select(r => new SelectListItem
-					{
-						Value = r.RegionId.ToString(),
-						Text = r.RegionName,
-						Selected = search.RegionSelect == r.RegionId
-					})
-					.ToList();
-
-			ViewBag.name = search.IngredientSelect;
-
-			IQueryable<CherishOrder> query = _context.CherishOrders;
-
-			if (search.CitySelect != null)
-				query = query.Where(c => c.CherishOrderInfo!.TradeCityKey == search.CitySelect);
-
-			if (search.RegionSelect > 0)
-				query = query.Where(c => c.CherishOrderInfo!.TradeRegionId == search.RegionSelect);
-
-			if (!string.IsNullOrEmpty(search.IngredientSelect))
-				query = query.Where(c => c.Ingredient.IngredientName.Contains(search.IngredientSelect));
-
-			if (search.CitySelect != null)
-				query = query.Where(c => c.CherishOrderInfo!.TradeCityKey == search.CitySelect);
-
-			if (search.RegionSelect > 0)
-				query = query.Where(c => c.CherishOrderInfo!.TradeRegionId == search.RegionSelect);
-
-			if (!string.IsNullOrEmpty(search.IngredientSelect))
-				query = query.Where(c => c.Ingredient.IngredientName.Contains(search.IngredientSelect));
-
-
-			var ccx = query.Include(c => c.CherishOrderInfo);
-
-
-			var chrishSearchOrders = from c in ccx
-									 where c.TradeStateCode == 0
-									 orderby c.EndDate
-									 select new CherishMatch
-									 {
-										 CherishId = c.CherishId,
-										 EndDate = c.EndDate,
-										 IngredAttributeName = c.IngredAttribute.IngredAttributeName,
-										 IngredientName = c.Ingredient.IngredientName,
-										 Quantity = c.Quantity,
-										 ObtainSource = c.ObtainSource,
-										 ObtainDate = c.ObtainDate,
-										 UserNickname = c.GiverUser.UserNickname!,
-										 CityName = c.CherishOrderInfo!.TradeCityKey,
-										 RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
-										 ContactLine = c.CherishOrderInfo.ContactLine,
-										 ContactPhone = c.CherishOrderInfo.ContactPhone,
-										 ContactOther = c.CherishOrderInfo.ContactOther,
-										 CherishPhoto = c.CherishOrderCheck!.CherishPhoto,
-										 CherishValidDate = c.CherishOrderCheck.CherishValidDate == null ? null : c.CherishOrderCheck.CherishValidDate.Value
-									 };
-			return View(await chrishSearchOrders.ToListAsync());
-		}
-
-		[HttpPost]
 		public async Task<IActionResult> ApplyCherish([FromForm] CherishOrderApplicant SumitUser)
 		{
 			Console.WriteLine($"{SumitUser.CherishId}'{SumitUser.ApplicantContactLine}'{SumitUser.ApplicantContactOther}'{SumitUser.ApplicantContactPhone}'{SumitUser.ApplicantId}");
@@ -368,13 +291,13 @@ namespace YumYum.Controllers
 		{
 			IQueryable<CherishOrder> query = _context.CherishOrders;
 
-			if (f.SortAttr != null && f.SortAttr.Any())
+			if (f.SortAttr != null && f.SortAttr.Count != 0)
 
 			{
 				query = query.Where(o => f.SortAttr.Contains(o.IngredAttributeId));
 			}
 
-			if (f.SortCont != null && f.SortCont.Any())
+			if (f.SortCont != null && f.SortCont.Count != 0)
 			{
 				query = query.Where(o =>
 					(f.SortCont.Contains(1) && o.CherishOrderInfo!.ContactLine != null) ||
@@ -382,7 +305,7 @@ namespace YumYum.Controllers
 					(f.SortCont.Contains(3) && o.CherishOrderInfo!.ContactOther != null));
 			}
 
-			if (f.SortDay != null && f.SortDay.Any())
+			if (f.SortDay != null && f.SortDay.Count != 0)
 			{
 				var today = DateOnly.FromDateTime(DateTime.Now);
 				query = query.Where(o =>
