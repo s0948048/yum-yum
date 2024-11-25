@@ -121,6 +121,7 @@ namespace YumYum.Controllers
 
 			var chrishOrders = from c in _context.CherishOrders
 							   where c.TradeStateCode == 0
+							   orderby c.EndDate
 							   select new CherishMatch
 							   {
 								   CherishId = c.CherishId,
@@ -198,6 +199,7 @@ namespace YumYum.Controllers
 
 			var chrishSearchOrders = from c in ccx
                                      where c.TradeStateCode == 0
+                                     orderby c.EndDate
                                      select new CherishMatch
 									 {
 										 CherishId = c.CherishId,
