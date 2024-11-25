@@ -27,7 +27,7 @@ namespace YumYum.Controllers
 		public async Task<IActionResult> Index()
 		{
             int? userId = HttpContext.Session.GetInt32("userId");
-            int? foreignUserId = 3205;
+            int? foreignUserId = HttpContext.Session.GetInt32("foreignId");
 
             ViewBag.foreignUserId = foreignUserId;
 			//int? userId = 3205;

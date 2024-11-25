@@ -43,7 +43,7 @@
             <!--創建者資訊及照片和收藏-->
             <div class="d-flex justify-content-start" style="border-color: aliceblue;margin-top: 1rem;">
                 <div id="watch-user" class="m-0" style="width: 50%;border-color: aliceblue;">
-                    <p style="font-size:22px"><img class="me-2" style="width:50px;height:50px;border-radius:100px" src=@($"{userPhoto}") />@Model.recipeWatchBrief[0].userNickName</p>
+                    <p class="user-infor" style="font-size:22px"><img class="me-2 user-infor" style="width:50px;height:50px;border-radius:100px" src=@($"{userPhoto}") /><span class="user-infor">@Model.recipeWatchBrief[0].userNickName</span></p>
                 </div>
                 <div class="ms-auto">
                     <button id="svg-collect" class="tag-button d-inline-flex btn align-items-center" style="margin-right:0px">
