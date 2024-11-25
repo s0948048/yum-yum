@@ -95,16 +95,20 @@ namespace YumYum.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> UpdateOrder(int orderid, [FromForm] CherishOrderViewModel order)
+		public async Task<IActionResult> SendoutOrder(int orderId, int orderState)
 		{
-			if (orderid != order.CherishId)
-			{
-				return NotFound();
-			}
-			_context.Update(order);
+			var query = from o in _context.CherishOrders
+						where o.CherishId == orderId
+						select o;
 
-			await _context.SaveChangesAsync();
-			return RedirectToAction("Manage");
+			if (query.Single().TradeStateCode == 0)
+			{
+				query.Single().TradeStateCode = 5;
+				_context.Update(query.Single());
+				await _context.SaveChangesAsync();
+				return RedirectToAction("Manage");
+			}
+			return NotFound();
 		}
 
 		public IActionResult ManageAdd()

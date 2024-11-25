@@ -219,8 +219,6 @@
 
 @section Scripts {
 	<script>
-		// console.log("frog");
-
 		// 使用 jQuery 來接收觸發按鈕傳遞的資料，並更新 modal 內容
 		$('#result-div').on('click', '.sendout', function (event) {
 			var button = $(this); // 觸發的按鈕
@@ -229,9 +227,9 @@
 			var orderItem = result.find('.order-item').text();
 			var orderState = result.find('.order-state').text();
 
-			console.log(orderId);
-			console.log(orderItem);
-			console.log(orderState);
+			// console.log(orderId);
+			// console.log(orderItem);
+			// console.log(orderState);
 
 			var modal = $('#sendout-modal');
 			modal.find('.modal-header .id').text(orderId);
@@ -242,27 +240,22 @@
 				// console.log(orderId + orderItem + orderState)
 
 				// 取得表單資料
-
-				// 用 Ajax 發送請求更新資料庫
+				// 用 AJAX 發送請求更新資料庫
 				$.ajax({
-					url: '/Cherish/UpdateOrder', // 這裡是你的後端控制器 URL
+					url: '/Cherish/SendoutOrder',
 					method: 'POST',
 					data: {
-						CherishId: orderId,
-						TradeStateCode: 5
+						orderId: orderId,
+						orderState: orderState
 					},
-					success: function (response) {
-						if (response.success) {
-							// 資料更新成功，關閉 modal 並顯示成功消息
-							$(modal).modal('hide');
-							alert('訂單已更新！');
-							// 可以重新加載或更新頁面顯示的訂單資料
-						} else {
-							alert('更新失敗，請稍後再試！');
-						}
+					success: function () {
+						// 資料更新成功，關閉 modal 並顯示成功消息
+						$(modal).modal('hide');
+						alert('贈出成功！');
 					},
 					error: function () {
-						alert('發生錯誤，請稍後再試！');
+						$(modal).modal('hide');
+						alert('目前訂單狀態無法贈出！');
 					}
 				});
 			});
