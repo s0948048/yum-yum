@@ -740,15 +740,55 @@ namespace YumYum.Controllers
 			return View(contact.Single());
 		}
 
+		//[HttpPost]
+		//public async Task<IActionResult> ContactInformation([FromForm] CherishDefaultInfo user)
+		//{
+		//	_context.Update(user);
+
+		//	await _context.SaveChangesAsync();
+		//	return RedirectToAction("ContactInformation");
+		//}
+
 		[HttpPost]
-		public async Task<IActionResult> ContactInformation([FromForm] CherishDefaultInfo user)
+		public async Task<IActionResult> ContactInformation(List<String> AvailableTime, [FromForm] CherishDefaultInfo user)
 		{
+			/* ---------------------------【 右側時段修改 】--------------------------*/
+			// 找到目前資料庫所有時段，方便稍後做比較
+			IEnumerable<string> exsistTime = _context.CherishDefaultTimeSets.Where(o => o.GiverUserId == user.GiverUserId).Select(o => o.TradeTimeCode).ToList();
+			//GetTradeTime(user.GiverUserId).ToList();
+
+			// Except
+			// 新的比舊的還多出的 => 要新增
+			var addTime = AvailableTime.Except(exsistTime);
+
+			// 舊的比新的還多出的 => 要刪除的
+			var delTime = exsistTime.Except(AvailableTime);
+
+			// 執行刪除
+			_context.CherishDefaultTimeSets.RemoveRange(
+					_context.CherishDefaultTimeSets.Where(o => o.GiverUserId == user.GiverUserId && delTime.Contains(o.TradeTimeCode))
+					);
+
+			// 執行新增
+			foreach (var time in addTime)
+			{
+				_context.CherishDefaultTimeSets.Add(new CherishDefaultTimeSet()
+				{
+					GiverUserId = user.GiverUserId,
+					TradeTimeCode = time
+				});
+			}
+
+			// 完成修改
+			_context.SaveChanges();
+
+			/* ---------------------------【 左側資料修改 】--------------------------*/
 			_context.Update(user);
 
 			await _context.SaveChangesAsync();
 			return RedirectToAction("ContactInformation");
+			// bug asp-* 驗證好像只做半套
 		}
-
 
 
 
@@ -861,26 +901,5 @@ namespace YumYum.Controllers
 
 		//    return View(chrishSearchOrders.ToList());
 		//}
-
-
-
-
-
-
-
-
-
-
-
-
 	}
-
-
-
-
-
-
-
-
-
 }

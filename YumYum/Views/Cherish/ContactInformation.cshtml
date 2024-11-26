@@ -1,26 +1,20 @@
 ﻿@using YumYum.Models.ViewModels
 @model CherishContactViewModel
 @{
-	@* CherishContactViewModel info = ViewBag.Info; *@
 	IQueryable<City> citylist = ViewBag.CityList;
 	IQueryable<Region> regionlist = ViewBag.RegionList;
 	Dictionary<string, string> days = ViewBag.Days;
 	Dictionary<int, string> times = ViewBag.Times;
-	List<CherishDefaultTimeSet> tradetimes = ViewBag.TradeTimes;
-
-	string test = "";
-	foreach (CherishDefaultTimeSet time in tradetimes)
-	{
-		test += time.TradeTimeCode;
-	}
+	List<string> tradetimes = ViewBag.TradeTimes;
 }
 
 @* 標示目前所在頁面路徑位置 *@
-@await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
+<div class="mt-2 mb-3">
+	@await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
+</div>
 
 @* 測試中 *@
-@* <h6>@Model.GiverUserId</h6> *@
-<h6 style="color: var(--yum-secondary-2);">※ 登入者ID為：@Model.GiverUserId</h6>
+@* <h6 style="color: var(--yum-secondary-2);">※ 登入者ID為：@Model.GiverUserId</h6> *@
 
 @* 表單標題 *@
 <div class="row article-title rounded-top mt-4">
@@ -125,7 +119,8 @@
 								foreach (var time in times)
 								{
 									<div>
-										<input type="checkbox" id="@($"{day.Key}-{time.Key}")" value="@($"{day.Key}-{time.Key}")" @(test.Contains($"{day.Key}-{time.Key}") ? "checked" : null)> @time.Value
+										<input type="checkbox" id="@($"{day.Key}-{time.Key}")" value="@($"{day.Key}-{time.Key}")" name="AvailableTime" @(tradetimes.Contains($"{day.Key}-{time.Key}") ? "checked" : null)>
+										<label for="@($"{day.Key}-{time.Key}")">@time.Value</label>
 									</div>
 								}
 							}
