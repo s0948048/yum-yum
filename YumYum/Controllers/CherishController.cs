@@ -35,8 +35,15 @@ namespace YumYum.Controllers
 
 		public IActionResult Manage()
 		{
-			// 設定 Breadcrumb
-			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+            if (HttpContext.Session.GetInt32("foreignId") is null)
+            {
+                if (HttpContext.Session.GetInt32("userId") is null)
+                {
+                    return RedirectToAction("LoginPage", "User");
+                }
+            }
+            // 設定 Breadcrumb
+            ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
 			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
 			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
 			 new BreadcrumbItem("管理良食", "#") // 當前的頁面
@@ -401,8 +408,15 @@ namespace YumYum.Controllers
 		[Route("Cherish/MatchHistory")]
 		public async Task<IActionResult> MatchHistory()
 		{
-			// 設定 Breadcrumb
-			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+            if (HttpContext.Session.GetInt32("foreignId") is null)
+            {
+                if (HttpContext.Session.GetInt32("userId") is null)
+                {
+                    return RedirectToAction("LoginPage", "User");
+                }
+            }
+            // 設定 Breadcrumb
+            ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
 			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
 			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
 			 new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryMine", "Cherish") ?? "#"),
@@ -702,8 +716,15 @@ namespace YumYum.Controllers
 		[HttpGet]
 		public IActionResult ContactInformation()
 		{
-			// 設定 Breadcrumb
-			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+            if (HttpContext.Session.GetInt32("foreignId") is null)
+            {
+                if (HttpContext.Session.GetInt32("userId") is null)
+                {
+                    return RedirectToAction("LoginPage", "User");
+                }
+            }
+            // 設定 Breadcrumb
+            ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
 			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
 			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
 			 new BreadcrumbItem("聯絡資料", "#") // 當前的頁面
