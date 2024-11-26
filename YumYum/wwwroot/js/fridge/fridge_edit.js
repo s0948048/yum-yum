@@ -71,6 +71,9 @@ $('#ingredientInput').on('input', function () {
     );
 });
 
+
+
+let indexRandom = 10000;
 // Create new item rows in item list by DEFAULT TAGS
 $('#ingredient-list').on('click', '.tag-button', function () {
     let clickedButtonHtml = $(this).prop('outerHTML');
@@ -78,6 +81,9 @@ $('#ingredient-list').on('click', '.tag-button', function () {
 
     let ingredientName = $(this).find('span').text().trim();
     console.log(ingredientName);
+
+    let ingredientID = $(this).prop('id');
+    console.log(ingredientID)
 
     $.ajax({
         url: 'GetUnitsByIngredientName', 
@@ -92,24 +98,32 @@ $('#ingredient-list').on('click', '.tag-button', function () {
             })
             console.log(optionsHtml);
 
+            
+
             let newRowHtml = `
                 <div class="row align-items-center mb-1 new-row">
-                    <input type="hidden" name="NewRefrigeratorItems.Index" value="${ingredientName}" />
-                    <input type="hidden" name="NewRefrigeratorItems[${ingredientName}].IngredientID" value="${ingredientName}" />
+                    
+
+                    <input type="hidden" name="NewRefrigeratorItems.Index" value="${indexRandom}" />
+                    <input type="hidden" name="NewRefrigeratorItems[${indexRandom}].StoreID" value="" />
+                    <input type="hidden" name="NewRefrigeratorItems[${indexRandom}].UserID" value="" />
+                    <input type="hidden" name="NewRefrigeratorItems[${indexRandom}].IngredientID" value="${ingredientID}" />
+
+
 
                     <div class="col-md-3 col-4">
                         ${clickedButtonHtml}
                     </div>
                     <div class="col-md-2 col-4 text-center">
-                        <input type="number" name="NewRefrigeratorItems[${ingredientName}].Quantity" class="form-control" value="1" min="1">
+                        <input type="number" name="NewRefrigeratorItems[${indexRandom}].Quantity" class="form-control" value="1" min="1">
                     </div>
                     <div class="col-md-2 col-4">
-                        <select class="form-select" name="NewRefrigeratorItems[${ingredientName}].UnitID">
+                        <select class="badge rounded-pill bg-body text-dark border" name="NewRefrigeratorItems[${indexRandom}].UnitName">
                             ${optionsHtml}
                         </select>
                     </div>
                     <div class="col-md-3 col-8 text-center">
-                        <input type="date" name="NewRefrigeratorItems[${ingredientName}].ValidDate" class="form-control">
+                        <input type="date" name="NewRefrigeratorItems[${indexRandom}].ValidDate" class="form-control">
                     </div>
                     <div class="col-md-1 col-4 d-flex justify-content-end">
                         <button class="btn d-flex justify-content-center align-items-center ps-1 pe-1 btn-delete">
@@ -120,6 +134,7 @@ $('#ingredient-list').on('click', '.tag-button', function () {
             `;
 
             $('.item-list').prepend(newRowHtml);
+            indexRandom++;
         }, 
         error: function (error) {
             console.log('Error: ' + error);
@@ -141,20 +156,31 @@ $('#food-tag-sec').on('click', '#add-new-ingred', function () {
             })
 
             let newRowHtml = `
-                <div class="row align-items-center mb-3">
+                <div class="row align-items-center mb-1">
+
+                    <input type="hidden" name="NewRefrigeratorItems.Index" value="${indexRandom}" />
+                    <input type="hidden" name="NewRefrigeratorItems[${indexRandom}].StoreID" value="" />
+                    <input type="hidden" name="NewRefrigeratorItems[${indexRandom}].UserID" value="" />
+                    <input type="hidden" name="NewRefrigeratorItems[${indexRandom}].IngredientID" value="" />
+
                     <div class="col-md-3 col-4">
-                        <input type="text" id="" class="form-control" placeholder="新增食材名稱">
+                        <button class="w-75 tag-button d-inline-flex align-items-center btn btn-tags">
+                            <img src="/img/icon/EmptyTag.svg" alt="" style="height:20px;"/>
+                            <span>
+                                <input type="text" class="w-100" style="height:24px;" name="NewRefrigeratorItems[${indexRandom}].NewIngredientCreate">
+                            </span>
+                        </button>
                     </div>
                     <div class="col-md-2 col-4 text-center">
-                        <input type="number" class="form-control" value="1" min="1">
+                        <input type="number" class="form-control" value="1" min="1" name="NewRefrigeratorItems[${indexRandom}].Quantity">
                     </div>
                     <div class="col-md-2 col-4">
-                        <select class="form-select">
+                        <select class="form-select" name="NewRefrigeratorItems[${indexRandom}].UnitID">
                             ${otherOptionsHtml}
                         </select>
                     </div>
                     <div class="col-md-3 col-8 text-center">
-                        <input type="date" class="form-control" value="">
+                        <input type="date" class="form-control" name="NewRefrigeratorItems[${indexRandom}].ValidDate">
                     </div>
                     <div class="col-md-1 col-4 d-flex justify-content-end">
                         <button class="btn d-flex justify-content-center align-items-center ps-1 pe-1 btn-delete">
@@ -175,3 +201,8 @@ $('#food-tag-sec').on('click', '#add-new-ingred', function () {
 $('.item-list').on('click', '.btn-delete', function () {
     $(this).closest('.row').remove();
 });
+
+$('form').on('click','.item-list button', function (e) {
+    e.preventDefault();
+    e.isPropagationStopped();
+})

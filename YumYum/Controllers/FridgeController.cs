@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 using YumYum.Models;
 using YumYum.Models.ViewModels;
 
@@ -23,14 +25,14 @@ namespace YumYum.Controllers
                 RefrigeratorData = fridgeItemData,
                 IngredientData = ingredientData
             };
-           
+
             return View(viewModel);
         }
 
         public IActionResult Edit()
         {
-            var fridgeItemData = GetFridgeItemData();
             var ingredientData = GetIngredientData(userId: null);
+            var fridgeItemData = GetFridgeItemData();
             var ingredAttributeData = GetIngredAttributeData();
 
             var viewModel = new FridgeViewModel
@@ -39,7 +41,7 @@ namespace YumYum.Controllers
                 IngredientData = ingredientData,
                 IngredAttributeData = ingredAttributeData
             };
-            
+
             return View(viewModel);
         }
 
@@ -48,37 +50,98 @@ namespace YumYum.Controllers
         {
             if (ModelState.IsValid)
             {
+                IQueryable<int> Newstoreid = (IQueryable<int>)RefrigeratorItems
+                        .Where(o => o.StoreID.HasValue) // 過濾掉 null
+                        .Select(o => o.StoreID!.Value)   // 取出值
+                        .AsQueryable();
+
+                IQueryable<int> ExsistStoreid = _context.RefrigeratorStores.Where(r => r.UserId == 3204).Select(r => r.StoreId);
+
+                // 舊的比新的還多出的 => 要刪除的
+                var delItems = ExsistStoreid.Except(Newstoreid).ToList();
+
+                // 要修改ㄉ
+                var UpdateItems = ExsistStoreid.Where(r => !delItems.Contains(r)).ToList();
+
                 // Update existing items
-                foreach (var item in RefrigeratorItems)
+                foreach (var item in RefrigeratorItems.Where(r => UpdateItems.Contains((int)r.StoreID!)))
                 {
                     var record = _context.RefrigeratorStores.FirstOrDefault(r => r.StoreId == item.StoreID && r.UserId == 3204);
                     if (record != null)
                     {
+                        record.UnitId = Convert.ToInt16(item.UnitName);
                         record.Quantity = item.Quantity!;
                         record.ValidDate = item.ValidDate;
                     }
                 }
 
-                // Add new items
+                // Delete No items
+                foreach (var item in RefrigeratorItems.Where(r => delItems.Contains((int)r.StoreID!)))
+                {
+                    var record = _context.RefrigeratorStores.FirstOrDefault(r => r.StoreId == item.StoreID && r.UserId == 3204);
+                    _context.RefrigeratorStores.Remove(record!);
+                }
+
+                // Add new items    1. 舊有食材、新的食材
                 foreach (var newItem in NewRefrigeratorItems)
                 {
-                    var newRecord = new RefrigeratorStore
+
+                    if (newItem.NewIngredientCreate is null)
                     {
-                        UserId = 3204,
-                        IngredientId = newItem.IngredientID,
-                        Quantity = newItem.Quantity!,
-                        UnitId = newItem.UnitID,
-                        ValidDate = newItem.ValidDate
+                        var newRecord = new RefrigeratorStore
+                        {
+                            UserId = 3204,
+                            IngredientId = newItem.IngredientID,
+                            Quantity = newItem.Quantity!,
+                            UnitId = Convert.ToInt16(newItem.UnitName),
+                            ValidDate = newItem.ValidDate
+                        };
+                        _context.RefrigeratorStores.Add(newRecord);
+                    }
+                    else if (newItem.NewIngredientCreate.Length > 0)
+                    {
+                        var newIg = _context.Ingredients.Add(new Ingredient
+                        {
+                            IngredientName = newItem.NewIngredientCreate,
+                            AttributionId = 9
+                        });
+                        _context.RefrigeratorStores.Add(new RefrigeratorStore
+                        {
+                            UserId = 3204,
+                            Ingredient = newIg.Entity,
+                            Quantity = newItem.Quantity!,
+                            UnitId = Convert.ToInt16(newItem.UnitName),
+                            ValidDate = newItem.ValidDate
+                        });
+                    }
+
+                    _context.SaveChanges();
+
+
+                    var FItemData = GetFridgeItemData();
+                    var IData = GetIngredientData();
+
+                    var Model = new FridgeViewModel
+                    {
+                        RefrigeratorData = FItemData,
+                        IngredientData = IData
                     };
-                    _context.RefrigeratorStores.Add(newRecord);
+                    return RedirectToAction("Index", Model); // Redirect back to the main view after saving changes
                 }
-                _context.SaveChanges();
 
-                return RedirectToAction("Index"); // Redirect back to the main view after saving changes
+                var fridgeItemData = GetFridgeItemData();
+                var ingredientData = GetIngredientData();
+
+                var viewModel = new FridgeViewModel
+                {
+                    RefrigeratorData = fridgeItemData,
+                    IngredientData = ingredientData
+                };
+                return View("Index", viewModel);
             }
-            return View("Index");
+        
+        return RedirectToAction("Index");
         }
-
 
         [HttpGet]
         public IActionResult GetOtherUnits()
@@ -117,13 +180,13 @@ namespace YumYum.Controllers
         public JsonResult FilterIngredients([FromBody] List<int> selectedIds)
         {
             var filteredIngredients = _context.Ingredients.AsQueryable();
-            if (selectedIds != null && selectedIds.Any()) 
+            if (selectedIds != null && selectedIds.Any())
             {
                 filteredIngredients = filteredIngredients.Where(i => selectedIds.Contains(i.AttributionId));
             }
 
             var result = filteredIngredients
-                .Select(i  => new
+                .Select(i => new
                 {
                     IngredientName = i.IngredientName,
                     IngredientIcon = Url.Content($"~{i.IngredientIcon}")
@@ -142,14 +205,13 @@ namespace YumYum.Controllers
                     .Where(i => i.IngredientName!.Contains(searchKeyword, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
-
             return PartialView("_IngredientListPartial", allIngredients);
         }
 
         private List<FridgeItemViewModel> GetFridgeItemData()
         {
+
             return (from fridge in _context.RefrigeratorStores
-                    join igd in _context.Ingredients on fridge.IngredientId equals igd.IngredientId
                     join unit in _context.Units on fridge.UnitId equals unit.UnitId
                     where fridge.UserId == 3204
                     orderby fridge.ValidDate
@@ -157,11 +219,14 @@ namespace YumYum.Controllers
                     {
                         StoreID = fridge.StoreId,
                         UserID = fridge.UserId,
-                        IngredientName = igd.IngredientName,
-                        IngredientIcon = igd.IngredientIcon,
+                        IngredientID = fridge.IngredientId,
+                        IngredientName = fridge.Ingredient.IngredientName,
+                        IngredientIcon = fridge.Ingredient.IngredientIcon,
                         Quantity = fridge.Quantity,
                         UnitName = unit.UnitName,
-                        ValidDate = fridge.ValidDate
+                        ValidDate = fridge.ValidDate,
+                        IngredAttributeUnit = new SelectList(_context.Units.Where(u => u.IngredAttributeId == fridge.Ingredient.AttributionId).ToList(), "UnitId", "UnitName", fridge.UnitId)
+
                     }).ToList();
         }
 
@@ -170,7 +235,7 @@ namespace YumYum.Controllers
         {
             var ingredientsQuery = _context.Ingredients.AsQueryable();
 
-            if (userId.HasValue) 
+            if (userId.HasValue)
             {
                 var existingIngredientIds = _context.RefrigeratorStores
                                              .Where(store => store.UserId == userId.Value)
@@ -180,8 +245,9 @@ namespace YumYum.Controllers
 
             return ingredientsQuery.Select(igd => new IngredientViewModel
             {
+                IngredientID = igd.IngredientId,
                 IngredientName = igd.IngredientName,
-                IngredientIcon = igd.IngredientIcon
+                IngredientIcon = igd.IngredientIcon,
             }).ToList();
         }
 
@@ -194,9 +260,9 @@ namespace YumYum.Controllers
                     {
                         IngredAttributeID = ia.IngredAttributeId,
                         IngredAttributeName = ia.IngredAttributeName,
-                        IngredAttributePhoto = ia.IngredAttributePhoto
+                        IngredAttributePhoto = ia.IngredAttributePhoto,
                     }
-                ).ToList(); 
+                ).ToList();
         }
     }
 }
