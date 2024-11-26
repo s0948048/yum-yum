@@ -568,7 +568,7 @@
             data: JSON.stringify(recipeAllData),
             success: function (result) {
                 alert(result["success"])
-                if (result["message"] != null) { alert(result["message"]) }
+                if (result["message"] != null) { alert("創立草稿成功") }
                 else if (result["error"] != null) { alert(result["error"]) }
                 //導向查看食譜
                 if (result["redirectUrl"] != null) {
