@@ -472,6 +472,7 @@ namespace YumYum.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterVerifyPage([FromBody] UserSecretInfo user)
         {
+            user.EmailChecked = true;
             await _context.UserSecretInfos.AddAsync(user);
             await _context.SaveChangesAsync();
             return Json(new { action = Url.Action("Index", "Recipe"), successmessage = "成功新增會員資料" });
