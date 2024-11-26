@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
 using System.Text.Json;
@@ -281,10 +282,10 @@ namespace YumYum.Controllers
 
         //查看食譜導向個人頁面
         [HttpPost]
-        public async Task<IActionResult> UserNavigate([FromBody] int creatorId)
+        public async Task<IActionResult> UserNavigate([FromBody] RecipeCreator creatorId)
         {
-            HttpContext.Session.SetInt32("foreignId", creatorId);
-            return Json(new { userUrl = Url.Action("Index","User") });
+            HttpContext.Session.SetInt32("foreignId", (int)creatorId.creatorId);
+            return Json(new { userUrl = Url.Action("Index", "User") });
         }
 
 
