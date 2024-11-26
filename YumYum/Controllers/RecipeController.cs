@@ -32,7 +32,8 @@ namespace YumYum.Controllers
 
             // 查詢所有食材
             var ingredientQuery = from ingredient in await _context.Ingredients.ToListAsync()
-                                  select new
+								  where ingredient.AttributionId != 9
+								  select new
                                   {
                                       IngredientName = ingredient.IngredientName,
                                       IngredientId = ingredient.IngredientId,
