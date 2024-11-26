@@ -50,10 +50,36 @@ svg {
 }
 
 #btn-edit {
-    background-color: var( --yum-secondary-1);
+    /*    background-color: var( --yum-secondary-1);
     border-color: var( --yum-secondary-1);
-    border-radius: 50px;
+    border-radius: 50px;*/
     float: right;
-    fill: var(--yum-primary-1);
-    color: var(--yum-primary-1);
+    /*    fill: var(--yum-primary-1);
+    color: var(--yum-primary-1);*/
 }
+
+/* 一般的按鈕樣式 */
+.yum-btn {
+    font-size: 1rem;
+    color: var(--yum-primary-2);
+    background-color: var(--yum-primary-3);
+    box-shadow: 2px 2px 2px #30533fa6;
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--yum-primary-2);
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+    .yum-btn:hover {
+        color: var(--yum-primary-3);
+        background-color: var(--yum-primary-2);
+        transition-duration: 0.5s;
+    }
