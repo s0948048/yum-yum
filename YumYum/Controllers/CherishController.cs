@@ -133,7 +133,7 @@ namespace YumYum.Controllers
 			return View();
 		}
 
-		public IActionResult ManageEdit()
+		public IActionResult ManageEdit(int cherishId)
 		{
 			// 設定 Breadcrumb
 			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
@@ -142,6 +142,8 @@ namespace YumYum.Controllers
 			 new BreadcrumbItem("管理良食", Url.Action("Manage", "Cherish") ?? "#"),
 			 new BreadcrumbItem("編輯良食", "#") // 當前的頁面
              };
+
+			ShowOrderDetail(cherishId);
 
 			return View();
 		}
@@ -877,6 +879,49 @@ namespace YumYum.Controllers
 			var result = query.ToList();
 
 			return result;
+		}
+
+		public CherishOrderViewModel ShowOrderDetail(int cherishId)
+		{
+			var query = from o in _context.CherishOrders
+						where o.CherishId == cherishId && o.TradeStateCode != 5
+						select new CherishOrderViewModel
+						{
+							// [訂單類]
+							CherishId = o.CherishId,
+							GiverUserId = o.GiverUserId,
+							SubmitDate = o.SubmitDate,
+							Quantity = o.Quantity,
+							EndDate = o.EndDate,
+							ObtainSource = o.ObtainSource,
+							ObtainDate = o.ObtainDate,
+							CherishValidDate = o.CherishOrderCheck!.CherishValidDate,
+							CherishPhoto = o.CherishOrderCheck.CherishPhoto,
+
+							// [食材類]
+							IngredientName = o.Ingredient.IngredientName,
+							IngredAttributeName = o.IngredAttribute.IngredAttributeName,
+
+							// [地區類]
+							TradeCityKey = o.CherishOrderInfo!.TradeCityKey,
+							CityName = o.CherishOrderInfo!.TradeCityKeyNavigation.CityName,
+							TradeRegionId = o.CherishOrderInfo!.TradeRegionId,
+							RegionName = o.CherishOrderInfo.TradeRegion.RegionName,
+
+							// [聯絡類]
+							UserNickname = o.CherishOrderInfo.UserNickname,
+							ContactLine = o.CherishOrderInfo.ContactLine,
+							ContactPhone = o.CherishOrderInfo.ContactPhone,
+							ContactOther = o.CherishOrderInfo.ContactOther,
+							//TradeTimeCode
+
+							// [訂單狀態類]
+							TradeStateCode = o.TradeStateCode,
+							ReasonId = o.CherishOrderCheck.ReasonId
+						};
+
+			CherishOrderViewModel orderDetail = query.Single();
+			return orderDetail;
 		}
 
 		//[HttpPost]
