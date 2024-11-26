@@ -13,5 +13,7 @@
 		public string? FieldShot { get; set; }
 
 		public short? FinishMinute { get; set; }
+
+		public byte? RecipeRecVersion { get; set; }
 	}
 }

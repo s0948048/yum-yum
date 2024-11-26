@@ -26,11 +26,13 @@ namespace YumYum.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Index()
 		{
-            int? userId = HttpContext.Session.GetInt32("userId");
-            int? foreignUserId = HttpContext.Session.GetInt32("foreignId");
+			int? userId = HttpContext.Session.GetInt32("userId");
+			ViewBag.userId = userId;
+			//int? foreignUserId = 3205;
+			int? foreignUserId = HttpContext.Session.GetInt32("foreignId");
+			userId = (foreignUserId == null) ? userId : foreignUserId;
 
-            ViewBag.foreignUserId = foreignUserId;
-			//int? userId = 3205;
+
 
 			// 設定Breadcrumb 顯示頁面資訊
 			ViewBag.Breadcrumbs = new List<BreadcrumbItem>
@@ -40,62 +42,64 @@ namespace YumYum.Controllers
              };
 
 			var userQuery = from user in _context.UserBios
-                            join userNickname in _context.UserSecretInfos
-                            on user.UserId equals userNickname.UserId
-                            where user.UserId == userId
-                            select new UserQueryViewModel
-                            {
-                                UserId = user.UserId,
-                                UserIntro = user.UserIntro,
-                                HeadShot = user.HeadShot,
-                                Igaccount = user.Igaccount,
-                                Fbnickname = user.Fbnickname,
-                                YoutuNickname = user.YoutuNickname,
-                                WebNickName = user.WebNickName,
-                                YoutuLink = user.YoutuLink,
-                                Fblink = user.Fblink,
-                                WebLink = user.WebLink,
-                                UserNickname = userNickname.UserNickname
-                            };
+							join userNickname in _context.UserSecretInfos
+							on user.UserId equals userNickname.UserId
+							where user.UserId == userId
+							select new UserQueryViewModel
+							{
+								UserId = user.UserId,
+								UserIntro = user.UserIntro,
+								HeadShot = user.HeadShot,
+								Igaccount = user.Igaccount,
+								Fbnickname = user.Fbnickname,
+								YoutuNickname = user.YoutuNickname,
+								WebNickName = user.WebNickName,
+								YoutuLink = user.YoutuLink,
+								Fblink = user.Fblink,
+								WebLink = user.WebLink,
+								UserNickname = userNickname.UserNickname
+							};
 
-            var recipeQuery = (from user in userQuery
-                               join recipe in _context.RecipeBriefs
-                               on user.UserId equals recipe.CreatorId
-                               join recipeInfo in _context.RecipeRecords
-                               on recipe.RecipeId equals recipeInfo.RecipeId
-                               //where recipeInfo.RecipeStatusCode == 1 || recipeInfo.RecipeStatusCode == 4
-                               join recipeImage in _context.RecipeRecordFields
-                               on recipe.RecipeId equals recipeImage.RecipeId
-                               where recipeImage.RecipeField == 0
-                               select new RecipeQueryViewModel
-                               {
-                                   RecipeId = recipe.RecipeId,
-                                   RecipeName = recipe.RecipeName,
-                                   RecipeStatusCode = recipeInfo.RecipeStatusCode,
-                                   FieldShot = recipeImage.FieldShot
-                               }).GroupBy(r => r.RecipeId).Select(g => g.OrderByDescending(r => r.RecipeStatusCode).FirstOrDefault()).ToList();
+			//1125更新
+			var recipeQuery = (from user in userQuery
+							   join recipe in _context.RecipeBriefs
+							   on user.UserId equals recipe.CreatorId
+							   join recipeInfo in _context.RecipeRecords
+							   on recipe.RecipeId equals recipeInfo.RecipeId
+							   //where (recipeInfo.RecipeStatusCode == 1 || recipeInfo.RecipeStatusCode == 4) set if in view
+							   join recipeImage in _context.RecipeRecordFields
+							   on recipe.RecipeId equals recipeImage.RecipeId
+							   where recipeImage.RecipeField == 0
+							   select new RecipeQueryViewModel
+							   {
+								   RecipeId = recipe.RecipeId,
+								   RecipeName = recipe.RecipeName,
+								   RecipeStatusCode = recipeInfo.RecipeStatusCode,
+								   FieldShot = recipeImage.FieldShot,
+								   RecipeRecVersion = recipeInfo.RecipeRecVersion
+							   }).GroupBy(r => r.RecipeId).Select(g => g.OrderByDescending(r => r.RecipeRecVersion).FirstOrDefault()).ToList();
 
-            var recipeDetailQuery = from recipe in recipeQuery
-                                    join recipeIngredient in _context.RecipeIngredients on recipe.RecipeId equals recipeIngredient.RecipeId
-                                    join recipeIngredientName in _context.Ingredients on recipeIngredient.IngredientId equals recipeIngredientName.IngredientId
-                                    select new RecipeDetailQuery
-                                    {
-                                        RecipeId = recipeIngredient.RecipeId,
-                                        IngredientId = recipeIngredient.IngredientId,
-                                        IngredientName = recipeIngredientName.IngredientName
-                                    };
-            var AllList = new RecipeAllUser()
-            {
-                userQueryViewModel = userQuery.ToList(),
-                recipeQueryViewModel = recipeQuery.ToList(),
-                recipeDetailQuery = recipeDetailQuery.ToList(),
-            };
+			var recipeDetailQuery = from recipe in recipeQuery
+									join recipeIngredient in _context.RecipeIngredients on recipe.RecipeId equals recipeIngredient.RecipeId
+									join recipeIngredientName in _context.Ingredients on recipeIngredient.IngredientId equals recipeIngredientName.IngredientId
+									select new RecipeDetailQuery
+									{
+										RecipeId = recipeIngredient.RecipeId,
+										IngredientId = recipeIngredient.IngredientId,
+										IngredientName = recipeIngredientName.IngredientName
+									};
+			var AllList = new RecipeAllUser()
+			{
+				userQueryViewModel = userQuery.ToList(),
+				recipeQueryViewModel = recipeQuery.ToList(),
+				recipeDetailQuery = recipeDetailQuery.ToList(),
+			};
 
-            HttpContext.Session.SetInt32("userId", (int)userId);
-            return View(AllList);
+			HttpContext.Session.SetInt32("userId", (int)userId);
+			return View(AllList);
 
 
-        }
+		}
 
 
 		[HttpGet]
