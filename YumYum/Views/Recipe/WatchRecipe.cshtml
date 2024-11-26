@@ -221,9 +221,10 @@
     console.log(@Model.recipeRecordFields[1].FieldShot)
 </script>
 <script>
+    let id = @(Model.userId is null ? ' ' : Model.userId);
     $(function () {
         $('#svg-collect').on('click', function () {
-            if (@Model.userId == 0) {
+            if (id == null) {
                 alert('會員未登入，登入後才能使用收藏食譜功能')
                 return
             };
@@ -236,7 +237,7 @@
                 $('#svg-path').attr('fill', "transparent")
             };
             let data = {
-                UserID: @Model.userId,
+                UserID: @(Model.userId is null ? ' ' : Model.userId),
                 RecipeID: @Model.recipeId,
                 verifyColor: $('#svg-path').attr('fill'),
             };

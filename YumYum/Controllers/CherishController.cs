@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Signing;
 using System.Data;
+using System.Linq;
 using YumYum.Models;
 using YumYum.Models.DataTransferObject;
 using YumYum.Models.ViewModels;
@@ -153,8 +154,12 @@ namespace YumYum.Controllers
 
 			ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName");
 
-			var chrishOrders = from c in _context.CherishOrders
+            List<int> cherishAttr = [1, 4, 5, 6];
+
+            var chrishOrders = from c in _context.CherishOrders
 							   where c.TradeStateCode == 0
+							   where cherishAttr.Contains(c.IngredAttributeId)
+							   where c.EndDate > DateOnly.FromDateTime(DateTime.Now)
 							   orderby c.EndDate
 							   select new CherishMatch
 							   {
@@ -311,9 +316,12 @@ namespace YumYum.Controllers
 		public async Task<IActionResult> SortCherish([FromBody] CherishFilter f)
 		{
 			IQueryable<CherishOrder> query = _context.CherishOrders;
+            
+			List<int> cherishAttr = [1, 4, 5, 6];
+            query = query.Where(c => cherishAttr.Contains(c.IngredAttributeId));
+			query = query.Where(c => c.EndDate > DateOnly.FromDateTime(DateTime.Now));
 
 			if (f.SortAttr != null && f.SortAttr.Count != 0)
-
 			{
 				query = query.Where(o => f.SortAttr.Contains(o.IngredAttributeId));
 			}
@@ -356,8 +364,12 @@ namespace YumYum.Controllers
 		// 2024-11-25 
 		public async Task<List<CherishMatch>> QResult(IQueryable<CherishOrder> query)
 		{
-			var _query = from c in query
+            List<int> cherishAttr = [1, 4, 5, 6];
+            
+            var _query = from c in query
 						 where c.TradeStateCode == 0
+						 where cherishAttr.Contains(c.IngredAttributeId)
+						 where c.EndDate > DateOnly.FromDateTime(DateTime.Now)
 						 orderby c.EndDate
 						 select new CherishMatch
 						 {

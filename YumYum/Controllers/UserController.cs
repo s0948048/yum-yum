@@ -26,13 +26,21 @@ namespace YumYum.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Index()
 		{
-			int? userId = HttpContext.Session.GetInt32("userId");
-			//int? foreignUserId = 3205;
-			int? foreignUserId = HttpContext.Session.GetInt32("foreignId");
-			int? id = (foreignUserId == null) ? userId : foreignUserId;
-			ViewBag.userId = userId;
+            int? userId = HttpContext.Session.GetInt32("userId");
+            //int? foreignUserId = 3205;
+            int? foreignUserId = HttpContext.Session.GetInt32("foreignId");
+            int? id = (foreignUserId == null) ? userId : foreignUserId;
+            ViewBag.userId = userId;
 
-
+            if(HttpContext.Session.GetInt32("foreignId") is null)
+            {
+                if (HttpContext.Session.GetInt32("userId") is null)
+                {
+                    return RedirectToAction("LoginPage", "User");
+                }
+            }
+            
+            
 
 			// 設定Breadcrumb 顯示頁面資訊
 			ViewBag.Breadcrumbs = new List<BreadcrumbItem>
@@ -95,7 +103,11 @@ namespace YumYum.Controllers
 				recipeDetailQuery = recipeDetailQuery.ToList(),
 			};
 
+            if(userId is not null)
+            {
 			HttpContext.Session.SetInt32("userId", (int)userId);
+            }
+
 			HttpContext.Session.Remove("foreignId");
 			return View(AllList);
 

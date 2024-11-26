@@ -172,8 +172,8 @@ namespace YumYum.Controllers
             //此區與此區的view更動中
             //接收食譜的id
 
-            int? userId = HttpContext.Session.GetInt32("userId") == null ? 0 : HttpContext.Session.GetInt32("userId");
-            HttpContext.Session.SetInt32("userId", (int)userId!);
+            int? userId = HttpContext.Session.GetInt32("userId") == null ? null : HttpContext.Session.GetInt32("userId");
+            //HttpContext.Session.SetInt32("userId", (int)userId!);
             //食譜id
             int? recipeIdTest = recipeId != null ? recipeId : 1412;
             //收藏食譜的內容

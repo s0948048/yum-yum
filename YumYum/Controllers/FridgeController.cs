@@ -48,100 +48,90 @@ namespace YumYum.Controllers
         [HttpPost]
         public IActionResult UpdateRefrigeratorStore(List<FridgeItemViewModel> RefrigeratorItems, List<FridgeItemViewModel> NewRefrigeratorItems)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                IQueryable<int> Newstoreid = (IQueryable<int>)RefrigeratorItems
-                        .Where(o => o.StoreID.HasValue) // 過濾掉 null
-                        .Select(o => o.StoreID!.Value)   // 取出值
-                        .AsQueryable();
-
-                IQueryable<int> ExsistStoreid = _context.RefrigeratorStores.Where(r => r.UserId == 3204).Select(r => r.StoreId);
-
-                // 舊的比新的還多出的 => 要刪除的
-                var delItems = ExsistStoreid.Except(Newstoreid).ToList();
-
-                // 要修改ㄉ
-                var UpdateItems = ExsistStoreid.Where(r => !delItems.Contains(r)).ToList();
-
-                // Update existing items
-                foreach (var item in RefrigeratorItems.Where(r => UpdateItems.Contains((int)r.StoreID!)))
-                {
-                    var record = _context.RefrigeratorStores.FirstOrDefault(r => r.StoreId == item.StoreID && r.UserId == 3204);
-                    if (record != null)
-                    {
-                        record.UnitId = Convert.ToInt16(item.UnitName);
-                        record.Quantity = item.Quantity!;
-                        record.ValidDate = item.ValidDate;
-                    }
-                }
-
-                // Delete No items
-                foreach (var item in RefrigeratorItems.Where(r => delItems.Contains((int)r.StoreID!)))
-                {
-                    var record = _context.RefrigeratorStores.FirstOrDefault(r => r.StoreId == item.StoreID && r.UserId == 3204);
-                    _context.RefrigeratorStores.Remove(record!);
-                }
-
-                // Add new items    1. 舊有食材、新的食材
-                foreach (var newItem in NewRefrigeratorItems)
-                {
-
-                    if (newItem.NewIngredientCreate is null)
-                    {
-                        var newRecord = new RefrigeratorStore
-                        {
-                            UserId = 3204,
-                            IngredientId = newItem.IngredientID,
-                            Quantity = newItem.Quantity!,
-                            UnitId = Convert.ToInt16(newItem.UnitName),
-                            ValidDate = newItem.ValidDate
-                        };
-                        _context.RefrigeratorStores.Add(newRecord);
-                    }
-                    else if (newItem.NewIngredientCreate.Length > 0)
-                    {
-                        var newIg = _context.Ingredients.Add(new Ingredient
-                        {
-                            IngredientName = newItem.NewIngredientCreate,
-                            AttributionId = 9
-                        });
-                        _context.RefrigeratorStores.Add(new RefrigeratorStore
-                        {
-                            UserId = 3204,
-                            Ingredient = newIg.Entity,
-                            Quantity = newItem.Quantity!,
-                            UnitId = Convert.ToInt16(newItem.UnitName),
-                            ValidDate = newItem.ValidDate
-                        });
-                    }
-
-                    _context.SaveChanges();
-
-
-                    var FItemData = GetFridgeItemData();
-                    var IData = GetIngredientData();
-
-                    var Model = new FridgeViewModel
-                    {
-                        RefrigeratorData = FItemData,
-                        IngredientData = IData
-                    };
-                    return RedirectToAction("Index", Model); // Redirect back to the main view after saving changes
-                }
-
-                var fridgeItemData = GetFridgeItemData();
-                var ingredientData = GetIngredientData();
-
-                var viewModel = new FridgeViewModel
-                {
-                    RefrigeratorData = fridgeItemData,
-                    IngredientData = ingredientData
-                };
-                return View("Index", viewModel);
+                return new BadRequestObjectResult(new { seccess = false, message = "錯誤資料格式。" });
             }
-        
-        return RedirectToAction("Index");
+
+            IQueryable<int> Newstoreid = (IQueryable<int>)RefrigeratorItems
+                    .Where(o => o.StoreID.HasValue) // 過濾掉 null
+                    .Select(o => o.StoreID!.Value)   // 取出值
+                    .AsQueryable();
+
+            IQueryable<int> ExsistStoreid = _context.RefrigeratorStores.Where(r => r.UserId == 3204).Select(r => r.StoreId);
+
+            // 舊的比新的還多出的 => 要刪除的
+            var delItems = ExsistStoreid.Except(Newstoreid).ToList();
+
+            // 要修改ㄉ
+            var UpdateItems = ExsistStoreid.Where(r => !delItems.Contains(r)).ToList();
+
+            // Update existing items
+            foreach (var item in RefrigeratorItems.Where(r => UpdateItems.Contains((int)r.StoreID!)))
+            {
+                var record = _context.RefrigeratorStores.FirstOrDefault(r => r.StoreId == item.StoreID && r.UserId == 3204);
+                if (record != null)
+                {
+                    record.UnitId = Convert.ToInt16(item.UnitName);
+                    record.Quantity = item.Quantity!;
+                    record.ValidDate = item.ValidDate;
+                }
+            }
+
+            // Delete No items
+            foreach (var item in RefrigeratorItems.Where(r => delItems.Contains((int)r.StoreID!)))
+            {
+                var record = _context.RefrigeratorStores.FirstOrDefault(r => r.StoreId == item.StoreID && r.UserId == 3204);
+                _context.RefrigeratorStores.Remove(record!);
+            }
+
+            // Add new items    1. 舊有食材、新的食材
+            foreach (var newItem in NewRefrigeratorItems)
+            {
+                if (newItem.NewIngredientCreate is null)
+                {
+                    var newRecord = new RefrigeratorStore
+                    {
+                        UserId = 3204,
+                        IngredientId = newItem.IngredientID,
+                        Quantity = newItem.Quantity!,
+                        UnitId = Convert.ToInt16(newItem.UnitName),
+                        ValidDate = newItem.ValidDate
+                    };
+                    _context.RefrigeratorStores.Add(newRecord);
+                }
+                else if (newItem.NewIngredientCreate.Length > 0)
+                {
+                    var newIg = _context.Ingredients.Add(new Ingredient
+                    {
+                        IngredientName = newItem.NewIngredientCreate,
+                        AttributionId = 9
+                    });
+                    _context.RefrigeratorStores.Add(new RefrigeratorStore
+                    {
+                        UserId = 3204,
+                        Ingredient = newIg.Entity,
+                        Quantity = newItem.Quantity!,
+                        UnitId = Convert.ToInt16(newItem.UnitName),
+                        ValidDate = newItem.ValidDate
+                    });
+                }
+                _context.SaveChanges();
+            }
+
+            var fridgeItemData = GetFridgeItemData();
+            var ingredientData = GetIngredientData();
+
+            var viewModel = new FridgeViewModel
+            {
+                RefrigeratorData = fridgeItemData,
+                IngredientData = ingredientData
+            };
+            return View("Index", viewModel);// Redirect back to the main view after saving changes
         }
+
+
+
 
         [HttpGet]
         public IActionResult GetOtherUnits()
