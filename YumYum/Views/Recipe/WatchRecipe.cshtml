@@ -10,8 +10,13 @@
 @using System.Text.Json;
 @using YumYum.Models;
 @{
-    string userPhoto = Model.recipeWatchBrief[0].userPhoto == null ? "~/img/icon/EmptyAvatar.svg" : Model.recipeWatchBrief[0].userPhoto;
+    string userPhoto = Model.recipeWatchBrief![0].userPhoto == null ? "~/img/icon/EmptyAvatar.svg" : Model.recipeWatchBrief[0].userPhoto!;
     string collectColor = Model.collectStatus == 0 ? "transparent" : "#30533f";
+    for (int i = 0; i < Model.recipeRecordFields!.Count; i++)
+    {
+        Model.recipeRecordFields[i].FieldShot = Model.recipeRecordFields[i].FieldShot == "/img/icon/addPhoto.png" ? "img/icon/EmptyPhoto.png" : Model.recipeRecordFields[i].FieldShot;
+    }
+
 }
 
 @model RecipeWatch
@@ -216,6 +221,9 @@
         <div class="finish-block"> <div class="d-inline-block align-content-center finish-ineer">FINISH</div> </div>
     </div>
 </div>
+<script>
+    console.log(@Model.recipeRecordFields[1].FieldShot)
+</script>
 <script>
     $(function () {
         $('#svg-collect').on('click', function () {
