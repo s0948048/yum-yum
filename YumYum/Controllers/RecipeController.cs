@@ -528,7 +528,7 @@ namespace YumYum.Controllers
             //接收食譜的id
 
             //測試(之後會刪掉)->
-            int recipeIdTest = recipeId != null ? recipeId : 1584;
+            int recipeIdTest = recipeId != 0 ? recipeId : 1591;
             //得到資料
             //取得食譜內容
             var recipeBrief = from recipe in await _context.RecipeBriefs.Where(p => p.RecipeId == recipeIdTest).ToListAsync()
