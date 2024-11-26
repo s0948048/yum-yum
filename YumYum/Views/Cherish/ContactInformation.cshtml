@@ -9,9 +9,9 @@
 }
 
 @* 標示目前所在頁面路徑位置 *@
-<div class="mt-2 mb-3">
-	@await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
-</div>
+@*<div class="mt-2 mb-3">*@
+@await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
+@*</div>*@
 
 @* 測試中 *@
 @* <h6 style="color: var(--yum-secondary-2);">※ 登入者ID為：@Model.GiverUserId</h6> *@
