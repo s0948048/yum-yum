@@ -35,15 +35,15 @@ namespace YumYum.Controllers
 
 		public IActionResult Manage()
 		{
-            if (HttpContext.Session.GetInt32("foreignId") is null)
-            {
-                if (HttpContext.Session.GetInt32("userId") is null)
-                {
-                    return RedirectToAction("LoginPage", "User");
-                }
-            }
-            // 設定 Breadcrumb
-            ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+			if (HttpContext.Session.GetInt32("foreignId") is null)
+			{
+				if (HttpContext.Session.GetInt32("userId") is null)
+				{
+					return RedirectToAction("LoginPage", "User");
+				}
+			}
+			// 設定 Breadcrumb
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
 			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
 			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
 			 new BreadcrumbItem("管理良食", "#") // 當前的頁面
@@ -161,9 +161,9 @@ namespace YumYum.Controllers
 
 			ViewBag.city = new SelectList(_context.Cities, "CityKey", "CityName");
 
-            List<int> cherishAttr = [1, 4, 5, 6];
+			List<int> cherishAttr = [1, 4, 5, 6];
 
-            var chrishOrders = from c in _context.CherishOrders
+			var chrishOrders = from c in _context.CherishOrders
 							   where c.TradeStateCode == 0
 							   where cherishAttr.Contains(c.IngredAttributeId)
 							   where c.EndDate > DateOnly.FromDateTime(DateTime.Now)
@@ -323,9 +323,9 @@ namespace YumYum.Controllers
 		public async Task<IActionResult> SortCherish([FromBody] CherishFilter f)
 		{
 			IQueryable<CherishOrder> query = _context.CherishOrders;
-            
+
 			List<int> cherishAttr = [1, 4, 5, 6];
-            query = query.Where(c => cherishAttr.Contains(c.IngredAttributeId));
+			query = query.Where(c => cherishAttr.Contains(c.IngredAttributeId));
 			query = query.Where(c => c.EndDate > DateOnly.FromDateTime(DateTime.Now));
 
 			if (f.SortAttr != null && f.SortAttr.Count != 0)
@@ -371,9 +371,9 @@ namespace YumYum.Controllers
 		// 2024-11-25 
 		public async Task<List<CherishMatch>> QResult(IQueryable<CherishOrder> query)
 		{
-            List<int> cherishAttr = [1, 4, 5, 6];
-            
-            var _query = from c in query
+			List<int> cherishAttr = [1, 4, 5, 6];
+
+			var _query = from c in query
 						 where c.TradeStateCode == 0
 						 where cherishAttr.Contains(c.IngredAttributeId)
 						 where c.EndDate > DateOnly.FromDateTime(DateTime.Now)
@@ -408,15 +408,15 @@ namespace YumYum.Controllers
 		[Route("Cherish/MatchHistory")]
 		public async Task<IActionResult> MatchHistory()
 		{
-            if (HttpContext.Session.GetInt32("foreignId") is null)
-            {
-                if (HttpContext.Session.GetInt32("userId") is null)
-                {
-                    return RedirectToAction("LoginPage", "User");
-                }
-            }
-            // 設定 Breadcrumb
-            ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+			if (HttpContext.Session.GetInt32("foreignId") is null)
+			{
+				if (HttpContext.Session.GetInt32("userId") is null)
+				{
+					return RedirectToAction("LoginPage", "User");
+				}
+			}
+			// 設定 Breadcrumb
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
 			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
 			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
 			 new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryMine", "Cherish") ?? "#"),
@@ -716,15 +716,15 @@ namespace YumYum.Controllers
 		[HttpGet]
 		public IActionResult ContactInformation()
 		{
-            if (HttpContext.Session.GetInt32("foreignId") is null)
-            {
-                if (HttpContext.Session.GetInt32("userId") is null)
-                {
-                    return RedirectToAction("LoginPage", "User");
-                }
-            }
-            // 設定 Breadcrumb
-            ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
+			if (HttpContext.Session.GetInt32("foreignId") is null)
+			{
+				if (HttpContext.Session.GetInt32("userId") is null)
+				{
+					return RedirectToAction("LoginPage", "User");
+				}
+			}
+			// 設定 Breadcrumb
+			ViewBag.Breadcrumbs = new List<BreadcrumbItem>{
 			 new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
 			 new BreadcrumbItem("惜食專區", Url.Action("Introduce", "Cherish") ?? "#"),
 			 new BreadcrumbItem("聯絡資料", "#") // 當前的頁面
@@ -869,11 +869,11 @@ namespace YumYum.Controllers
 			return time;
 		}
 
-		public List<CherishDefaultTimeSet> GetTradeTime(int userId)
+		public List<string> GetTradeTime(int userId)
 		{
 			var query = from o in _context.CherishDefaultTimeSets
 						where o.GiverUserId == userId
-						select o;
+						select o.TradeTimeCode;
 			var result = query.ToList();
 
 			return result;
