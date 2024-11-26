@@ -318,7 +318,7 @@
         var elementUnit = $('<div>', {
             class: 'col-3 d-flex justify-content-center align-items-center',
             name: 'div-unit',
-            html: '<select name="" id="" style="width: 80px;" class="mx-4 br-black d-flex">@foreach (var unit in Model.units!){if (unit.IngredAttributeId == 9){<option id="@unit.UnitId">@unit.UnitName</option>}}</select>'
+            html: '<select style="width: 80px;" class="mx-4 br-black d-flex">@foreach (var unit in Model.units!){if (unit.IngredAttributeId == 9){<option id="@unit.UnitId">@unit.UnitName</option>}}</select>'
         }).attr('b-wbveynjuki', '');
         //垃圾桶
         var elementDelete = $('<button>', {
