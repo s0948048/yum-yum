@@ -23,7 +23,7 @@ $('#register-submit').on("click", function () {
         }
         //傳遞資料給server->controller
         $.ajax({
-            url: 'User/RegisterPage',
+            url: '/User/RegisterPage',
             type: 'Post',
             contentType: 'application/json',
             data: JSON.stringify(data),
