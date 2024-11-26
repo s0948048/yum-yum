@@ -242,6 +242,7 @@
 						// 資料更新成功，關閉 modal 並顯示成功消息
 						$(modal).modal('hide');
 						alert('贈出成功！');
+						window.location.href = "/Cherish/Manage";
 					},
 					error: function () {
 						$(modal).modal('hide');
