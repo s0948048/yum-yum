@@ -44,10 +44,11 @@ namespace YumYum.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateRefrigeratorStore(List<FridgeItemViewModel> RefrigeratorItems)
+        public IActionResult UpdateRefrigeratorStore(List<FridgeItemViewModel> RefrigeratorItems, List<FridgeItemViewModel> NewRefrigeratorItems)
         {
             if (ModelState.IsValid)
             {
+                // Update existing items
                 foreach (var item in RefrigeratorItems)
                 {
                     var record = _context.RefrigeratorStores.FirstOrDefault(r => r.StoreId == item.StoreID && r.UserId == 3204);
@@ -58,11 +59,24 @@ namespace YumYum.Controllers
                     }
                 }
 
+                // Add new items
+                foreach (var newItem in NewRefrigeratorItems)
+                {
+                    var newRecord = new RefrigeratorStore
+                    {
+                        UserId = 3204,
+                        IngredientId = newItem.IngredientID,
+                        Quantity = newItem.Quantity!,
+                        UnitId = newItem.UnitID,
+                        ValidDate = newItem.ValidDate
+                    };
+                    _context.RefrigeratorStores.Add(newRecord);
+                }
                 _context.SaveChanges();
 
                 return RedirectToAction("Index"); // Redirect back to the main view after saving changes
             }
-            return View();
+            return View("Index");
         }
 
 

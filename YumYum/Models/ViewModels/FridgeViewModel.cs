@@ -11,10 +11,11 @@
     {
         public int StoreID { get; set; }
         public int UserID { get; set; }
-        public int IngredientID { get; set; }
+        public short IngredientID { get; set; }
         public string? IngredientName { get; set; }
         public string? IngredientIcon { get; set; }
         public string? Quantity { get; set; }
+        public short UnitID { get; set; }
         public string? UnitName { get; set; }
         public DateOnly ValidDate { get; set; }
     }

@@ -93,20 +93,23 @@ $('#ingredient-list').on('click', '.tag-button', function () {
             console.log(optionsHtml);
 
             let newRowHtml = `
-                <div class="row align-items-center mb-1">
+                <div class="row align-items-center mb-1 new-row">
+                    <input type="hidden" name="NewRefrigeratorItems.Index" value="${ingredientName}" />
+                    <input type="hidden" name="NewRefrigeratorItems[${ingredientName}].IngredientID" value="${ingredientName}" />
+
                     <div class="col-md-3 col-4">
                         ${clickedButtonHtml}
                     </div>
                     <div class="col-md-2 col-4 text-center">
-                        <input type="number" class="form-control" value="1" min="1">
+                        <input type="number" name="NewRefrigeratorItems[${ingredientName}].Quantity" class="form-control" value="1" min="1">
                     </div>
                     <div class="col-md-2 col-4">
-                        <select class="form-select">
+                        <select class="form-select" name="NewRefrigeratorItems[${ingredientName}].UnitID">
                             ${optionsHtml}
                         </select>
                     </div>
                     <div class="col-md-3 col-8 text-center">
-                        <input type="date" class="form-control">
+                        <input type="date" name="NewRefrigeratorItems[${ingredientName}].ValidDate" class="form-control">
                     </div>
                     <div class="col-md-1 col-4 d-flex justify-content-end">
                         <button class="btn d-flex justify-content-center align-items-center ps-1 pe-1 btn-delete">
