@@ -14,7 +14,7 @@
     string collectColor = Model.collectStatus == 0 ? "transparent" : "#30533f";
     for (int i = 0; i < Model.recipeRecordFields!.Count; i++)
     {
-        Model.recipeRecordFields[i].FieldShot = Model.recipeRecordFields[i].FieldShot == "/img/icon/addPhoto.png" ? "img/icon/EmptyPhoto.png" : Model.recipeRecordFields[i].FieldShot;
+        Model.recipeRecordFields[i].FieldShot = Model.recipeRecordFields[i].FieldShot == "/img/icon/addPhoto.png" ? "/img/icon/EmptyPhoto.png" : Model.recipeRecordFields[i].FieldShot;
     }
 
 }
