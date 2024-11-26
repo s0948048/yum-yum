@@ -59,10 +59,13 @@
                             </span>
                         </div>
                         <div class="col-md-3 col-3 text-center">
-                            <span class="bottom-line">有效天數: 2日</span>
+                            @{
+                                var valid = item.ValidDate.DayNumber - DateOnly.FromDateTime(DateTime.Now).DayNumber;
+                            }
+                            <span class="bottom-line">有效天數: @(valid)日</span>
                         </div>
-                        <div class="col-md-3 col-2 text-end">
-                            <span class="badge bg-danger">快過期了</span>
+                        <div class="col-md-3 col-2 text-center">
+                            <span class="badge btn @(valid>3?"btn-success":valid>0?"btn-warning":"btn-danger")">@(valid > 3 ? "保存" : valid > 0 ? "快過期了" : "過期了")</span>
                         </div>
                     </div>
                 }

@@ -53,7 +53,7 @@ namespace YumYum.Controllers
                 return new BadRequestObjectResult(new { seccess = false, message = "錯誤資料格式。" });
             }
 
-            IQueryable<int> Newstoreid = (IQueryable<int>)RefrigeratorItems
+            IQueryable<int> Newstoreid = RefrigeratorItems
                     .Where(o => o.StoreID.HasValue) // 過濾掉 null
                     .Select(o => o.StoreID!.Value)   // 取出值
                     .AsQueryable();
@@ -66,26 +66,25 @@ namespace YumYum.Controllers
             // 要修改ㄉ
             var UpdateItems = ExsistStoreid.Where(r => !delItems.Contains(r)).ToList();
 
-            // Update existing items
-            foreach (var item in RefrigeratorItems.Where(r => UpdateItems.Contains((int)r.StoreID!)))
+            // Update existing items 1. 舊有食材
+            foreach (var item in _context.RefrigeratorStores.Where(r => UpdateItems.Contains(r.StoreId!)))
             {
-                var record = _context.RefrigeratorStores.FirstOrDefault(r => r.StoreId == item.StoreID && r.UserId == 3204);
-                if (record != null)
+                var UpItem = RefrigeratorItems.Where(r => r.StoreID == item.StoreId).First();
+                if (UpItem != null)
                 {
-                    record.UnitId = Convert.ToInt16(item.UnitName);
-                    record.Quantity = item.Quantity!;
-                    record.ValidDate = item.ValidDate;
+                    item.UnitId = Convert.ToInt16(UpItem.UnitName);
+                    item.Quantity = UpItem.Quantity!;
+                    item.ValidDate = UpItem.ValidDate;
                 }
             }
 
-            // Delete No items
-            foreach (var item in RefrigeratorItems.Where(r => delItems.Contains((int)r.StoreID!)))
+            // Delete No items 2. 刪除
+            foreach (var item in _context.RefrigeratorStores.Where(r => delItems.Contains((int)r.StoreId!)))
             {
-                var record = _context.RefrigeratorStores.FirstOrDefault(r => r.StoreId == item.StoreID && r.UserId == 3204);
-                _context.RefrigeratorStores.Remove(record!);
+                _context.RefrigeratorStores.Remove(item!);
             }
 
-            // Add new items    1. 舊有食材、新的食材
+            // Add new items  3. a.原有食材 b.克制化石才
             foreach (var newItem in NewRefrigeratorItems)
             {
                 if (newItem.NewIngredientCreate is null)
@@ -105,6 +104,7 @@ namespace YumYum.Controllers
                     var newIg = _context.Ingredients.Add(new Ingredient
                     {
                         IngredientName = newItem.NewIngredientCreate,
+                        IngredientIcon = "/img/icon/EmptyTag.svg",
                         AttributionId = 9
                     });
                     _context.RefrigeratorStores.Add(new RefrigeratorStore
@@ -112,13 +112,12 @@ namespace YumYum.Controllers
                         UserId = 3204,
                         Ingredient = newIg.Entity,
                         Quantity = newItem.Quantity!,
-                        UnitId = Convert.ToInt16(newItem.UnitName),
+                        UnitId = Convert.ToInt16(newItem.UnitID),
                         ValidDate = newItem.ValidDate
                     });
                 }
-                _context.SaveChanges();
             }
-
+            _context.SaveChanges();
             var fridgeItemData = GetFridgeItemData();
             var ingredientData = GetIngredientData();
 
@@ -179,6 +178,7 @@ namespace YumYum.Controllers
                 .Select(i => new
                 {
                     IngredientName = i.IngredientName,
+                    IngredientID = i.IngredientId,
                     IngredientIcon = Url.Content($"~{i.IngredientIcon}")
                 }).ToList();
 

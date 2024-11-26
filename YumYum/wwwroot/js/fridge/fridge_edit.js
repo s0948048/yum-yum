@@ -37,7 +37,7 @@ $('.ingredient-attribute-checkbox').on('change', function () {
                 $.each(response, function (index, item) {
                     $('#ingredient-list').append(
                         `
-                        <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+                        <button class="tag-button d-inline-flex align-items-center btn btn-tags" id="${item.IngredientID}">
                                 <img src="${item.IngredientIcon}" alt="" />
                                 <span>${item.IngredientName}</span>
                         </button>
@@ -154,14 +154,15 @@ $('#food-tag-sec').on('click', '#add-new-ingred', function () {
             response.forEach(function (unit) {
                 otherOptionsHtml += `<option value="${unit.UnitId}">${unit.UnitName}</option>`
             })
-
+            let time = new Date();
+            time.setDate(time.getDate() + 3);
             let newRowHtml = `
                 <div class="row align-items-center mb-1">
 
                         <input type="hidden" name="NewRefrigeratorItems.Index" value="${indexRandom}" />
                         <input type="hidden" name="NewRefrigeratorItems[${indexRandom}].StoreID" value="" />
                         <input type="hidden" name="NewRefrigeratorItems[${indexRandom}].UserID" value="" />
-                        <input type="hidden" name="NewRefrigeratorItems[${indexRandom}].IngredientID" value="" />
+                        <input type="hidden" name="NewRefrigeratorItems[${indexRandom}].IngredientID" value="0" />
 
                         <div class="col-md-3 col-4">
                             <button class="w-75 tag-button d-inline-flex align-items-center btn btn-tags">
@@ -180,7 +181,7 @@ $('#food-tag-sec').on('click', '#add-new-ingred', function () {
                             </select>
                         </div>
                         <div class="col-md-3 col-8 text-center">
-                            <input type="date" class="form-control" name="NewRefrigeratorItems[${indexRandom}].ValidDate" />
+                            <input type="date" class="form-control" value="${time.getFullYear()}-${String(time.getMonth() + 1).padStart(2, '0')}-${String(time.getDate()).padStart(2, '0')}" name="NewRefrigeratorItems[${indexRandom}].ValidDate" />
                         </div>
                         <div class="col-md-1 col-4 d-flex justify-content-end">
                             <button class="btn d-flex justify-content-center align-items-center ps-1 pe-1 btn-delete">
