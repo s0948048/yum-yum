@@ -27,10 +27,10 @@ namespace YumYum.Controllers
 		public async Task<IActionResult> Index()
 		{
 			int? userId = HttpContext.Session.GetInt32("userId");
-			ViewBag.userId = userId;
 			//int? foreignUserId = 3205;
 			int? foreignUserId = HttpContext.Session.GetInt32("foreignId");
-			userId = (foreignUserId == null) ? userId : foreignUserId;
+			int? id = (foreignUserId == null) ? userId : foreignUserId;
+			ViewBag.userId = userId;
 
 
 
@@ -44,7 +44,7 @@ namespace YumYum.Controllers
 			var userQuery = from user in _context.UserBios
 							join userNickname in _context.UserSecretInfos
 							on user.UserId equals userNickname.UserId
-							where user.UserId == userId
+							where user.UserId == id
 							select new UserQueryViewModel
 							{
 								UserId = user.UserId,
@@ -96,6 +96,7 @@ namespace YumYum.Controllers
 			};
 
 			HttpContext.Session.SetInt32("userId", (int)userId);
+			HttpContext.Session.Remove("foreignId");
 			return View(AllList);
 
 
