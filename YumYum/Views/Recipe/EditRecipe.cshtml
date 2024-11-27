@@ -554,6 +554,7 @@
         };
         //-----------------------------------------------------------------
         let recipeBriefData = {
+            RecipeId: @Model.recipeWatchBrief[0].RecipeId,
             RecipeName: $('#recipe-name').val(),
             RecipeClassId: parseInt($('#select-recipeclass option:selected').attr('id').slice(-1)),
             FinishMinute: parseInt($('#recipe-finishtime').val()),
@@ -679,6 +680,7 @@
         };
         //-----------------------------------------------------------------
         let recipeBriefData = {
+            RecipeId:@Model.recipeWatchBrief[0].RecipeId,
             RecipeName: $('#recipe-name').val(),
             RecipeClassId: parseInt($('#select-recipeclass option:selected').attr('id').slice(-1)),
             FinishMinute: parseInt($('#recipe-finishtime').val()),
