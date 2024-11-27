@@ -470,17 +470,24 @@ namespace YumYum.Controllers
             }
 
         }
-        [HttpPost]
-        public async Task<IActionResult> RegisterVerifyPage([FromBody] UserSecretInfo user)
-        {
-            user.EmailChecked = true;
-            await _context.UserSecretInfos.AddAsync(user);
-            await _context.SaveChangesAsync();
-            return Json(new { action = Url.Action("Index", "Recipe"), successmessage = "成功新增會員資料" });
-        }
+		[HttpPost]
+		public async Task<IActionResult> RegisterVerifyPage([FromBody] UserSecretInfo user)
+		{
+			user.EmailChecked = true;
+			await _context.UserSecretInfos.AddAsync(user);
+			await _context.SaveChangesAsync();
+			UserSecretInfo? newUserSecret = await _context.UserSecretInfos.FirstOrDefaultAsync(p => p.Email == user.Email);
+			UserBio newUser = new UserBio()
+			{
+				UserId = newUserSecret.UserId
+			};
+			_context.UserBios.Add(newUser);
+			await _context.SaveChangesAsync();
+			return Json(new { action = Url.Action("Index", "Recipe"), successmessage = "成功新增會員資料" });
+		}
 
 
-        [HttpPost]
+		[HttpPost]
         public async Task<IActionResult> SendVerifyAgain([FromBody] string Email)
         {
             //驗證碼
