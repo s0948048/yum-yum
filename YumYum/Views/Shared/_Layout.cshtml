@@ -79,17 +79,27 @@
 						</li>
 						<!-- 登入 -->
 						<li class="nav-item">
-							@if (userId != null)
-							{
-								<a class="nav-link" asp-controller="User" asp-action="Index">
-									<img src='@(TempData.Peek("userHeadShot"))' style="height: 30px; width: auto;" alt="login" class="rounded-circle">
-									<text>@(TempData.Peek("userNickName"))</text>
-								</a>
-							}
-							else
+							@if (userId == null || userId == 0)
 							{
 								<a class="nav-link" asp-controller="User" asp-action="LogInPage">
-									<img src="~/img/icon/Login.svg" style="height: 30px; width: auto;" alt="login"> 登入
+									<img src="~/img/icon/Login.svg" style="height: 30px; width: 30px;" alt="login"> 登入
+								</a>
+							}
+							else if (userId != null)
+							{
+								<a class="nav-link" asp-controller="User" asp-action="Index">
+									@if (TempData.Peek("userHeadShot") != null)
+									{
+										<img src='@(TempData.Peek("userHeadShot"))' style="height: 30px; width: 30px;" alt="login" class="rounded-circle" onerror="setDefaultImage()" id="dynamicImage">
+									}
+									else
+									{
+										<svg height="30" width="30">
+											<circle r="14" cx="15" cy="15" fill="var(--yum-primary-3)" />
+											<image x="0" y="0" width="30" height="30" href="/img/icon/EmptyAvatar.svg" />
+										</svg>
+									}
+									<text>@(TempData.Peek("userNickName"))</text>
 								</a>
 							}
 						</li>
