@@ -33,7 +33,7 @@
 							<ul class="dropdown-menu" aria-labelledby="recipeDropdown">
 								<li><a class="dropdown-item" asp-controller="Recipe" asp-action="Index">查詢食譜</a></li>
 								<li><hr class="dropdown-divider"></li>
-								<li><a class="dropdown-item" asp-controller="Recipe" asp-action="WatchRecipe">建立食譜</a></li>
+								<li><a class="dropdown-item" asp-controller="Recipe" asp-action="CreateRecipe">建立食譜</a></li>
 							</ul>
 						</li>
 						<!-- 冰箱 -->
@@ -69,6 +69,9 @@
 								<li><a class="dropdown-item" asp-controller="User" asp-action="Index">個人簡介</a></li>
 								<li><hr class="dropdown-divider"></li>
 								<li><a class="dropdown-item" asp-controller="User" asp-action="MyRecipeEdit">我的食譜</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item" asp-controller="User" asp-action="ChangePasswordPage">變更密碼</a></li>
+								
 							</ul>
 						</li>
 						<!-- 登入 -->
