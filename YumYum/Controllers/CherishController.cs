@@ -143,9 +143,30 @@ namespace YumYum.Controllers
 			 new BreadcrumbItem("編輯良食", "#") // 當前的頁面
              };
 
-			ShowOrderDetail(cherishId);
+			var ingredientType = from o in _context.IngredAttributes
+								 where o.IngredAttributeId == 1 || o.IngredAttributeId == 4 || o.IngredAttributeId == 5 || o.IngredAttributeId == 6
+								 select o;
+			ViewBag.IngredientTypeList = ingredientType;
 
-			return View();
+			var ingredient = from o in _context.Ingredients
+							 select o;
+			ViewBag.IngredientList = ingredient;
+
+			var city = from o in _context.Cities
+					   select o;
+			ViewBag.CityList = city;
+
+			var region = from o in _context.Regions
+						 select o;
+			ViewBag.RegionList = region;
+
+			CherishOrderViewModel orderDetail = ShowOrderDetail(cherishId);
+
+			ViewBag.Days = GetDay();
+			ViewBag.Times = GetTime();
+			ViewBag.TradeTimes = GetTradeTime(orderDetail.GiverUserId);
+
+			return View(orderDetail);
 		}
 
 

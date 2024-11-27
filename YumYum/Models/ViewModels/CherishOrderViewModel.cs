@@ -1,4 +1,6 @@
-﻿namespace YumYum.Models.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace YumYum.Models.ViewModels
 {
 	public class CherishOrderViewModel
 	{
@@ -9,23 +11,35 @@
 		public int GiverUserId { get; set; }
 		// 上架申請日期
 		public DateOnly SubmitDate { get; set; }
-		// 數量
+
+		[Display(Name = "數量")]
 		public short Quantity { get; set; }
-		// 截止日期
+
+		[Display(Name = "截止日期")]
 		public DateOnly EndDate { get; set; }
-		// 食材來源
+
+		[Display(Name = "食材來源")]
 		public string? ObtainSource { get; set; }
-		// 購買日期
+
+		[Display(Name = "購買日期 或 採收日期")]
 		public DateOnly ObtainDate { get; set; }
-		// 有效期限
+
+		[Display(Name = "有效期限")]
 		public DateOnly? CherishValidDate { get; set; }
 		// 圖片路徑
 		public string? CherishPhoto { get; set; }
 
 		// [食材類]
-		// 食材名稱
+		// 食材編號
+		public short IngredientId { get; set; }
+
+		[Display(Name = "食材名稱")]
 		public string? IngredientName { get; set; }
-		// 食材分類
+
+		// 食材分類編號
+		public byte IngredAttributeId { get; set; }
+
+		[Display(Name = "食材分類")]
 		public string? IngredAttributeName { get; set; }
 
 		// [地區類]
@@ -37,8 +51,9 @@
 		public string? RegionName { get; set; }
 
 		// [聯絡類]
-		// 暱稱
+		[Display(Name = "暱稱")]
 		public string? UserNickname { get; set; }
+
 		// 聯絡方式
 		public string? ContactLine { get; set; }
 		public string? ContactPhone { get; set; }
