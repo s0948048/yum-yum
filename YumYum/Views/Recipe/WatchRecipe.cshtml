@@ -6,7 +6,7 @@
 @using System.Text.Json;
 @using YumYum.Models;
 @{
-    string userPhoto = Model.recipeWatchBrief![0].userPhoto == null ? "~/img/icon/EmptyAvatar.svg" : Model.recipeWatchBrief[0].userPhoto!;
+    string userPhoto = Model.recipeWatchBrief![0].userPhoto == null ? "/img/icon/EmptyAvatar.svg" : Model.recipeWatchBrief[0].userPhoto!;
     string collectColor = Model.collectStatus == 0 ? "transparent" : "#30533f";
     for (int i = 0; i < Model.recipeRecordFields!.Count; i++)
     {
