@@ -58,10 +58,12 @@
                                     <p class="card-title text-start">
                                         食材:
                                         @{
-                                            var ingredients = string.Join(", ", recipeGroup.Select(ingredient => ingredient.IngredientName));
+                                            var ingredients = recipe.Ingredients ?? new List<string>();
+                                            var ingredientsText = string.Join(", ", ingredients);
                                         }
-                                        @ingredients
+                                        @ingredientsText
                                     </p>
+                                    
                                     <div class="d-flex align-items-center">
                                         <img src="/img/icon/timer.svg" alt="timer">
                                         <div class="card-text text-start mb-0">
@@ -75,10 +77,14 @@
                             <div class="col-md-2 d-flex justify-content-center align-items-center flex-column">
 
                                 <button type="button" class="yum-btn btn align-content-center fw-600" onclick="window.location.href='@Url.Action("WatchRecipe", "Recipe", new { recipeId = @recipe.RecipeID })';">
-                                    
-                                    <svg height="20px" viewBox="0 -960 960 960" width="20px" fill="#30533f">
-                                        <path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z" fill="#e2e3cf" />
+                                    <svg viewBox="0 -960 960 960" width="20px" height="20px" fill="#30533f">
+                                        <!-- 外框 -->
+                                        <path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z"></path>
+                                        <!-- 內部 -->
+                                        <path id="svg-path" d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Z"  transform="scale(0.8, 0.8) translate(100,-140)"></path>
                                     </svg>
+                                    
+
                                     <span>收藏食譜</span>
                                 </button>
 

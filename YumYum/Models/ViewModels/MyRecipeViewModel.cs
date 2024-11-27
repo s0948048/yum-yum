@@ -22,6 +22,8 @@
 
             public short RecipeId { get; set; }
 
+            public List<string>? Ingredients { get; set; }
+
         }
         public partial class UserCollectRecipe
         {

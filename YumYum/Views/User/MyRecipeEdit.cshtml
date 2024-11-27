@@ -65,12 +65,15 @@
             <h4 class="card-title text-start">@recipe.RecipeName</h4>
             <p class="card-title text-start">@recipe.UserNickname</p>
             <p class="card-text text-start">@recipe.FieldDescript</p>
-            <p class="card-title text-start">食材:
-            @{
-            var ingredients = string.Join(", ", recipeGroup.Select(ingredient => ingredient.IngredientName));
-            }
-            @ingredients
+            <p class="card-title text-start">
+                食材:
+                @{
+                    var ingredients = recipe.Ingredients ?? new List<string>();
+                    var ingredientsText = string.Join(", ", ingredients);
+                }
+                @ingredientsText
             </p>
+
             <div class="d-flex align-items-center">
             <img src="/img/icon/timer.svg" alt="timer">
             <div class="card-text text-start mb-0">

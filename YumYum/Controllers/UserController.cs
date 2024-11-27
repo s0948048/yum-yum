@@ -232,17 +232,26 @@ namespace YumYum.Controllers
         //芳慈
         public IActionResult MyRecipeEdit()
         {
-            // 設定Breadcrumb 顯示頁面資訊
+            // 設定 Breadcrumb 顯示頁面資訊
             ViewBag.Breadcrumbs = new List<BreadcrumbItem>
-             {
-             new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
-             new BreadcrumbItem("會員專區", Url.Action("Index", "User") ?? "#"),
-             new BreadcrumbItem("我的食譜", "#") // 目前的頁面
-             };
+    {
+        new BreadcrumbItem("首頁", Url.Action("Index", "Recipe") ?? "#"),
+        new BreadcrumbItem("會員專區", Url.Action("Index", "User") ?? "#"),
+        new BreadcrumbItem("我的食譜", "#") // 目前的頁面
+    };
 
+            // 先給初始值的 userId
+            //int userId = 3205;
+            //if (HttpContext.Session.GetInt32("foreignId") is null)
+            //{
+            //    if (HttpContext.Session.GetInt32("userId") is null)
+            //    {
+            //        return RedirectToAction("LoginPage", "User");
+            //    }
+            //}
 
-            //先設定的userId
-            int userId = 3201;
+            int? userId = HttpContext.Session.GetInt32("userId");
+
 
             // 食譜基本資訊查詢
             var recipeData = from rb in _context.RecipeBriefs
@@ -255,8 +264,8 @@ namespace YumYum.Controllers
                                                            where r.RecipeId == rb.RecipeId
                                                            select r.RecipeRecVersion).Max()
                              && rf.RecipeField == 0
-                             && us.UserId == userId  // Filter by UserID = 3201
-                             select new MyRecipeViewModel.RecipeDetail
+                             && us.UserId == userId // Filter by UserID
+                             select new
                              {
                                  RecipeID = (int)rb.RecipeId,
                                  RecipeName = rb.RecipeName,
@@ -265,21 +274,33 @@ namespace YumYum.Controllers
                                  FieldShot = rf.FieldShot,
                                  FieldDescript = rf.FieldDescript,
                                  RecipeStatusCode = rr.RecipeStatusCode,
-                                 IngredientName = ig.IngredientName,
+                                 IngredientName = ig.IngredientName, // 不去重複
                                  RecipeRecVersion = rf.RecipeRecVersion
                              };
 
+            // 將資料按 RecipeID 分組，並去重複 IngredientName
+            var groupedRecipes = recipeData
+                .GroupBy(r => r.RecipeID)
+                .Select(group => new MyRecipeViewModel.RecipeDetail
+                {
+                    RecipeID = group.Key,
+                    RecipeName = group.First().RecipeName,
+                    UserNickname = group.First().UserNickname,
+                    FinishMinute = group.First().FinishMinute,
+                    FieldShot = group.First().FieldShot,
+                    FieldDescript = group.First().FieldDescript,
+                    RecipeStatusCode = group.First().RecipeStatusCode,
+                    RecipeRecVersion = group.First().RecipeRecVersion,
+                    Ingredients = group.Select(g => g.IngredientName).Distinct().ToList() ?? new List<string>() // 去重複的食材列表
+                })
+                .ToList();
 
-
-            // 合併data
             var viewModel = new MyRecipeViewModel
             {
-                RecipeDetails = recipeData.ToList()
+                RecipeDetails = groupedRecipes
             };
 
             return View(viewModel);
-
-
         }
 
         public IActionResult MyRecipeCollect()
@@ -294,8 +315,8 @@ namespace YumYum.Controllers
             new BreadcrumbItem("收藏食譜", "#") // 目前的頁面
             };
 
-            //先設定的userId
-            int userId = 3201;
+            int? userId = HttpContext.Session.GetInt32("userId");
+
 
             // 食譜基本資訊查詢
             var recipeData = from rb in _context.RecipeBriefs
