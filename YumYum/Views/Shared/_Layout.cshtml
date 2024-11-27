@@ -41,7 +41,7 @@
 						</li>
 						<!-- 冰箱 -->
 						<li class="nav-item">
-							<a class="nav-link fridge-link" style="font-size: 1.15rem; font-weight: 500; letter-spacing: 0.14rem;"
+							<a id="fridge" class="nav-link fridge-link" style="font-size: 1.15rem; font-weight: 500; letter-spacing: 0.14rem;"
 							   asp-controller="Fridge" asp-action="Index">冰箱</a>
 						</li>
 						<!-- 惜食專區 -->
@@ -112,7 +112,26 @@
 			Copyright &copy; 2024 YumYum. All rights reserved.
 		</div>
 	</footer>
+	<script>
+        //by 毅祥
+        $(function () {
+            $('.dropdown-item').on('click', function (e) {
+                if ("@(userId == null)") {
+                    e.preventDefault();
+                    alert("此功能需要登入");
+                    window.location.href = "@Url.Action("LoginPage","User")";
+                }
+            });
 
+            $('#fridge').on('click', function (e) {
+                if ("@(userId == null)") {
+                    e.preventDefault();
+                    alert("此功能需要登入");
+                    window.location.href = "@Url.Action("LoginPage", "User")";
+                }
+            });
+        });
+    </script>
 	<script src="~/js/shared/bootstrap.bundle.js"></script>
 	<script src="~/js/shared/jquery.js"></script>
 	<script src="~/js/shared/site.js"></script>
