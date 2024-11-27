@@ -116,7 +116,7 @@
         //by 毅祥
         $(function () {
             $('.dropdown-item').on('click', function (e) {
-                if ("@(userId == null)") {
+				if (@(userId == null ? "true" : "false")) {
                     e.preventDefault();
                     alert("此功能需要登入");
                     window.location.href = "@Url.Action("LoginPage","User")";
@@ -124,7 +124,7 @@
             });
 
             $('#fridge').on('click', function (e) {
-                if ("@(userId == null)") {
+                if (@(userId == null ? "true":"false")) {
                     e.preventDefault();
                     alert("此功能需要登入");
                     window.location.href = "@Url.Action("LoginPage", "User")";
