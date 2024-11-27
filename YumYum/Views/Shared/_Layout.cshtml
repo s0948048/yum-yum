@@ -10,6 +10,9 @@
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/YumYum.styles.css" asp-append-version="true" />
 </head>
+@{
+	int? userId = HttpContextAccessor.HttpContext.Session.GetInt32("userId");
+}
 <body>
 	<header>
 		@* --- navbar在此 ---*@
@@ -76,9 +79,6 @@
 						</li>
 						<!-- 登入 -->
 						<li class="nav-item">
-							@{
-								int? userId = HttpContextAccessor.HttpContext.Session.GetInt32("userId");
-							}
 							@if (userId != null)
 							{
 								<a class="nav-link" asp-controller="User" asp-action="Index">
