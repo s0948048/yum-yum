@@ -208,7 +208,7 @@ namespace YumYum.Controllers
 			{
 				var fileNamefromlocal = System.IO.Path.GetFileName(file.FileName);
 				var sideFileName = fileNamefromlocal.Split('.').Last();
-				var fileName = "HeadShot" + userId.ToString() + "." + sideFileName;
+				var fileName = userId.ToString() + "." + sideFileName;
 				var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/user", fileName);
 				using (var stream = new FileStream(filePath, FileMode.Create))
 				{
@@ -216,6 +216,7 @@ namespace YumYum.Controllers
 				}
 				UserBio? userBio = await _context.UserBios.Where(p => p.UserId == userId).FirstOrDefaultAsync();
 				userBio.HeadShot = "/img/user/" + fileName;
+				TempData["userHeadShot"] = userBio.HeadShot;
 				_context.Update(userBio);
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(EditInfo));
