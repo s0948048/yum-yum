@@ -215,7 +215,7 @@ namespace YumYum.Controllers
 					await file.CopyToAsync(stream);
 				}
 				UserBio? userBio = await _context.UserBios.Where(p => p.UserId == userId).FirstOrDefaultAsync();
-				userBio.HeadShot = "/img/user" + fileName;
+				userBio.HeadShot = "/img/user/" + fileName;
 				_context.Update(userBio);
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(EditInfo));
