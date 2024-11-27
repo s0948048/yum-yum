@@ -72,7 +72,7 @@
 								<li><a class="dropdown-item" asp-controller="User" asp-action="Index">個人簡介</a></li>
 								<li><hr class="dropdown-divider"></li>
 								<li><a class="dropdown-item" asp-controller="User" asp-action="MyRecipeEdit">我的食譜</a></li>
-								@if (userId != null || userId != 0)
+								@if (userId != null && userId != 0)
 								{
 									<li><hr class="dropdown-divider"></li>
 									<li><a class="dropdown-item" asp-controller="User" asp-action="ChangePasswordPage">變更密碼</a></li>
