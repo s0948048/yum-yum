@@ -34,7 +34,7 @@
             @foreach (var recipeGroup in Model.RecipeDetails.GroupBy(r => r.RecipeID))
             {
             var recipe = recipeGroup.First();
-
+            recipe.FieldShot = recipe.FieldShot == "/img/icon/addPhoto.png" ? "/img/icon/EmptyPhoto.png" : recipe.FieldShot;
             <div class="card mb-3 mx-auto" style="max-width: 95%;width: 100%;">
             <div class="row">
             <!-- 左側圖片區域 -->
