@@ -86,25 +86,28 @@ namespace YumYum.Controllers
             {
                 Console.WriteLine(item);
             }
-            var recipeQuery = from recipe in _context.RecipeBriefs
-                              join recipeInfo in _context.RecipeRecords
-                              on recipe.RecipeId equals recipeInfo.RecipeId
-                              join recipeImage in _context.RecipeRecordFields
-                              on recipe.RecipeId equals recipeImage.RecipeId
-                              join recipeIngredient in _context.RecipeIngredients
-                              on recipe.RecipeId equals recipeIngredient.RecipeId
-                              where (recipeInfo.RecipeStatusCode == 1 || recipeInfo.RecipeStatusCode == 4)
-                              && (recipeImage.RecipeField == 0)
-                              && selectedValues.Contains(recipeIngredient.IngredientId.ToString())
-                              select new RecipeQueryViewModel
-                              {
-                                  RecipeId = recipe.RecipeId,
-                                  RecipeName = recipe.RecipeName,
-                                  FieldShot = recipeImage.FieldShot,
-                                  FinishMinute = recipe.FinishMinute
-                              };
+			var recipeQuery = (from recipe in _context.RecipeBriefs
+							   join recipeInfo in _context.RecipeRecords
+							   on recipe.RecipeId equals recipeInfo.RecipeId
+							   join recipeImage in _context.RecipeRecordFields
+							   on recipe.RecipeId equals recipeImage.RecipeId
+							   join recipeIngredient in _context.RecipeIngredients
+							   on recipe.RecipeId equals recipeIngredient.RecipeId
+							   //where (recipeInfo.RecipeStatusCode == 1 || recipeInfo.RecipeStatusCode == 4) set if in view
+							   where (recipeImage.RecipeField == 0)
+							   where selectedValues.Contains(recipeIngredient.IngredientId.ToString())
+							   select new RecipeQueryViewModel
+							   {
+								   RecipeId = recipe.RecipeId,
+								   RecipeName = recipe.RecipeName,
+								   RecipeStatusCode = recipeInfo.RecipeStatusCode,
+								   FieldShot = recipeImage.FieldShot,
+								   FinishMinute = recipe.FinishMinute,
+								   RecipeRecVersion = recipeInfo.RecipeRecVersion
+							   }).GroupBy(r => r.RecipeId).Select(g => g.OrderByDescending(r => r.RecipeRecVersion).FirstOrDefault()).ToList();
 
-            var recipeDetailQuery = from recipe in recipeQuery.Distinct()
+
+			var recipeDetailQuery = from recipe in recipeQuery.Distinct()
                                     join recipeIngredient in _context.RecipeIngredients on recipe.RecipeId equals recipeIngredient.RecipeId
                                     join recipeIngredientName in _context.Ingredients on recipeIngredient.IngredientId equals recipeIngredientName.IngredientId
                                     select new RecipeDetailQuery
