@@ -274,7 +274,7 @@ namespace YumYum.Controllers
                     }
                 }
                 await _context.SaveChangesAsync();
-                return Json(new { success = "成功", message = collect });
+                return Json(new { success = "收藏食譜成功", message = collect });
             }
             catch (Exception ex)
             {
