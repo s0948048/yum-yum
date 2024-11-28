@@ -5,6 +5,10 @@
 @{
     @model YumYum.Models.ViewModels.FridgeViewModel;
 }
+<link rel="stylesheet" href="~/css/bootstrap.css" />
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/Fridge/fridge.index.css" asp-append-version="true" />
+
 <div class="container mt-5">
     <div class="row">
         <!-- Sidebar - Food Tag Section -->
@@ -34,7 +38,7 @@
                 </div>
             </div>
 
-            <button class="btn btn-secondary mt-3">+新增食材</button>
+            <button class="yum-btn mt-3">+新增食材</button>
         </div>
 
         <!-- Right-hand Section - Edit Selected Item -->
@@ -76,10 +80,10 @@
 
         <div class="d-flex justify-content-end align-items-center mt-2">
             <div class="d-flex justify-content-end">
-                <button class="btn btn-secondary me-3" id="btn-edit">編輯</button>
+                <button class="back-btn me-3" id="btn-edit">編輯</button>
             </div>
             <div class="d-flex justify-content-end">
-                <button class="btn btn-primary me-5" id="btn-recipe">查食譜</button>
+                <button class="yum-btn me-5" id="btn-recipe">查食譜</button>
             </div>
         </div>
 
@@ -87,10 +91,5 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/fridge/fridge_index.js"></script>
-    <script>
-        // $("#btn-edit").on("click", function () {
-        //     window.location.href = "/fridge/edit";
-        // });
-    </script>
+    <script src="~/js/fridge/fridge_index.js" asp-append-version="true"></script>
 }
