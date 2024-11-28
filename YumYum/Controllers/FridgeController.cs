@@ -15,6 +15,9 @@ namespace YumYum.Controllers
             _context = context;
         }
 
+        private int? UserId { get; set; }
+
+
         public IActionResult Index()
         {
             var fridgeItemData = GetFridgeItemData();
@@ -58,7 +61,7 @@ namespace YumYum.Controllers
                     .Select(o => o.StoreID!.Value)   // 取出值
                     .AsQueryable();
 
-            IQueryable<int> ExsistStoreid = _context.RefrigeratorStores.Where(r => r.UserId == 3204).Select(r => r.StoreId);
+            IQueryable<int> ExsistStoreid = _context.RefrigeratorStores.Where(r => r.UserId == (int)UserId!).Select(r => r.StoreId);
 
             // 舊的比新的還多出的 => 要刪除的
             var delItems = ExsistStoreid.Except(Newstoreid).ToList();
@@ -91,7 +94,7 @@ namespace YumYum.Controllers
                 {
                     var newRecord = new RefrigeratorStore
                     {
-                        UserId = 3204,
+                        UserId = (int)UserId!,
                         IngredientId = newItem.IngredientID,
                         Quantity = newItem.Quantity!,
                         UnitId = Convert.ToInt16(newItem.UnitName),
@@ -109,7 +112,7 @@ namespace YumYum.Controllers
                     });
                     _context.RefrigeratorStores.Add(new RefrigeratorStore
                     {
-                        UserId = 3204,
+                        UserId = (int)UserId!,
                         Ingredient = newIg.Entity,
                         Quantity = newItem.Quantity!,
                         UnitId = Convert.ToInt16(newItem.UnitID),
@@ -119,7 +122,7 @@ namespace YumYum.Controllers
             }
             _context.SaveChanges();
             var fridgeItemData = GetFridgeItemData();
-            var ingredientData = GetIngredientData();
+            var ingredientData = GetIngredientData(UserId);
 
             var viewModel = new FridgeViewModel
             {
@@ -187,7 +190,7 @@ namespace YumYum.Controllers
 
         public IActionResult SearchIngredients(string searchKeyword)
         {
-            var allIngredients = GetIngredientData();
+            var allIngredients = GetIngredientData(UserId);
 
             if (!string.IsNullOrEmpty(searchKeyword))
             {
@@ -200,10 +203,11 @@ namespace YumYum.Controllers
 
         private List<FridgeItemViewModel> GetFridgeItemData()
         {
-
+            UserId = HttpContext.Session.GetInt32("userId");
+            
             return (from fridge in _context.RefrigeratorStores
                     join unit in _context.Units on fridge.UnitId equals unit.UnitId
-                    where fridge.UserId == 3204
+                    where fridge.UserId == UserId
                     orderby fridge.ValidDate
                     select new FridgeItemViewModel
                     {
