@@ -423,7 +423,7 @@ namespace YumYum.Controllers
         {
             UserSecretInfo users = await _context.UserSecretInfos.Where(p => p.Email == user.Email).FirstOrDefaultAsync();
 
-            if (users != null)
+            if (users != null && users.Password == user.Password)
             {
                 //show user info	on nav bar by 健誠
                 UserBio? userBio = await _context.UserBios.Where(p => p.UserId == users.UserId).FirstOrDefaultAsync();
@@ -433,6 +433,10 @@ namespace YumYum.Controllers
                 // set session
                 HttpContext.Session.SetInt32("userId", users.UserId);
                 return Json(new { redirectUrl = Url.Action("Index", "Recipe") });
+            }
+            else if (users != null && users.Password != user.Password)
+            {
+                return Json(new { errorMessage = "帳號或密碼錯誤" });
             }
             else
             {
