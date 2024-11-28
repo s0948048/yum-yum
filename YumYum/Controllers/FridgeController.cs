@@ -21,7 +21,7 @@ namespace YumYum.Controllers
         public IActionResult Index()
         {
             var fridgeItemData = GetFridgeItemData();
-            var ingredientData = GetIngredientData();
+            var ingredientData = GetIngredientData(UserId);
 
             var viewModel = new FridgeViewModel
             {
@@ -34,8 +34,8 @@ namespace YumYum.Controllers
 
         public IActionResult Edit()
         {
-            var ingredientData = GetIngredientData(userId: null);
             var fridgeItemData = GetFridgeItemData();
+            var ingredientData = GetIngredientData(UserId);
             var ingredAttributeData = GetIngredAttributeData();
 
             var viewModel = new FridgeViewModel
@@ -51,6 +51,8 @@ namespace YumYum.Controllers
         [HttpPost]
         public IActionResult UpdateRefrigeratorStore(List<FridgeItemViewModel> RefrigeratorItems, List<FridgeItemViewModel> NewRefrigeratorItems)
         {
+            UserId = HttpContext.Session.GetInt32("userId");
+
             if (!ModelState.IsValid)
             {
                 return new BadRequestObjectResult(new { seccess = false, message = "錯誤資料格式。" });
