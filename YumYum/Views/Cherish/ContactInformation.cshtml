@@ -104,11 +104,11 @@
 			<div class="col-6">
 				<label for="tradetime" class="form-label">面交時段</label>
 				<div class="d-flex justify-content-around pb-3">
-					<button type="button" class="btn my-button set-fs" id="weekday">平日</button>
-					<button type="button" class="btn my-button set-fs" id="holiday">假日</button>
-					<button type="button" class="btn my-button set-fs" id="all-morning">所有早上</button>
-					<button type="button" class="btn my-button set-fs" id="all-afternoon">所有下午</button>
-					<button type="button" class="btn my-button set-fs" id="all-evening">所有晚上</button>
+					<button type="button" class="btn yum-btn set-fs" id="weekday">平日</button>
+					<button type="button" class="btn yum-btn set-fs" id="holiday">假日</button>
+					<button type="button" class="btn yum-btn set-fs" id="all-morning">所有早上</button>
+					<button type="button" class="btn yum-btn set-fs" id="all-afternoon">所有下午</button>
+					<button type="button" class="btn yum-btn set-fs" id="all-evening">所有晚上</button>
 				</div>
 				@{
 					foreach (var day in days)
@@ -148,10 +148,10 @@
 		@* 儲存、返回按鈕 *@
 		<div class="row justify-content-center my-4">
 			<div class="col-2 text-center">
-				<a href="@Url.Action("Introduce", "Cherish")" class="btn my-button set-fs">返回</a>
+				<a href="@Url.Action("Introduce", "Cherish")" class="btn back-btn set-fs">返回</a>
 			</div>
 			<div class="col-2 text-center">
-				<button type="submit" class="btn my-button set-fs">儲存</button>
+				<button type="submit" class="btn yum-btn set-fs">儲存</button>
 			</div>
 		</div>
 	</form>
