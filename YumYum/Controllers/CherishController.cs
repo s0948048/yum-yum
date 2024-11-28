@@ -50,10 +50,10 @@ namespace YumYum.Controllers
              };
 
 			// 抓到 userId (在 UserController LogInPage 這邊有set)
-			//int? userId = HttpContext.Session.GetInt32("userId");
-			int userId = 3238; // 登入者Id（測試用）
+			int? userId = HttpContext.Session.GetInt32("userId");
+			//int userId = 3238; // 登入者Id（測試用）
 
-			ShowOrder(userId);
+			ShowOrder((int)userId!);
 
 			return View();
 		}
@@ -217,7 +217,7 @@ namespace YumYum.Controllers
 		public async Task<IActionResult> ApplyCherish([FromForm] CherishOrderApplicant SumitUser)
 		{
 			int? aId = HttpContext.Session.GetInt32("userId");
-            Console.WriteLine($"{SumitUser.CherishId}'{SumitUser.ApplicantContactLine}'{SumitUser.ApplicantContactOther}'{SumitUser.ApplicantContactPhone}'{SumitUser.ApplicantId}");
+			Console.WriteLine($"{SumitUser.CherishId}'{SumitUser.ApplicantContactLine}'{SumitUser.ApplicantContactOther}'{SumitUser.ApplicantContactPhone}'{SumitUser.ApplicantId}");
 
 			if (SumitUser.ApplicantContactLine is null
 				&& SumitUser.ApplicantContactPhone is null
@@ -447,7 +447,7 @@ namespace YumYum.Controllers
              };
 
 			var userId = HttpContext.Session.GetInt32("userId");
-            var chrishOrders = from c in _context.CherishOrders
+			var chrishOrders = from c in _context.CherishOrders
 							   where c.GiverUserId == userId
 							   select new MatchHistory
 							   {
@@ -485,7 +485,7 @@ namespace YumYum.Controllers
 			 new BreadcrumbItem("別人的食材", "#") // 當前的頁面
              };
 			var userId = HttpContext.Session.GetInt32("userId");
-            var chrishOrders = from c in _context.CherishOrders
+			var chrishOrders = from c in _context.CherishOrders
 							   join coa in _context.CherishOrderApplicants
 							   on c.CherishId equals coa.CherishId
 							   where coa.ApplicantId == userId
@@ -526,7 +526,7 @@ namespace YumYum.Controllers
              };
 
 			var userId = HttpContext.Session.GetInt32("userId");
-            var chrishOrders = from c in _context.CherishOrders
+			var chrishOrders = from c in _context.CherishOrders
 							   join coa in _context.CherishOrderApplicants
 							   on c.CherishId equals coa.CherishId
 							   join ub in _context.UserBios
@@ -577,8 +577,8 @@ namespace YumYum.Controllers
 		{
 			var userId = HttpContext.Session.GetInt32("userId");
 
-            // 根據查詢條件篩選數據
-            var results = from c in _context.CherishOrders
+			// 根據查詢條件篩選數據
+			var results = from c in _context.CherishOrders
 						  join ig in _context.Ingredients
 						  on c.IngredientId equals ig.IngredientId
 						  where c.GiverUserId == userId &&
@@ -611,7 +611,7 @@ namespace YumYum.Controllers
 		public async Task<IActionResult> FilterMatchHistory(int filterType)
 		{
 			var userId = HttpContext.Session.GetInt32("userId");
-            IQueryable<MatchHistory> matchHistories;
+			IQueryable<MatchHistory> matchHistories;
 
 			if (filterType == 1) // 我的食材
 			{
