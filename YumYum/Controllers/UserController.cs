@@ -240,8 +240,6 @@ namespace YumYum.Controllers
         new BreadcrumbItem("我的食譜", "#") // 目前的頁面
     };
 
-            // 先給初始值的 userId
-            //int userId = 3205;
             //if (HttpContext.Session.GetInt32("foreignId") is null)
             //{
             //    if (HttpContext.Session.GetInt32("userId") is null)
@@ -250,7 +248,18 @@ namespace YumYum.Controllers
             //    }
             //}
 
-            int? userId = HttpContext.Session.GetInt32("userId");
+            //int userId = 3205;
+
+            //int? userId = HttpContext.Session.GetInt32("userId");
+
+            var foreignId = HttpContext.Session.GetInt32("foreignId");
+            var userId = HttpContext.Session.GetInt32("userId");
+
+            if (foreignId is null && userId is null)
+            {
+                return RedirectToAction("LoginPage", "User");
+            }
+
 
 
             // 食譜基本資訊查詢
@@ -315,7 +324,24 @@ namespace YumYum.Controllers
             new BreadcrumbItem("收藏食譜", "#") // 目前的頁面
             };
 
-            int? userId = HttpContext.Session.GetInt32("userId");
+            //if (HttpContext.Session.GetInt32("foreignId") is null)
+            //{
+            //    if (HttpContext.Session.GetInt32("userId") is null)
+            //    {
+            //        return RedirectToAction("LoginPage", "User");
+            //    }
+            //}
+
+            //int userId = 3205;
+            //int? userId = HttpContext.Session.GetInt32("userId");
+            var foreignId = HttpContext.Session.GetInt32("foreignId");
+            var userId = HttpContext.Session.GetInt32("userId");
+
+            if (foreignId is null && userId is null)
+            {
+                return RedirectToAction("LoginPage", "User");
+            }
+
 
 
             // 食譜基本資訊查詢
