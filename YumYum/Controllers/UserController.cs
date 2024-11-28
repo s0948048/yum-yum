@@ -269,7 +269,7 @@ namespace YumYum.Controllers
                              join rr in _context.RecipeRecords on rb.RecipeId equals rr.RecipeId
                              join ri in _context.RecipeIngredients on rb.RecipeId equals ri.RecipeId
                              join ig in _context.Ingredients on ri.IngredientId equals ig.IngredientId
-                             where rf.RecipeRecVersion == (from r in _context.RecipeRecordFields
+                             where rr.RecipeRecVersion == (from r in _context.RecipeRecords
                                                            where r.RecipeId == rb.RecipeId
                                                            select r.RecipeRecVersion).Max()
                              && rf.RecipeField == 0
@@ -352,7 +352,7 @@ namespace YumYum.Controllers
                              join rr in _context.RecipeRecords on rb.RecipeId equals rr.RecipeId
                              join ri in _context.RecipeIngredients on rb.RecipeId equals ri.RecipeId
                              join ig in _context.Ingredients on ri.IngredientId equals ig.IngredientId
-                             where rf.RecipeRecVersion == (from r in _context.RecipeRecordFields
+                             where rr.RecipeRecVersion == (from r in _context.RecipeRecords
                                                            where r.RecipeId == rb.RecipeId
                                                            select r.RecipeRecVersion).Max()
                              && rf.RecipeField == 0
@@ -389,8 +389,9 @@ namespace YumYum.Controllers
             Console.WriteLine($"Updating RecipeID: {recipeId}, RecipeRecVersion: {recipeRecVersion}");
             try
             {
+                var maxVer = _context.RecipeRecords.Where(r => r.RecipeId == recipeId).Max(r => r.RecipeRecVersion);
                 var recipeUpload = await _context.RecipeRecords.FirstOrDefaultAsync(
-                    r => r.RecipeId == recipeId && r.RecipeRecVersion == recipeRecVersion);
+                    r => r.RecipeId == recipeId && r.RecipeRecVersion == maxVer);
 
                 if (recipeUpload == null)
                 {
@@ -398,7 +399,7 @@ namespace YumYum.Controllers
                     return RedirectToAction("MyRecipeEdit", new { toastMessage = "食譜記錄未找到。", success = false });
                 }
 
-                recipeUpload.RecipeStatusCode = 4;
+                recipeUpload.RecipeStatusCode = 1;
                 await _context.SaveChangesAsync();
                 Console.WriteLine("Update successful.");
 
