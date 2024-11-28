@@ -92,7 +92,7 @@
 								<a class="nav-link" asp-controller="User" asp-action="Index">
 									@if (TempData.Peek("userHeadShot") != null)
 									{
-										<img src='@(TempData.Peek("userHeadShot"))' style="height: 30px; width: 30px;" alt="login" class="rounded-circle" onerror="setDefaultImage()" id="dynamicImage">
+										<img src='@(TempData.Peek("userHeadShot"))' style="height: 30px; width: 30px;" alt="login" class="rounded-circle" onerror="this.src='/img/icon/Login.svg';">
 									}
 									else
 									{
