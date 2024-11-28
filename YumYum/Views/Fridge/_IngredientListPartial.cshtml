@@ -7,7 +7,7 @@
 <div class="d-flex flex-wrap" id="ingredient-list">
     @foreach (var item in Model)
     {
-        <button class="tag-button d-inline-flex align-items-center btn btn-tags">
+        <button class="tag-button d-inline-flex align-items-center btn btn-tags" id="@item.IngredientID">
             <img src="@Url.Content($"~{item.IngredientIcon}")" alt="" />
             <span>@item.IngredientName</span>
         </button>

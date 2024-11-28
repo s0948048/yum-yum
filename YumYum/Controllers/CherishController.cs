@@ -216,7 +216,8 @@ namespace YumYum.Controllers
 		[HttpPost]
 		public async Task<IActionResult> ApplyCherish([FromForm] CherishOrderApplicant SumitUser)
 		{
-			Console.WriteLine($"{SumitUser.CherishId}'{SumitUser.ApplicantContactLine}'{SumitUser.ApplicantContactOther}'{SumitUser.ApplicantContactPhone}'{SumitUser.ApplicantId}");
+			int? aId = HttpContext.Session.GetInt32("userId");
+            Console.WriteLine($"{SumitUser.CherishId}'{SumitUser.ApplicantContactLine}'{SumitUser.ApplicantContactOther}'{SumitUser.ApplicantContactPhone}'{SumitUser.ApplicantId}");
 
 			if (SumitUser.ApplicantContactLine is null
 				&& SumitUser.ApplicantContactPhone is null
@@ -225,7 +226,6 @@ namespace YumYum.Controllers
 				return new BadRequestObjectResult(new { success = false, message = "必須傳入最少一種聯絡方式！" });
 			}
 
-			var aId = 3238;
 
 
 
@@ -239,7 +239,7 @@ namespace YumYum.Controllers
 			var od = new CherishOrderApplicant
 			{
 				CherishId = SumitUser.CherishId,
-				ApplicantId = aId,
+				ApplicantId = (int)aId!,
 				UserNickname = SumitUser.UserNickname,
 				ApplicantContactLine = SumitUser.ApplicantContactLine,
 				ApplicantContactPhone = SumitUser.ApplicantContactPhone,
@@ -375,7 +375,7 @@ namespace YumYum.Controllers
 			}
 
 
-			if (!string.IsNullOrEmpty(f.Search.CitySelect))
+			if (!string.IsNullOrEmpty(f.Search!.CitySelect))
 				query = query.Where(c => c.CherishOrderInfo!.TradeCityKey == f.Search.CitySelect);
 
 			if (f.Search.RegionSelect > 0)
@@ -446,8 +446,8 @@ namespace YumYum.Controllers
 			 new BreadcrumbItem("我的食材", "#") // 當前的頁面
              };
 
-			int userId = 3201;
-			var chrishOrders = from c in _context.CherishOrders
+			var userId = HttpContext.Session.GetInt32("userId");
+            var chrishOrders = from c in _context.CherishOrders
 							   where c.GiverUserId == userId
 							   select new MatchHistory
 							   {
@@ -460,7 +460,7 @@ namespace YumYum.Controllers
 								   ObtainSource = c.ObtainSource,
 								   ObtainDate = c.ObtainDate,
 								   UserNickname = c.GiverUser.UserNickname!,
-								   CityName = c.CherishOrderInfo!.TradeCityKey,
+								   CityName = c.CherishOrderInfo!.TradeCityKeyNavigation.CityName,
 								   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
 								   ContactLine = c.CherishOrderInfo.ContactLine,
 								   ContactPhone = c.CherishOrderInfo.ContactPhone,
@@ -484,8 +484,8 @@ namespace YumYum.Controllers
 			 new BreadcrumbItem("配對紀錄", Url.Action("MatchHistoryOthers", "Cherish") ?? "#"),
 			 new BreadcrumbItem("別人的食材", "#") // 當前的頁面
              };
-			int userId = 3201;
-			var chrishOrders = from c in _context.CherishOrders
+			var userId = HttpContext.Session.GetInt32("userId");
+            var chrishOrders = from c in _context.CherishOrders
 							   join coa in _context.CherishOrderApplicants
 							   on c.CherishId equals coa.CherishId
 							   where coa.ApplicantId == userId
@@ -502,7 +502,7 @@ namespace YumYum.Controllers
 								   ObtainSource = c.ObtainSource,
 								   ObtainDate = c.ObtainDate,
 								   UserNickname = c.GiverUser.UserNickname!,
-								   CityName = c.CherishOrderInfo!.TradeCityKey,
+								   CityName = c.CherishOrderInfo!.TradeCityKeyNavigation.CityName,
 								   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
 								   ContactLine = c.CherishOrderInfo.ContactLine,
 								   ContactPhone = c.CherishOrderInfo.ContactPhone,
@@ -525,8 +525,8 @@ namespace YumYum.Controllers
 			 new BreadcrumbItem("我的食材", "#") // 當前的頁面
              };
 
-			int userId = 3201; // 假設目前登入的使用者 ID 是固定的
-			var chrishOrders = from c in _context.CherishOrders
+			var userId = HttpContext.Session.GetInt32("userId");
+            var chrishOrders = from c in _context.CherishOrders
 							   join coa in _context.CherishOrderApplicants
 							   on c.CherishId equals coa.CherishId
 							   join ub in _context.UserBios
@@ -547,7 +547,7 @@ namespace YumYum.Controllers
 								   Quantity = c.Quantity,
 								   ObtainSource = c.ObtainSource,
 								   ObtainDate = c.ObtainDate,
-								   CityName = c.CherishOrderInfo!.TradeCityKey,
+								   CityName = c.CherishOrderInfo!.TradeCityKeyNavigation.CityName,
 								   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
 								   ContactLine = c.CherishOrderInfo.ContactLine,
 								   ContactPhone = c.CherishOrderInfo.ContactPhone,
@@ -575,10 +575,10 @@ namespace YumYum.Controllers
 		[Route("Cherish/MatchHistorySearch")]
 		public async Task<IActionResult> MatchHistorySearch(string query)
 		{
-			int userId = 3201; // 假設的使用者 ID
+			var userId = HttpContext.Session.GetInt32("userId");
 
-			// 根據查詢條件篩選數據
-			var results = from c in _context.CherishOrders
+            // 根據查詢條件篩選數據
+            var results = from c in _context.CherishOrders
 						  join ig in _context.Ingredients
 						  on c.IngredientId equals ig.IngredientId
 						  where c.GiverUserId == userId &&
@@ -595,7 +595,7 @@ namespace YumYum.Controllers
 							  ObtainSource = c.ObtainSource,
 							  ObtainDate = c.ObtainDate,
 							  UserNickname = c.GiverUser.UserNickname!,
-							  CityName = c.CherishOrderInfo!.TradeCityKey,
+							  CityName = c.CherishOrderInfo!.TradeCityKeyNavigation.CityName,
 							  RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
 							  ContactLine = c.CherishOrderInfo.ContactLine,
 							  ContactPhone = c.CherishOrderInfo.ContactPhone,
@@ -610,8 +610,8 @@ namespace YumYum.Controllers
 
 		public async Task<IActionResult> FilterMatchHistory(int filterType)
 		{
-			int userId = 3201; // 替換成當前登入的使用者 ID
-			IQueryable<MatchHistory> matchHistories;
+			var userId = HttpContext.Session.GetInt32("userId");
+            IQueryable<MatchHistory> matchHistories;
 
 			if (filterType == 1) // 我的食材
 			{
@@ -628,7 +628,7 @@ namespace YumYum.Controllers
 									 ObtainSource = c.ObtainSource,
 									 ObtainDate = c.ObtainDate,
 									 UserNickname = c.GiverUser.UserNickname!,
-									 CityName = c.CherishOrderInfo!.TradeCityKey,
+									 CityName = c.CherishOrderInfo!.TradeCityKeyNavigation.CityName,
 									 RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
 									 ContactLine = c.CherishOrderInfo.ContactLine,
 									 ContactPhone = c.CherishOrderInfo.ContactPhone,
@@ -655,7 +655,7 @@ namespace YumYum.Controllers
 									 ObtainSource = c.ObtainSource,
 									 ObtainDate = c.ObtainDate,
 									 UserNickname = c.GiverUser.UserNickname!,
-									 CityName = c.CherishOrderInfo!.TradeCityKey,
+									 CityName = c.CherishOrderInfo!.TradeCityKeyNavigation.CityName,
 									 RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
 									 ContactLine = c.CherishOrderInfo.ContactLine,
 									 ContactPhone = c.CherishOrderInfo.ContactPhone,
@@ -720,7 +720,7 @@ namespace YumYum.Controllers
 								   ObtainSource = c.ObtainSource,
 								   ObtainDate = c.ObtainDate,
 								   UserNickname = c.GiverUser.UserNickname!,
-								   CityName = c.CherishOrderInfo!.TradeCityKey,
+								   CityName = c.CherishOrderInfo!.TradeCityKeyNavigation.CityName,
 								   RegionName = c.CherishOrderInfo.TradeRegion.RegionName,
 								   ContactLine = c.CherishOrderInfo.ContactLine,
 								   ContactPhone = c.CherishOrderInfo.ContactPhone,
@@ -754,8 +754,6 @@ namespace YumYum.Controllers
              };
 
 			int? userId = HttpContext.Session.GetInt32("userId");
-			userId = 3238; // 登入者Id（測試用）
-						   //int userId = 3208; // 登入者Id（測試用）
 
 			var city = from o in _context.Cities
 					   select o;
@@ -767,7 +765,7 @@ namespace YumYum.Controllers
 
 			ViewBag.Days = GetDay();
 			ViewBag.Times = GetTime();
-			ViewBag.TradeTimes = GetTradeTime((int)userId);
+			ViewBag.TradeTimes = GetTradeTime((int)userId!);
 
 			//var query = _context.UserSecretInfos.FindAsync(userId);
 			//if (query == null)
