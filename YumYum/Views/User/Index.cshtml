@@ -19,7 +19,7 @@
 			@* photo *@
 			@if (Model?.userQueryViewModel[0].HeadShot != null)
 			{
-				<img class="rounded-circle mt-3 mb-3" src="@(Model?.userQueryViewModel[0].HeadShot.ToString())" alt="user-img" width="180" height="180" />
+				<img class="rounded-circle mt-3 mb-3" src="@(Model?.userQueryViewModel[0].HeadShot.ToString())" alt="user-img" width="180" height="180" onerror="this.src='/img/icon/EmptyAvatar.svg';" />
 			}
 			else
 			{

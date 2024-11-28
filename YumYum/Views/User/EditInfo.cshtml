@@ -9,7 +9,7 @@
 <div style="text-align:center" id="user-avatar" class="mb-3">
 	@if (@Model?.HeadShot != null)
 	{
-		<img class="rounded-circle" alt="photo" src="@(@Model?.HeadShot)" height="200" width="200" />
+		<img class="rounded-circle" alt="photo" src="@(@Model?.HeadShot)" height="200" width="200" onerror="this.src='/img/icon/EmptyAvatar.svg';" />
 	}
 	else
 	{
