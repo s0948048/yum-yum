@@ -118,13 +118,13 @@
 			{
 				count++;
 				<div class="card contentcard" style="width: 20%;" id="@card.RecipeId" onclick="window.location.href='@Url.Action("WatchRecipe", "Recipe", new { recipeId =@card.RecipeId })';">
-					@if (card.FieldShot != null)
+					@if (card.FieldShot == "/img/icon/addPhoto.png" || card.FieldShot == null)
 					{
-						<img src="@card.FieldShot" class="card-img-top" alt="...">
+						<img src="~/img/icon/EmptyPhoto.png" class="card-img-top" alt="...">
 					}
 					else
 					{
-						<img src="~/img/icon/EmptyPhoto.png" class="card-img-top" alt="...">
+						<img src="@card.FieldShot" class="card-img-top" alt="..." onerror="this.src='/img/icon/EmptyPhoto.png';">
 					}
 					<div class="card-body">
 						<h5 class="card-title">@card.RecipeName</h5>
