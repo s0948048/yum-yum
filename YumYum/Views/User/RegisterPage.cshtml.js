@@ -1,5 +1,5 @@
 ﻿var regEamil = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})*$/;
-var regPwd=/^(?=.*[a-zA-Z])(?=.*\d)[\w]{6,}$/
+var regPwd=/^(?=.*[a-zA-Z])(?=.*\d)[\w.?]{6,}$/
 $('#register-submit').on("click", function () {
 
     if ($('#register-nickname').val() == '') {
