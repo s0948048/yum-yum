@@ -257,8 +257,9 @@ namespace YumYum.Controllers
                     if (collect != null)
                     {
                         _context.UserCollectRecipes.Remove(collect);
-
+                        await _context.SaveChangesAsync();
                     }
+                    return Json(new { success = "取消收藏成功", message = collect });
                 }
                 else if (uc.verifyColor == "#30533f")
                 {
@@ -270,11 +271,12 @@ namespace YumYum.Controllers
                             UserID = uc.UserID,
                         };
                         _context.UserCollectRecipes.Add(data);
-
+                        await _context.SaveChangesAsync();
                     }
+                    return Json(new { success = "收藏食譜成功", message = collect });
                 }
-                await _context.SaveChangesAsync();
-                return Json(new { success = "成功", message = collect });
+               
+                return Json(new { success = "收藏食譜成功", message = collect });
             }
             catch (Exception ex)
             {
@@ -512,7 +514,7 @@ namespace YumYum.Controllers
             }
 
             //回傳新建食譜成功
-            return Json(new { success = "新建食譜成功", redirectUrl = Url.Action("WatchRecipe", "Recipe", new { recipe.RecipeId }) });
+            return Json(new { success = "新建食譜成功", redirectUrl = Url.Action("MyRecipeEdit", "User") });
         }
 
 
@@ -812,7 +814,7 @@ namespace YumYum.Controllers
 
 
             //回傳新建食譜成功
-            return Json(new { success = "編輯食譜成功", redirectUrl = Url.Action("WatchRecipe", "Recipe", new { recipe.RecipeId }) });
+            return Json(new { success = "編輯食譜成功", redirectUrl = Url.Action("MyRecipeEdit", "User") });
         }
 
         //刪除食譜

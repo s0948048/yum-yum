@@ -417,6 +417,17 @@
             }
         })
     })
+    //查詢食材及時
+    $('#input-searchingre').on('input', function () {
+        $('#search-ingredients').find('span').each(function () {
+            if ($(this).text().indexOf($('#input-searchingre').val()) != -1) {
+                $(this).parent().removeClass('d-none')
+            }
+            else {
+                $(this).parent().addClass('d-none')
+            }
+        })
+    })
     //刪除所需食材邏輯-自建立
     $(document).on('click', '.delete-myingredient', function () {
         //刪除整列新增標籤

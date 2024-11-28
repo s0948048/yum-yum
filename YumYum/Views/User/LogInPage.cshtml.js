@@ -21,7 +21,7 @@ $('#button-login').on('click', function () {
         data: JSON.stringify(data), // 傳遞的 JSON 資料
         success: function (result) {
             console.log('成功:', result);
-            if (result["errorMessage"] == "帳號未註冊") {
+            if (result["errorMessage"] != null) {
                 alert(`${result["errorMessage"]}`)
             }
             else {

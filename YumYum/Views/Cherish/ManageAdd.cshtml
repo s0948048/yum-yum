@@ -45,10 +45,9 @@
 				<div class="col-3">
 					<label for="quantity" class="form-label">數量</label>
 					<div class="input-group">
-						<button class="btn my-button" type="button" id="decrease-btn">-</button>
-						<input type="number" class="form-control text-center" value="1" id="quantity" min="1"
-							   readonly>
-						<button class="btn my-button" type="button" id="increase-btn">+</button>
+						@*<button class="yum-btn" type="button" id="decrease-btn">-</button>*@
+						<input type="number" class="form-control text-center" value="1" id="quantity" min="1">
+						@*<button class="yum-btn" type="button" id="increase-btn">+</button>*@
 					</div>
 					<div class="invalid-feedback">
 						此為必填欄位
@@ -122,23 +121,23 @@
 				<img src="/img/icon/condition-photo.png" alt="" class="my-photo rounded">
 				<div class="d-flex justify-content-around pt-3">
 					<button type="button"
-							class="btn my-button set-fs">
+							class="yum-btn set-fs">
 						選擇照片
 					</button>
-					<button type="submit" class="btn my-button set-fs">設定成封面</button>
+					<button type="submit" class="yum-btn set-fs">設定成封面</button>
 				</div>
 			</div>
 			<div class="col-4">
 				<img src="/img/icon/condition-photo.png" alt="" class="my-photo rounded">
 				<div class="d-flex justify-content-around pt-3">
-					<button type="button" class="btn my-button set-fs">選擇照片</button>
-					<button type="submit" class="btn my-button set-fs">設定成封面</button>
+					<button type="button" class="yum-btn set-fs">選擇照片</button>
+					<button type="submit" class="yum-btn set-fs">設定成封面</button>
 				</div>
 			</div>
 			<div class="col-4">
 				<img src="/img/icon/expiration-date-photo.png" alt="" class="my-photo rounded">
 				<div class="d-flex justify-content-around pt-3">
-					<button type="button" class="btn my-button set-fs">選擇照片</button>
+					<button type="button" class="yum-btn set-fs">選擇照片</button>
 				</div>
 			</div>
 		</div>
@@ -154,7 +153,7 @@
 	<!-- 表單內容 -->
 	<div class="row background-white mb-4 rounded-bottom">
 		<div class="d-flex justify-content-center py-4">
-			<button class="btn my-button">帶入填寫聯絡資料</button>
+			<button class="yum-btn">帶入填寫聯絡資料</button>
 		</div>
 		<div class="row">
 			<div class="col-6">
@@ -222,11 +221,11 @@
 			<div class="col-6">
 				<label for="trade-time" class="form-label">面交時段</label>
 				<div class="d-flex justify-content-around pb-3">
-					<button type="button" class="btn my-button set-fs">平日</button>
-					<button type="button" class="btn my-button set-fs">假日</button>
-					<button type="button" class="btn my-button set-fs">所有早上</button>
-					<button type="button" class="btn my-button set-fs">所有下午</button>
-					<button type="button" class="btn my-button set-fs">所有晚上</button>
+					<button type="button" class="yum-btn set-fs">平日</button>
+					<button type="button" class="yum-btn set-fs">假日</button>
+					<button type="button" class="yum-btn set-fs">所有早上</button>
+					<button type="button" class="yum-btn set-fs">所有下午</button>
+					<button type="button" class="yum-btn set-fs">所有晚上</button>
 				</div>
 				<div class="d-flex justify-content-around pb-3">
 					<label for="">星期一</label>
@@ -330,10 +329,10 @@
 		<!-- 提交、返回按鈕 -->
 		<div class="row justify-content-center py-4">
 			<div class="col-2 text-center">
-				<a href="@Url.Action("Manage", "Cherish")" class="btn my-button set-fs">返回</a>
+				<a href="@Url.Action("Manage", "Cherish")" class="back-btn set-fs">返回</a>
 			</div>
 			<div class="col-2 text-center">
-				<button type="submit" class="btn my-button set-fs">提交</button>
+				<button type="submit" class="yum-btn set-fs">提交</button>
 			</div>
 		</div>
 		<!-- form 的結束 -->
