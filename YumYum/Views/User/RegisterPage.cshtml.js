@@ -48,7 +48,20 @@ $('#register-submit').on("click", function () {
             }
         });
     }
-   
-    
+})
+$('.input-pwd').hover(
+    function () {
+        $(this).children('img').removeClass('d-none')
+    }, function () {
+        $(this).children('img').addClass('d-none')
+    });
 
+$('.input-pwd').children('img').on('click', function () {
+    var pwdState = $(this).prev().attr('type')
+    if (pwdState == 'password') {
+        $(this).prev().attr('type', 'text')
+    }
+    else {
+        $(this).prev().attr('type', 'password')
+    }
 })
