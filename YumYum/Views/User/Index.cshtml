@@ -36,12 +36,12 @@
 				<h2 class="fw-600">@Model?.userQueryViewModel[0].UserNickname</h2>
 				<br />
 				<p class="fw-400 mb-4">@Model?.userQueryViewModel[0].UserIntro</p>
-				<div class="row">
+				<div class="row mb-1">
 					@if (Model?.userQueryViewModel[0].WebLink != null && Model?.userQueryViewModel[0].WebNickName != null)
 					{
 						<div class="col-2" style="text-align:left">
 							<a href="@Model?.userQueryViewModel[0].WebLink" class="btn btn-outline-secondary tags">
-								<svg height="18" width="18">
+								<svg height="20" width="19">
 									<image x="0" y="0" width="16" height="16" href="/img/icon/web.svg" />
 								</svg>@Model?.userQueryViewModel[0].WebNickName
 							</a>
@@ -61,8 +61,8 @@
 					{
 						<div class="col-2" style="text-align:center">
 							<a href=@Model?.userQueryViewModel[0].Fblink class="btn btn-outline-secondary tags">
-								<svg height="18" width="18">
-									<image x="0" y="0" width="16" height="16" href="/img/icon/facebook.svg" />
+								<svg height="18" width="17">
+									<image x="0" y="0" width="14" height="14" href="/img/icon/facebook.svg" />
 								</svg>@Model?.userQueryViewModel[0].Fbnickname
 							</a>
 						</div>
