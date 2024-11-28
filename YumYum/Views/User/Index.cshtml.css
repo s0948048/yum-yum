@@ -83,3 +83,8 @@ svg {
         background-color: var(--yum-primary-2);
         transition-duration: 0.5s;
     }
+.card-img-top {
+    object-fit: cover; /* 保持圖片的寬高比進行裁切 */
+    height: 187px; /* 自行調整裁切後的高度 */
+    width: 100%; /* 確保圖片寬度與卡片匹配 */
+}
