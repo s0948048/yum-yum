@@ -847,7 +847,7 @@ namespace YumYum.Controllers
 
                     transaction.Commit();
                     //傳回跳轉首頁的頁面
-                    return Json(new { success = "刪除食譜成功", redirectUrl = Url.Action("MytRecipeEdit", "User") });
+                    return Json(new { success = "刪除食譜成功", redirectUrl = Url.Action("MyRecipeEdit", "User") });
                 }
                 catch (Exception ex)
                 {
