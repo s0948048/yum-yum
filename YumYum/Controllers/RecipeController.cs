@@ -118,7 +118,7 @@ namespace YumYum.Controllers
                                     };
             var AllList = new RecipeAllUser()
             {
-                recipeQueryViewModel = recipeQuery.Distinct().ToList(),
+                recipeQueryViewModel = recipeQuery.Distinct().ToList()!,
                 recipeDetailQuery = recipeDetailQuery.ToList()
             };
             return PartialView("_PartialRecipe", AllList);
@@ -176,7 +176,7 @@ namespace YumYum.Controllers
             //接收食譜的id
 
             int? userId = HttpContext.Session.GetInt32("userId") == null ? null : HttpContext.Session.GetInt32("userId");
-            //HttpContext.Session.SetInt32("userId", (int)userId!);
+            if (userId != null) { HttpContext.Session.SetInt32("userId", (int)userId!); };
             //食譜id
             int? recipeIdTest = recipeId != null ? recipeId : 1412;
             //收藏食譜的內容
