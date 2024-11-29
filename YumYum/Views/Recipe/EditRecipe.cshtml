@@ -743,8 +743,7 @@
     })
     //刪除視窗點選是
     $('#delete-true').on('click', function () {
-        var data = { RecipeId: @Model.recipeWatchBrief[0].RecipeId, };
-        alert(JSON.stringify(data))
+        var data = { RecipeId: @Model.recipeWatchBrief[0].RecipeId,};
         $.ajax({
             url: "/Recipe/DeleteRecipe",
             method: "POST",
