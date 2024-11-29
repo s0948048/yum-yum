@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Server.Kestrel.Transport.NamedPipes;
 using System.Linq;
 using YumYum.Models;
 using YumYum.Models.ViewModels;
@@ -58,36 +59,48 @@ namespace YumYum.Controllers
                 return new BadRequestObjectResult(new { seccess = false, message = "錯誤資料格式。" });
             }
 
-            IQueryable<int> Newstoreid = RefrigeratorItems
+            if(RefrigeratorItems.Count > 0)
+            {
+                IQueryable<int> Newstoreid = RefrigeratorItems
                     .Where(o => o.StoreID.HasValue) // 過濾掉 null
                     .Select(o => o.StoreID!.Value)   // 取出值
                     .AsQueryable();
 
-            IQueryable<int> ExsistStoreid = _context.RefrigeratorStores.Where(r => r.UserId == (int)UserId!).Select(r => r.StoreId);
+                IQueryable<int> ExsistStoreid = _context.RefrigeratorStores.Where(r => r.UserId == (int)UserId!).Select(r => r.StoreId);
 
-            // 舊的比新的還多出的 => 要刪除的
-            var delItems = ExsistStoreid.Except(Newstoreid).ToList();
+                // 舊的比新的還多出的 => 要刪除的
 
-            // 要修改ㄉ
-            var UpdateItems = ExsistStoreid.Where(r => !delItems.Contains(r)).ToList();
+                var delItems = ExsistStoreid.Except(Newstoreid).ToList();
 
-            // Update existing items 1. 舊有食材
-            foreach (var item in _context.RefrigeratorStores.Where(r => UpdateItems.Contains(r.StoreId!)))
-            {
-                var UpItem = RefrigeratorItems.Where(r => r.StoreID == item.StoreId).First();
-                if (UpItem != null)
+                // 要修改ㄉ
+                var UpdateItems = ExsistStoreid.Where(r => !delItems.Contains(r)).ToList();
+
+                // Update existing items 1. 舊有食材
+                foreach (var item in _context.RefrigeratorStores.Where(r => UpdateItems.Contains(r.StoreId!)))
                 {
-                    item.UnitId = Convert.ToInt16(UpItem.UnitName);
-                    item.Quantity = UpItem.Quantity!;
-                    item.ValidDate = UpItem.ValidDate;
+                    var UpItem = RefrigeratorItems.Where(r => r.StoreID == item.StoreId).First();
+                    if (UpItem != null)
+                    {
+                        item.UnitId = Convert.ToInt16(UpItem.UnitName);
+                        item.Quantity = UpItem.Quantity!;
+                        item.ValidDate = UpItem.ValidDate;
+                    }
+                }
+
+                // Delete No items 2. 刪除
+                foreach (var item in _context.RefrigeratorStores.Where(r => delItems.Contains((int)r.StoreId!)))
+                {
+                    _context.RefrigeratorStores.Remove(item!);
                 }
             }
-
-            // Delete No items 2. 刪除
-            foreach (var item in _context.RefrigeratorStores.Where(r => delItems.Contains((int)r.StoreId!)))
+            else
             {
-                _context.RefrigeratorStores.Remove(item!);
+                foreach (var item in _context.RefrigeratorStores.Where( r => r.UserId == (int)UserId!))
+                {
+                    _context.RefrigeratorStores.Remove(item!);
+                }
             }
+            
 
             // Add new items  3. a.原有食材 b.克制化石才
             foreach (var newItem in NewRefrigeratorItems)

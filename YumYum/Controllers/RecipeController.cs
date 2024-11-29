@@ -367,11 +367,11 @@ namespace YumYum.Controllers
             }
 
 
-            _context.RecipeBriefs.Add(saveData.recipeBrief);
+            var entity =  _context.RecipeBriefs.Add(saveData.recipeBrief);
             await _context.SaveChangesAsync();
             //將食譜的id提出出來
-
-            var recipe = _context.RecipeBriefs.FirstOrDefault(p => p.RecipeName == saveData.recipeBrief.RecipeName && saveData.recipeBrief.CreateDate.Date == p.CreateDate.Date);
+            var id = entity.Entity.RecipeId;
+            var recipe = _context.RecipeBriefs.FirstOrDefault(p => p.RecipeId == id && saveData.recipeBrief.CreateDate.Date == p.CreateDate.Date);
             string recipeID = recipe!.RecipeId.ToString();
             //設定session recipeid
             HttpContext.Session.SetInt32("recipeId", recipe.RecipeId);
