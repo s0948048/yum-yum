@@ -130,10 +130,20 @@ namespace YumYum.Controllers
 			 new BreadcrumbItem("新增良食", "#") // 當前的頁面
              };
 
+			int? userId = HttpContext.Session.GetInt32("userId");
+			ViewBag.UserId = userId;
+
 			var ingredientType = from o in _context.IngredAttributes
 								 where o.IngredAttributeId == 1 || o.IngredAttributeId == 4 || o.IngredAttributeId == 5 || o.IngredAttributeId == 6
 								 select o;
 			ViewBag.IngredientTypeList = ingredientType;
+
+			var city = from o in _context.Cities
+					   select o;
+			ViewBag.CityList = city;
+
+			ViewBag.Days = GetDay();
+			ViewBag.Times = GetTime();
 
 			return View();
 		}
@@ -186,6 +196,49 @@ namespace YumYum.Controllers
 
 			// 返回視圖（可以顯示訊息或重新顯示表單）
 			return View("ManageAdd");
+		}
+
+		[HttpPost]
+		public IActionResult ManageAdd(CherishOrder order, CherishOrderCheck check, CherishOrderInfo info)
+		//, CherishTradeTime tradeTime
+		{
+			try
+			{
+				// 儲存訂單資料
+				// 取得現在時間
+				DateTime current = DateTime.Now;
+				// 將 DateTime 轉換為 DateOnly
+				DateOnly submitDate = DateOnly.FromDateTime(current);
+				order.SubmitDate = submitDate;
+				order.TradeStateCode = 1;
+				_context.CherishOrders.Add(order);
+				_context.SaveChanges(); // 確保訂單被成功插入並且取得ID
+
+				// 設定和儲存訂單檢查資料，並且關聯到訂單
+				check.CherishId = order.CherishId; // CherishId 是訂單的主鍵
+				check.CherishPhoto = "ABC";
+				check.OtherPhoto = "DEF";
+				_context.CherishOrderChecks.Add(check);
+				_context.SaveChanges(); // 確保檢查資料被成功插入
+
+				// 設置和儲存訂單明細，並且關聯到訂單
+				info.CherishId = order.CherishId;
+				_context.CherishOrderInfos.Add(info);
+				_context.SaveChanges();
+
+				// 設置和儲存面交時段資料，並且關聯到訂單
+				//tradeTime.CherishId = order.CherishId;
+				//_context.CherishTradeTimes.Add(tradeTime);
+				//_context.SaveChanges();
+
+				// 如果成功，重新導向或返回確認訊息
+				return RedirectToAction("Manage");
+			}
+			catch (Exception ex)
+			{
+				// 如果出現錯誤，前往錯誤頁面
+				return View("Error");
+			}
 		}
 
 		public IActionResult ManageEdit(int cherishId)
