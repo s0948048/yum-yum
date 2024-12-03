@@ -130,6 +130,11 @@ namespace YumYum.Controllers
 			 new BreadcrumbItem("新增良食", "#") // 當前的頁面
              };
 
+			var ingredientType = from o in _context.IngredAttributes
+								 where o.IngredAttributeId == 1 || o.IngredAttributeId == 4 || o.IngredAttributeId == 5 || o.IngredAttributeId == 6
+								 select o;
+			ViewBag.IngredientTypeList = ingredientType;
+
 			return View();
 		}
 
@@ -910,6 +915,15 @@ namespace YumYum.Controllers
 				.ToList();
 
 			return PartialView("_PartialRegion", regions);
+		}
+
+		public IActionResult GetIngredients(string IngredAttributeId)
+		{
+			var ingredients = _context.Ingredients
+				.Where(o => o.AttributionId.ToString() == IngredAttributeId)
+				.ToList();
+
+			return PartialView("_PartialIngredient", ingredients);
 		}
 
 		public Dictionary<string, string> GetDay()
