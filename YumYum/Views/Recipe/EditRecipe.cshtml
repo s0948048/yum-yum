@@ -173,7 +173,7 @@
                     </div>
                 </div>
                 <div id="step-countdiv01" class="d-flex" style="margin-right:260px">
-                    <label id="step-count01" class="d-flex ms-auto">0/100</label>
+                    <label id="step-count01" class="d-flex ms-auto">@item.FieldDescript!.Length/100</label>
                 </div>
                 if (item.RecipeField == Model.recipeRecordFields.Count - 1)
                 {
@@ -196,7 +196,7 @@
                     </div>
                 </div>
                 <div id=@($"step-countdiv0{item.RecipeField}") class="d-flex" style="margin-right: 260px">
-                    <label id="step-count0${steps}" class="d-flex ms-auto">0/100</label>
+                    <label id="step-count0${steps}" class="d-flex ms-auto">@item.FieldDescript!.Length/100</label>
                 </div>
 
                 if (item.RecipeField == Model.recipeRecordFields.Count - 1)
@@ -226,7 +226,7 @@
                     </div>
                 </div>
                 <div b-wbveynjuki class="d-flex" id=@($"step-countdiv0{item.RecipeField}") style="margin-right:146px">
-                    <label b-wbveynjuki id="step-count0${steps}" class="d-flex ms-auto">0/100</label>
+                    <label b-wbveynjuki id="step-count0${steps}" class="d-flex ms-auto">@item.FieldDescript!.Length/100</label>
                 </div>
                 if (item.RecipeField == Model.recipeRecordFields.Count - 1)
                 {
@@ -251,7 +251,7 @@
                     </div>
                 </div>
                 <div b-wbveynjuki class="d-flex" id=@($"step-countdiv0{item.RecipeField}") style="margin-right:146px">
-                    <label b-wbveynjuki id="step-count0${steps}" class="d-flex ms-auto">0/100</label>
+                    <label b-wbveynjuki id="step-count0${steps}" class="d-flex ms-auto">@item.FieldDescript!.Length/100</label>
                 </div>
                 if (item.RecipeField == Model.recipeRecordFields.Count - 1)
                 {
