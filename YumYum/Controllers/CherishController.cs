@@ -899,7 +899,14 @@ namespace YumYum.Controllers
 							  ContactOther = o.ContactOther,
 						  };
 
-			return View(contact.Single());
+			if (contact.Any())
+			{
+				return View(contact.Single());
+			}
+			else
+			{
+				return View(CreateEmptyContact((int)userId));
+			}
 		}
 
 		//[HttpPost]
@@ -1015,6 +1022,24 @@ namespace YumYum.Controllers
 			var result = query.ToList();
 
 			return result;
+		}
+
+		private CherishContactViewModel CreateEmptyContact(int userId)
+		{
+			var query = from o in _context.UserSecretInfos
+						where o.UserId == userId
+						select o;
+
+			return new CherishContactViewModel
+			{
+				GiverUserId = userId,
+				UserNickname = query.Single().UserNickname,
+				TradeCityKey = "",
+				TradeRegionId = 0,
+				ContactLine = "",
+				ContactPhone = "",
+				ContactOther = "",
+			};
 		}
 
 		public CherishOrderViewModel ShowOrderDetail(int cherishId)
