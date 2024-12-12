@@ -35,14 +35,22 @@ jobs:
     runs-on: windows-latest
     needs: build
     steps:
+
+    - name: Create project directory
+      run: mkdir -p ${{ env.WORKING_DIRECTORY }}
+
     - name: Set up appsettings.json
+      shell: pwsh
       run: |
-        Write-Host '${{ secrets.APPSETTING }}' > ${{ env.WORKING_DIRECTORY }}/appsettings.json
+        mkdir -p "${{ env.WORKING_DIRECTORY }}"
+        Set-Content -Path "${{ env.WORKING_DIRECTORY }}/appsettings.json" -Value '${{ secrets.APPSETTING }}'
+
     - name: Download artifact from build job
       uses: actions/download-artifact@v3
       with:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
       with:
