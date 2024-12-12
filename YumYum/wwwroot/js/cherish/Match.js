@@ -42,7 +42,7 @@ function Sorting() {
 
 //----JQ------
 // 重置篩選面板
-$('#reset-left').click(function () {
+$('#reset-left').on('click',function () {
     $('#Ifilter input[type="checkbox"]').prev().removeClass('selected')
     $('#Ifilter,#Cfilter,#Dfilter').find('input[type="checkbox"]').prop('checked', false);
     Sorting();
@@ -67,7 +67,7 @@ $('#CitySelect,#RegionSelect,#IngredientSelect')
 
 
 // 摺疊篩選面板。
-$('#Ifilter-active,#Cfilter-active,#Dfilter-active').change(function () {
+$('#Ifilter-active,#Cfilter-active,#Dfilter-active').on('change', function () {
     $(this).parent().next().toggleClass('filter-hide')
 })
 
@@ -101,7 +101,7 @@ $('#insert-result').on('click','.match-btn',  function () {
 
 // 輸入資訊的那個表單  【 -> (3)彈出/關閉對方資訊的視窗】
 //  1.要AJAX
-$('#btn-match-info-post').click(function (e) {
+$('#btn-match-info-post').on('click', function (e) {
     e.preventDefault();
 
     var fromD = $(this).parent();
@@ -118,15 +118,21 @@ $('#btn-match-info-post').click(function (e) {
             alert(`執行結果: ${data.message}`)
 
             $("#popup-order-match").addClass('visible-hide');
-            $.ajax({
-                url: '/cherish/ContactOrder',
-                method: 'POST',
-                data: { cherishID: cherishID },
-                success: function (data) {
-                    $('#contact-info').html(data);
-                    $('#contact-info').removeClass('visible-hide');
-                }
-            })
+            //$.ajax({
+            //    url: '/cherish/ContactOrder',
+            //    method: 'POST',
+            //    data: { cherishID: cherishID },
+            //    success: function (data) {
+            //        $('#contact-info').html(data);
+            //        $('#contact-info').removeClass('visible-hide');
+            //    }
+            //})
+
+            var contactInfo = $('#contact-info');
+
+            contactInfo.html(data.view.Result);
+            contactInfo.removeClass('visible-hide');
+            contactInfo.scrollTop(0); 
         },
         error: function (xhr) {
             alert(`執行結果: ${xhr.responseJSON.message}`)
@@ -135,7 +141,7 @@ $('#btn-match-info-post').click(function (e) {
 })
 
 
-$('#btn-match-off').click(function () {
+$('#btn-match-off').on('click',function () {
     $(this).parent().parent().addClass('visible-hide');
     $('#mask').hide()
     enableScroll()

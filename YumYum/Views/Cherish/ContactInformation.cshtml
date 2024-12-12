@@ -28,7 +28,7 @@
 	<p class="text-center pt-3 pb-2 fw-500 reminder-text">建立聯絡資料後，即可使用［帶入填寫］功能</p>
 	<form method="post" asp-controller="Cherish" asp-action="ContactInformation">
 		<div class="row">
-			<input type="text" name="GiverUserId" value="@Model.GiverUserId" hidden />
+			<input type="text" name="GiverUserId" value="@(Model.GiverUserId)" hidden />
 			<div class="col-6">
 				@* 暱稱 *@
 				<div class="col">
@@ -111,6 +111,17 @@
 					<button type="button" class="yum-btn set-fs" id="all-evening">所有晚上</button>
 				</div>
 				@{
+					List<string> isTradTimes(List<string> tradeTimes)
+					{
+						if (tradeTimes.Count > 0)
+						{
+							return tradeTimes;
+						}
+						else
+						{
+							return [""];
+						}
+					}
 					foreach (var day in days)
 					{
 						<div class="d-flex justify-content-around pb-3">
@@ -119,7 +130,7 @@
 								foreach (var time in times)
 								{
 									<div>
-										<input type="checkbox" id="@($"{day.Key}-{time.Key}")" value="@($"{day.Key}-{time.Key}")" name="AvailableTime" @(tradetimes.Contains($"{day.Key}-{time.Key}") ? "checked" : null)>
+										<input type="checkbox" id="@($"{day.Key}-{time.Key}")" value="@($"{day.Key}-{time.Key}")" name="AvailableTime" @(isTradTimes(tradetimes).Contains($"{day.Key}-{time.Key}") ? "checked" : null)>
 										<label for="@($"{day.Key}-{time.Key}")">@time.Value</label>
 									</div>
 								}

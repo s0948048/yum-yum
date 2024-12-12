@@ -4,7 +4,7 @@
     var date = DateTime.Now.ToString("HHmmss");
 }
 <link href="~/css/Cherish/Match.css?@date" rel="stylesheet" />
-@await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.BreadcrumbsMatch)
+@await Html.PartialAsync("_PartialBreadcrumb", (List<BreadcrumbItem>)ViewBag.Breadcrumbs)
 
 <!-- 表單提交食的全域遮罩 -->
 <div class="mask" id="mask"></div>
