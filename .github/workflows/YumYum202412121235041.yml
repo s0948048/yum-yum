@@ -35,9 +35,6 @@ jobs:
     runs-on: windows-latest
     needs: build
     steps:
-    - name: Set up appsettings.json
-      run: 
-          echo ${{ secrets.APPSETTING }} > appsettings.json
     - name: Download artifact from build job
       uses: actions/download-artifact@v3
       with:
@@ -47,5 +44,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.APPSECRETSAZURE }}
+        publish-profile: ${{ secrets.YumYum20241212123504_BD82 }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
