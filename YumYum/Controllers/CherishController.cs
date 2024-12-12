@@ -803,7 +803,8 @@ namespace YumYum.Controllers
             }
 
 
-        }
+			return View(contact.Single());
+		}
 
 
 
