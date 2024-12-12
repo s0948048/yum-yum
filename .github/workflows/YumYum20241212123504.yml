@@ -36,7 +36,7 @@ jobs:
     needs: build
     steps:
     - name: Set up appsettings.json
-      run: |
+      run: | 
         Write-Host '${{ secrets.APPSETTING }}' > ${{ env.WORKING_DIRECTORY }}/appsettings.json
     - name: Download artifact from build job
       uses: actions/download-artifact@v3
