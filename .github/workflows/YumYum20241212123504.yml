@@ -42,7 +42,8 @@ jobs:
     - name: Set up appsettings.json
       shell: pwsh
       run: |
-        mkdir -p "${{ env.WORKING_DIRECTORY }}"
+        if (-Not (Test-Path "${{ env.WORKING_DIRECTORY }}")) {
+          mkdir "${{ env.WORKING_DIRECTORY }}"}
         Set-Content -Path "${{ env.WORKING_DIRECTORY }}/appsettings.json" -Value '${{ secrets.APPSETTING }}'
 
     - name: Download artifact from build job
