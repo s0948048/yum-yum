@@ -95,3 +95,4 @@ packages/
 *.swn
 *.swo
 /YumYum/Views/User/EditInfo.cshtml
+YumYum/appsettings.json
